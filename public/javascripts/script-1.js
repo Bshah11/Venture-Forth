@@ -2,6 +2,7 @@
 Front element for eventlisteners
     <button id="create-circle">Create circle top layer</button>
     <button id="create-square">Create square bottom layer</button>
+    <button id="create-image"> Create image </button>
     <button id="save">Save</button>
     <button id="load">Load</button>
 
@@ -9,6 +10,31 @@ Front element for eventlisteners
 
 var circleButton = document.getElementById('create-circle');
 circleButton.addEventListener("click", createButton);
+
+var imageButton = document.getElementById('create-image');
+imageButton.addEventListener("click", createImage);
+
+function createImage(){
+  console.log("create image");
+  var imageObj = new Image();
+  imageObj.onload = function () {
+    var img = new Konva.Image({
+      x: 50,
+      y: 50,
+      image: imageObj,
+      width: 106,
+      height: 118,
+      id: "test",
+    });
+
+    // add the shape to the layer
+    draggable = img.draggable();
+    img.draggable(true);
+    layer.add(img);
+    layer.batchDraw();
+  };
+  imageObj.src = 'images/unnamed.png';
+}
 
 function createButton(){
   console.log("inside create Button");
@@ -28,11 +54,14 @@ function createButton(){
 }
 
 
+
+
 var save = document.getElementById('save');
 save.addEventListener("click", saveLayer);
 
 function saveLayer(){
-  
+  console.log("inside Save layer");
+  console.log(stage.toJSON());
 }
 
 
