@@ -7,6 +7,7 @@ Front element for eventlisteners
     <button id="load">Load</button>
 
 */
+//const axios = require('axios')
 
 var circleButton = document.getElementById('create-circle');
 circleButton.addEventListener("click", createButton);
@@ -62,8 +63,23 @@ save.addEventListener("click", saveLayer);
 function saveLayer(){
   console.log("inside Save layer");
   console.log(stage.toJSON());
+  /*var payload = {};
+  payload.stage = stage.toJSON();
+  console.log(payload);
+  */
+  axios.post('/saveStage', {
+    payload: stage.toJSON()
+    })
+    .then(function(response){
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+/*
   var req = new XMLHttpRequest();
-  req.open('PUT', '/saveStage');
+  req.open('POST', '/saveStage');
   req.setRequestHeader('Content-Type', 'application/json');
   req.addEventListener('load', function(){ 
     if (req.status >= 200 && req.status < 400){
@@ -71,9 +87,12 @@ function saveLayer(){
       var response = JSON.parse(req.responseText);
       console.log(response);
     }
+    console.log("Sending stage");
+    req.send(JSON.stringify(payload));
+  
 
   });
-
+*/
 
 
 }
