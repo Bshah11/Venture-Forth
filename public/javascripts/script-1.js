@@ -62,6 +62,20 @@ save.addEventListener("click", saveLayer);
 function saveLayer(){
   console.log("inside Save layer");
   console.log(stage.toJSON());
+  var req = new XMLHttpRequest();
+  req.open('PUT', '/saveStage');
+  req.setRequestHeader('Content-Type', 'application/json');
+  req.addEventListener('load', function(){ 
+    if (req.status >= 200 && req.status < 400){
+      console.log("inside response");
+      var response = JSON.parse(req.responseText);
+      console.log(response);
+    }
+
+  });
+
+
+
 }
 
 

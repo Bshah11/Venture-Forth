@@ -27,6 +27,14 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
+app.put('/saveStage', function (req, res, next){
+  // Endpoint where client Side Stage is being Sent
+  context = {};
+  var query = req.body;
+  console.log(query);
+  req.send("Good Job, We got the Stage");
+})
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
