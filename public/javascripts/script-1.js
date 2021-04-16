@@ -96,10 +96,10 @@ function loadLayer(e){
       var newMap = response.data.map
 
       var stage = Konva.Node.create(newMap, 'container');
-      
+
       //newStage.create(response.data[0].map);
 
-    
+
     })
     .catch(function (error) {
       console.log(error);
@@ -125,7 +125,9 @@ disable drag and drop
 node.draggable(false); */
 
 // then create layer
-var layer = new Konva.Layer();
+var layer = new Konva.Layer({
+  name: 'tokenLayer'
+});
 var bgLayer = new Konva.Layer();
 
 // create our shape
@@ -142,13 +144,66 @@ var circle = new Konva.Circle({
 var draggable = circle.draggable();
 circle.draggable(true);
 
-// add the shape to the layer
-layer.add(circle);
+//Function to create new line given set of points
+//Lines are all active for event listeners.
+function createLine(points){
+  var line = new Konva.Line({
+    points: points,
+    stroke: 'black',
+    listening: 'true',
+    lineJoin: 'round',
+  });
+  console.log(line);
+  return line;
+}
+
+//Function to create grid of lines to add to layer.
+//Will move right to left adding horizontal and vertical lines to create grid.
+//Grid will be added to its own layer called gridLayer. All lines are created with createLine.
+//Currently making a 25x25 grid. Can be refactored later
+
+function createGrid(){
+  console.log("in createGrid");
+  var gridLayer = new Konva.Layer({
+    name: 'gridLayer',
+  });
+  curY = 500;
+  for(i=0; i <= 25; i++){
+    //Reset x axis to 0 to begin on left of grid again
+    curX = 0;
+    for(j=0; j <= 25; j++){
+      //make horizontal line first
+      var horizLine = createLine([curX, curY, curX+20, curY]);
+      // Add line to layer
+      gridLayer.add(horizLine);
+      //Make vertical line
+      var vertLine = createLine([curX,curY,curX,curY-20]);
+      //Add line to layer
+      gridLayer.add(vertLine);
+      curX = curX + 20;
+    }
+    curY = curY - 20;
+  }
+  return gridLayer;
+}
+
+var gridLayer = createGrid();
+
+// var horizontal = createLine([0,20,20,20]);
+// layer.add(horizontal);
+// var vertical = createLine([500,0,480,0])
+// layer.add(vertical);
+
+
+// //add the shape to the layer
+// layer.add(circle);
 
 // add the layer to the stage
+stage.add(gridLayer);
 stage.add(layer);
 stage.add(bgLayer);
 
 // draw the image
+gridLayer.draw();
 layer.draw();
 bgLayer.draw();
