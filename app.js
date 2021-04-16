@@ -1,5 +1,6 @@
 
 const axios = require('axios');
+var map;
 
 var createError = require('http-errors');
 var express = require('express');
@@ -7,7 +8,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
+var mainRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
@@ -22,13 +23,28 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/', mainRouter); // USE THIS ROUTER FOR CALLS TO AND FROM CLIETNT SIDE SCRIPTS
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+
+mainRouter.post('/saveStage', (req, res) =>{
+  map = req.body.payload;
+  console.log(map);
+  res.status(200).send("Captured Map and stored");
+
+})
+
+mainRouter.post('/loadStage', (req, res) =>{
+  context = {};
+  context.map = map
+  res.status(200).send(context);
+
+})
 
 // Endpoint where client Side Stage is being Sent
 // error handler
@@ -41,5 +57,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;

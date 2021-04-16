@@ -54,49 +54,59 @@ function createButton(){
 
 }
 
-
-
-
+var load = document.getElementById('load');
+load.addEventListener("click", loadLayer);
 var save = document.getElementById('save');
 save.addEventListener("click", saveLayer);
 
-function saveLayer(){
+function saveLayer(e){
+  e.stopPropagation();
   console.log("inside Save layer");
   console.log(stage.toJSON());
   /*var payload = {};
   payload.stage = stage.toJSON();
   console.log(payload);
   */
+ const headers = {'Content-Type': 'application/json'};
   axios.post('/saveStage', {
+    headers: headers,
     payload: stage.toJSON()
     })
     .then(function(response){
-      console.log(response);
+      console.log("saved Map");
+      console.log(response.data[0]);
     })
     .catch(function (error) {
       console.log(error);
     });
-
-/*
-  var req = new XMLHttpRequest();
-  req.open('POST', '/saveStage');
-  req.setRequestHeader('Content-Type', 'application/json');
-  req.addEventListener('load', function(){ 
-    if (req.status >= 200 && req.status < 400){
-      console.log("inside response");
-      var response = JSON.parse(req.responseText);
-      console.log(response);
-    }
-    console.log("Sending stage");
-    req.send(JSON.stringify(payload));
-  
-
-  });
-*/
-
+    console.log("got past axios request")
 
 }
 
+function loadLayer(e){
+  e.stopPropagation();
+  /*var payload = {};
+  payload.stage = stage.toJSON();
+  console.log(payload);
+  */
+  axios.post('/loadStage', {})
+    .then(function(response){
+      console.log("Load Map");
+      //console.log(response.data.map);
+      var newMap = response.data.map
+
+      var stage = Konva.Node.create(newMap, 'container');
+      
+      //newStage.create(response.data[0].map);
+
+    
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    console.log("got past axios request")
+
+}
 
 // first we need to create a stage
 var stage = new Konva.Stage({
