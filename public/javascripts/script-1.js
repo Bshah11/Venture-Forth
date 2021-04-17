@@ -9,6 +9,8 @@ Front element for eventlisteners
 */
 //const axios = require('axios')
 
+
+
 var circleButton = document.getElementById('create-circle');
 circleButton.addEventListener("click", createButton);
 
@@ -115,6 +117,9 @@ var stage = new Konva.Stage({
   height: 500
 });
 
+//Global variables for the the cell width and height
+var gridN = 25;
+var cellSize = stage.width()/gridN
 /* get draggable flag
 var draggable = node.draggable();
 
@@ -186,22 +191,22 @@ function createGrid(){
   var gridLayer = new Konva.Layer({
     name: 'gridLayer',
   });
-  curY = 500;
-  for(i=0; i <= 25; i++){
+  curY = stage.height();
+  for(i=0; i <= gridN; i++){
     //Reset x axis to 0 to begin on left of grid again
     curX = 0;
-    for(j=0; j <= 25; j++){
+    for(j=0; j <= gridN; j++){
       //make horizontal line first
-      var horizLine = createLine([curX, curY, curX+20, curY]);
+      var horizLine = createLine([curX, curY, curX+cellSize, curY]);
       // Add line to layer
       gridLayer.add(horizLine);
       //Make vertical line
-      var vertLine = createLine([curX,curY,curX,curY-20]);
+      var vertLine = createLine([curX,curY,curX,curY-cellSize]);
       //Add line to layer
       gridLayer.add(vertLine);
-      curX = curX + 20;
+      curX = curX + cellSize;
     }
-    curY = curY - 20;
+    curY = curY - cellSize;
   }
   return gridLayer;
 }
