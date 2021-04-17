@@ -9,6 +9,10 @@ Front element for eventlisteners
 */
 //const axios = require('axios')
 
+// //Snap to grid will be called by all tokens on dragEnd()
+// function snapToGrid(e){
+
+// }
 
 
 var circleButton = document.getElementById('create-circle');
@@ -44,13 +48,27 @@ function createButton(){
   var newCircle = new Konva.Circle({
     x: stage.width() / 2,
     y: stage.height() / 2,
-    radius: 70,
+    radius: 10,
     fill: 'blue',
     stroke: 'black',
     strokeWidth: 4,
   });
   draggable = newCircle.draggable();
   newCircle.draggable(true);
+  newCircle.on('dragend', ()=>{
+    var position = newCircle.position();
+    var x = position.x;
+    console.log("x before: %i", x);
+    var y = position.y;
+    console.log("y before: %i", y);
+    var modX = (Math.round(x/cellSize)) * cellSize;
+    console.log("modX before: %i", modX);
+    var modY = (Math.round(y/cellSize)) * cellSize;
+    console.log("modY before: %i", modY);
+    newPosition = {x: modX, y: modY};
+    console.log("newPosition: %i", newPosition);
+    newCircle.position(newPosition);
+  } );
   bgLayer.add(newCircle);
   bgLayer.draw();
 
@@ -177,7 +195,6 @@ function createLine(points){
     listening: 'true',
     lineJoin: 'round',
   });
-  console.log(line);
   return line;
 }
 
@@ -214,7 +231,7 @@ function createGrid(){
 //Fully built grid will be returned.
 var gridLayer = createGrid();
 
-//Snap to grid
+
 
 
 // var horizontal = createLine([0,20,20,20]);
