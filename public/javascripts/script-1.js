@@ -43,6 +43,27 @@ function createImage(){
   imageObj.src = 'images/unnamed.png';
 }
 
+function printObject(){
+   var layers = stage.getChildren();
+   layers.each.each(function(shape, n){
+    shape.on('dragmove', ()=>{
+      var position = shape.position();
+      var x = position.x;
+      console.log("x before: %i", x);
+      var y = position.y;
+      console.log("y before: %i", y);
+      var modX = (Math.round(x/cellSize)) * cellSize;
+      console.log("modX before: %i", modX);
+      var modY = (Math.round(y/cellSize)) * cellSize;
+      console.log("modY before: %i", modY);
+      newPosition = {x: modX, y: modY};
+      console.log("newPosition: %i", newPosition);
+      shape.position(newPosition);
+    });
+  }
+}
+
+
 function createButton(){
   console.log("inside create Button");
   var newCircle = new Konva.Circle({
@@ -52,10 +73,11 @@ function createButton(){
     fill: 'blue',
     stroke: 'black',
     strokeWidth: 4,
+    name: 'blue-circle'
   });
   draggable = newCircle.draggable();
   newCircle.draggable(true);
-  newCircle.on('dragend', ()=>{
+  newCircle.on('dragmove', ()=>{
     var position = newCircle.position();
     var x = position.x;
     console.log("x before: %i", x);
@@ -68,10 +90,9 @@ function createButton(){
     newPosition = {x: modX, y: modY};
     console.log("newPosition: %i", newPosition);
     newCircle.position(newPosition);
-  } );
+  });
   bgLayer.add(newCircle);
   bgLayer.draw();
-
 }
 
 var load = document.getElementById('load');
@@ -135,6 +156,8 @@ var stage = new Konva.Stage({
   height: 500
 });
 
+var printButton = document.getElementById('print-map');
+printButton.addEventListener('click', printObject);
 //Global variables for the the cell width and height
 var gridN = 25;
 var cellSize = stage.width()/gridN
@@ -244,11 +267,11 @@ var gridLayer = createGrid();
 // layer.add(circle);
 
 // add the layer to the stage
-stage.add(gridLayer);
+//stage.add(gridLayer);
 stage.add(layer);
 stage.add(bgLayer);
 
 // draw the image
-gridLayer.draw();
+//gridLayer.draw();
 layer.draw();
 bgLayer.draw();
