@@ -60,7 +60,7 @@ function printObject(){
       console.log("newPosition: %i", newPosition);
       shape.position(newPosition);
     });
-  }
+  });
 }
 
 
@@ -275,3 +275,22 @@ stage.add(bgLayer);
 //gridLayer.draw();
 layer.draw();
 bgLayer.draw();
+
+function printObject(){
+  bgLayer.each(function(shape, n){
+   shape.on('dragmove', ()=>{
+     var position = shape.position();
+     var x = position.x;
+     console.log("x before: %i", x);
+     var y = position.y;
+     console.log("y before: %i", y);
+     var modX = (Math.round(x/cellSize)) * cellSize;
+     console.log("modX before: %i", modX);
+     var modY = (Math.round(y/cellSize)) * cellSize;
+     console.log("modY before: %i", modY);
+     newPosition = {x: modX, y: modY};
+     console.log("newPosition: %i", newPosition);
+     shape.position(newPosition);
+   });
+ });
+}
