@@ -206,7 +206,11 @@ function createGrid(){
   return gridLayer;
 }
 
+//Fully built grid will be returned.
 var gridLayer = createGrid();
+
+//Snap to grid
+
 
 // var horizontal = createLine([0,20,20,20]);
 // layer.add(horizontal);
