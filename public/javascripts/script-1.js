@@ -144,6 +144,25 @@ var circle = new Konva.Circle({
 var draggable = circle.draggable();
 circle.draggable(true);
 
+
+///////////////
+//CREATE GRID//
+///////////////
+
+//Take data from user submission to create different sized grids.
+//https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_forms_through_JavaScript
+var axisForm = document.getElementById("grid-axis");
+
+function setAxis(e){
+  axios({
+    method:"post",
+    url: "/setAxis",
+    data: axisForm,
+    headers: { "Content-Type": "multipart/form-data"}
+  })
+
+};
+
 //Function to create new line given set of points
 //Lines are all active for event listeners.
 function createLine(points){
