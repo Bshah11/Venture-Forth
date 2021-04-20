@@ -14,6 +14,7 @@ Front element for eventlisteners
 
 // }
 
+var bgState = [];
 
 var circleButton = document.getElementById('create-circle');
 circleButton.addEventListener("click", createButton);
@@ -37,8 +38,8 @@ function createImage(){
     // add the shape to the layer
     draggable = img.draggable();
     img.draggable(true);
-    layer.add(img);
-    layer.batchDraw();
+    bgLayer.add(img);
+    bgLayer.batchDraw();
   };
   imageObj.src = 'images/unnamed.png';
 }
@@ -78,6 +79,7 @@ function createButton(){
   draggable = newCircle.draggable();
   newCircle.draggable(true);
   newCircle.on('dragmove', ()=>{
+    console.log(typeof(newCircle));
     var position = newCircle.position();
     var x = position.x;
     console.log("x before: %i", x);
@@ -90,15 +92,78 @@ function createButton(){
     newPosition = {x: modX, y: modY};
     console.log("newPosition: %i", newPosition);
     newCircle.position(newPosition);
+    grabLayer(bgLayer);
+    // Grab current Layer state and for each token save to list (x, y) and store to global list called state
+    // Send state list to other hosts
+    // Those hosts would call createboard() => destroy layer in question, create new token based on state list, render layer
   });
   bgLayer.add(newCircle);
   bgLayer.draw();
 }
+function loadLayer(layer, state){
+  layer.destroyChildren();
+  state.forEach(token => createNew(token))
+
+}
+
+
+function createNew(token){
+  let x = token.x;
+  let y = token.y;
+  let src = token.id;
+  var newCircle = new Konva.Circle({
+    x: x,
+    y: y,
+    radius: 10,
+    fill: 'red',
+    stroke: 'black',
+    strokeWidth: 4,
+    name: 'blue-circle',
+    //id : src
+  });
+  draggable = newCircle.draggable();
+  newCircle.draggable(true);
+  newCircle.on('dragmove', ()=>{
+    console.log(typeof(newCircle));
+    var position = newCircle.position();
+    var x = position.x;
+    console.log("x before: %i", x);
+    var y = position.y;
+    console.log("y before: %i", y);
+    var modX = (Math.round(x/cellSize)) * cellSize;
+    console.log("modX before: %i", modX);
+    var modY = (Math.round(y/cellSize)) * cellSize;
+    console.log("modY before: %i", modY);
+    newPosition = {x: modX, y: modY};
+    console.log("newPosition: %i", newPosition);
+    newCircle.position(newPosition);
+    grabLayer(bgLayer);
+    // Grab current Layer state and for each token save to list (x, y) and store to global list called state
+    // Send state list to other hosts
+    // Those hosts would call createboard() => destroy layer in question, create new token based on state list, render layer
+  });
+  bgLayer.add(newCircle);
+  bgLayer.draw();
+
+
+
+
+}
+
+function grabLayer(layer){
+  bgState = []; 
+  let tokens = layer.getChildren();
+  tokens.each( function(token, n){
+    bgState.push({"x": token.attrs.x, "y": token.attrs.y, "id" : token.attrs.id});
+  })
+};
 
 var load = document.getElementById('load');
-load.addEventListener("click", loadLayer);
+load.addEventListener("click", function(){loadLayer(bgLayer, bgState)});
 var save = document.getElementById('save');
 save.addEventListener("click", saveLayer);
+
+
 
 function saveLayer(e){
   e.stopPropagation();
@@ -124,7 +189,14 @@ function saveLayer(e){
 
 }
 
-function loadLayer(e){
+// first we need to create a stage
+var stage = new Konva.Stage({
+  container: 'container',   // id of container <div>
+  width: 500,
+  height: 500
+});
+
+function loadLayer1(e){
   e.stopPropagation();
   /*var payload = {};
   payload.stage = stage.toJSON();
@@ -135,8 +207,8 @@ function loadLayer(e){
       console.log("Load Map");
       //console.log(response.data.map);
       var newMap = response.data.map
-
-      var stage = Konva.Node.create(newMap, 'container');
+      //stage.destroy();
+      stage = Konva.Node.create(newMap, 'container');
 
       //newStage.create(response.data[0].map);
 
@@ -149,12 +221,6 @@ function loadLayer(e){
 
 }
 
-// first we need to create a stage
-var stage = new Konva.Stage({
-  container: 'container',   // id of container <div>
-  width: 500,
-  height: 500
-});
 
 var printButton = document.getElementById('print-map');
 printButton.addEventListener('click', printObject);
@@ -277,8 +343,12 @@ layer.draw();
 bgLayer.draw();
 
 function printObject(){
-  bgLayer.each(function(shape, n){
-   shape.on('dragmove', ()=>{
+  console.log("inside printMap");
+  let children = bgLayer.getChildren();
+  children.each(function(shape){
+    console.log(shape);
+    shape.fill('red');
+    shape.on('dragmove', ()=>{
      var position = shape.position();
      var x = position.x;
      console.log("x before: %i", x);
