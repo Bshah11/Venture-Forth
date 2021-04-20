@@ -11,6 +11,24 @@ let srcDict = {
     "goblin" : 'images/unnamed.png'
 }
 
+let tokenLayer = new Konva.Layer({
+    name: 'tokenlayer',
+});
+
+var gridN = 25;
+var cellSize = stage.width()/gridN;
+stage.add(tokenLayer);
+tokenLayer.draw();
+
+var tokenType = document.getElementById('token-type-button');
+
+var tokenButton = document.getElementById('create-token-button');
+tokenButton.addEventListener("click", function(){createToken(tokenType.value, 25,25)});
+
+var loadButton = document.getElementById('load-button');
+loadButton.addEventListener("click", function() {loadLayer(curState, tokenLayer)});
+
+
 function createToken(src, x, y){
     // Tool bar creation 
     // New piece goes on board
@@ -28,32 +46,39 @@ function createToken(src, x, y){
         // add the shape to the layer
         draggable = img.draggable();
         img.draggable(true);
-        bgLayer.add(img);
-        bgLayer.batchDraw();
+        tokenLayer.add(img);
+        tokenLayer.batchDraw();
 
         img.on('dragmove', ()=>{
-            var position = shape.position();
+            var position = img.position();
             var x = position.x;
+            //console.log(x);
             var y = position.y;
+            //console.log(y);
             var modX = (Math.round(x/cellSize)) * cellSize;
             var modY = (Math.round(y/cellSize)) * cellSize;
             newPosition = {x: modX, y: modY};
-            console.log("newPosition: %i", newPosition)
+            img.position(newPosition);
         })
         img.on('dragend', () => {
-
+            
             saveLayer(tokenLayer);
         })
     };
     imageObj.src = srcDict[src];
+    console.log(stage);
 }
 
-function saveLayer(layer, state){
+function saveLayer(layer){
+    console.log("inside saveLayer");
     curState = []; 
     let tokens = layer.getChildren();
-    tokens.each( function(token, n){
-      curState.push({"x": token.attrs.x, "y": token.attrs.y, "name" : token.attrs.name});
+    console.log(tokens);
+    tokens.each(function(token, n){
+        console.log(token);
+        curState.push({"x": token.attrs.x, "y": token.attrs.y, "name" : token.attrs.name});
     })
+    console.log(curState);
 }
 
 function loadLayer(curState, layer){
