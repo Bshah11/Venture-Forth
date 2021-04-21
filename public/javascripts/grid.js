@@ -2,11 +2,11 @@
 var gridN = 25; // Will eventually be player selected
 
 var stage = new Konva.Stage({
-    container: 'container',   // id of container <div>
+    container: 'konva-container',   // id of container <div>
     width: 500,
     height: 500
   });
-  
+
 var cellSize = stage.width()/gridN;
 
 
@@ -25,12 +25,12 @@ function createLine(points){
     });
     return line;
   }
-  
+
   //Function to create grid of lines to add to layer.
   //Will move right to left adding horizontal and vertical lines to create grid.
   //Grid will be added to its own layer called gridLayer. All lines are created with createLine.
   //Currently making a 25x25 grid. Can be refactored later
-  
+
   function createGrid(){
     console.log("in createGrid");
     var gridLayer = new Konva.Layer({
@@ -55,11 +55,11 @@ function createLine(points){
     }
     return gridLayer;
   }
-  
+
   //Fully built grid will be returned.
   var gridLayer = createGrid();
 
   stage.add(gridLayer);
-  
+
   gridLayer.draw();
 
