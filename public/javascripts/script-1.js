@@ -9,6 +9,13 @@ Front element for eventlisteners
 */
 //const axios = require('axios')
 
+// //Snap to grid will be called by all tokens on dragEnd()
+// function snapToGrid(e){
+
+// }
+
+var bgState = [];
+
 var circleButton = document.getElementById('create-circle');
 circleButton.addEventListener("click", createButton);
 
@@ -31,33 +38,132 @@ function createImage(){
     // add the shape to the layer
     draggable = img.draggable();
     img.draggable(true);
-    layer.add(img);
-    layer.batchDraw();
+    bgLayer.add(img);
+    bgLayer.batchDraw();
   };
   imageObj.src = 'images/unnamed.png';
 }
+
+function printObject(){
+   var layers = stage.getChildren();
+   layers.each.each(function(shape, n){
+    shape.on('dragmove', ()=>{
+      var position = shape.position();
+      var x = position.x;
+      console.log("x before: %i", x);
+      var y = position.y;
+      console.log("y before: %i", y);
+      var modX = (Math.round(x/cellSize)) * cellSize;
+      console.log("modX before: %i", modX);
+      var modY = (Math.round(y/cellSize)) * cellSize;
+      console.log("modY before: %i", modY);
+      newPosition = {x: modX, y: modY};
+      console.log("newPosition: %i", newPosition);
+      shape.position(newPosition);
+    });
+  });
+}
+
 
 function createButton(){
   console.log("inside create Button");
   var newCircle = new Konva.Circle({
     x: stage.width() / 2,
     y: stage.height() / 2,
-    radius: 70,
+    radius: 10,
     fill: 'blue',
     stroke: 'black',
     strokeWidth: 4,
+    name: 'blue-circle'
   });
   draggable = newCircle.draggable();
   newCircle.draggable(true);
+  newCircle.on('dragmove', ()=>{
+    console.log(typeof(newCircle));
+    var position = newCircle.position();
+    var x = position.x;
+    console.log("x before: %i", x);
+    var y = position.y;
+    console.log("y before: %i", y);
+    var modX = (Math.round(x/cellSize)) * cellSize;
+    console.log("modX before: %i", modX);
+    var modY = (Math.round(y/cellSize)) * cellSize;
+    console.log("modY before: %i", modY);
+    newPosition = {x: modX, y: modY};
+    console.log("newPosition: %i", newPosition);
+    newCircle.position(newPosition);
+    grabLayer(bgLayer);
+    // Grab current Layer state and for each token save to list (x, y) and store to global list called state
+    // Send state list to other hosts
+    // Those hosts would call createboard() => destroy layer in question, create new token based on state list, render layer
+  });
   bgLayer.add(newCircle);
   bgLayer.draw();
+}
+function loadLayer(layer, state){
+  layer.destroyChildren();
+  state.forEach(token => createNew(token))
 
 }
 
+
+function createNew(token){
+  let x = token.x;
+  let y = token.y;
+  let src = token.id;
+  var newCircle = new Konva.Circle({
+    x: x,
+    y: y,
+    radius: 10,
+    fill: 'red',
+    stroke: 'black',
+    strokeWidth: 4,
+    name: 'blue-circle',
+    //id : src
+  });
+  draggable = newCircle.draggable();
+  newCircle.draggable(true);
+  newCircle.on('dragmove', ()=>{
+    console.log(typeof(newCircle));
+    var position = newCircle.position();
+    var x = position.x;
+    console.log("x before: %i", x);
+    var y = position.y;
+    console.log("y before: %i", y);
+    var modX = (Math.round(x/cellSize)) * cellSize;
+    console.log("modX before: %i", modX);
+    var modY = (Math.round(y/cellSize)) * cellSize;
+    console.log("modY before: %i", modY);
+    newPosition = {x: modX, y: modY};
+    console.log("newPosition: %i", newPosition);
+    newCircle.position(newPosition);
+    grabLayer(bgLayer);
+    // Grab current Layer state and for each token save to list (x, y) and store to global list called state
+    // Send state list to other hosts
+    // Those hosts would call createboard() => destroy layer in question, create new token based on state list, render layer
+  });
+  bgLayer.add(newCircle);
+  bgLayer.draw();
+
+
+
+
+}
+
+function grabLayer(layer){
+  bgState = []; 
+  let tokens = layer.getChildren();
+  tokens.each( function(token, n){
+    bgState.push({"x": token.attrs.x, "y": token.attrs.y, "id" : token.attrs.id});
+  })
+};
+
 var load = document.getElementById('load');
-load.addEventListener("click", loadLayer);
+load.addEventListener("click", function(){loadLayer(bgLayer, bgState)});
 var save = document.getElementById('save');
 save.addEventListener("click", saveLayer);
+
+
 
 function saveLayer(e){
   e.stopPropagation();
@@ -83,7 +189,14 @@ function saveLayer(e){
 
 }
 
-function loadLayer(e){
+// first we need to create a stage
+var stage = new Konva.Stage({
+  container: 'container',   // id of container <div>
+  width: 500,
+  height: 500
+});
+
+function loadLayer1(e){
   e.stopPropagation();
   /*var payload = {};
   payload.stage = stage.toJSON();
@@ -94,12 +207,12 @@ function loadLayer(e){
       console.log("Load Map");
       //console.log(response.data.map);
       var newMap = response.data.map
+      //stage.destroy();
+      stage = Konva.Node.create(newMap, 'container');
 
-      var stage = Konva.Node.create(newMap, 'container');
-      
       //newStage.create(response.data[0].map);
 
-    
+
     })
     .catch(function (error) {
       console.log(error);
@@ -108,13 +221,12 @@ function loadLayer(e){
 
 }
 
-// first we need to create a stage
-var stage = new Konva.Stage({
-  container: 'container',   // id of container <div>
-  width: 500,
-  height: 500
-});
 
+var printButton = document.getElementById('print-map');
+printButton.addEventListener('click', printObject);
+//Global variables for the the cell width and height
+var gridN = 25;
+var cellSize = stage.width()/gridN
 /* get draggable flag
 var draggable = node.draggable();
 
@@ -125,7 +237,9 @@ disable drag and drop
 node.draggable(false); */
 
 // then create layer
-var layer = new Konva.Layer();
+var layer = new Konva.Layer({
+  name: 'tokenLayer'
+});
 var bgLayer = new Konva.Layer();
 
 // create our shape
@@ -142,13 +256,111 @@ var circle = new Konva.Circle({
 var draggable = circle.draggable();
 circle.draggable(true);
 
-// add the shape to the layer
-layer.add(circle);
+
+///////////////
+//CREATE GRID//
+///////////////
+
+//Take data from user submission to create different sized grids.
+//https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_forms_through_JavaScript
+var axisForm = document.getElementById("grid-axis");
+
+function setAxis(e){
+  axios({
+    method:"post",
+    url: "/setAxis",
+    data: axisForm,
+    headers: { "Content-Type": "multipart/form-data"}
+  })
+
+};
+
+//Function to create new line given set of points
+//Lines are all active for event listeners.
+function createLine(points){
+  var line = new Konva.Line({
+    points: points,
+    stroke: 'black',
+    listening: 'true',
+    lineJoin: 'round',
+  });
+  return line;
+}
+
+//Function to create grid of lines to add to layer.
+//Will move right to left adding horizontal and vertical lines to create grid.
+//Grid will be added to its own layer called gridLayer. All lines are created with createLine.
+//Currently making a 25x25 grid. Can be refactored later
+
+function createGrid(){
+  console.log("in createGrid");
+  var gridLayer = new Konva.Layer({
+    name: 'gridLayer',
+  });
+  curY = stage.height();
+  for(i=0; i <= gridN; i++){
+    //Reset x axis to 0 to begin on left of grid again
+    curX = 0;
+    for(j=0; j <= gridN; j++){
+      //make horizontal line first
+      var horizLine = createLine([curX, curY, curX+cellSize, curY]);
+      // Add line to layer
+      gridLayer.add(horizLine);
+      //Make vertical line
+      var vertLine = createLine([curX,curY,curX,curY-cellSize]);
+      //Add line to layer
+      gridLayer.add(vertLine);
+      curX = curX + cellSize;
+    }
+    curY = curY - cellSize;
+  }
+  return gridLayer;
+}
+
+//Fully built grid will be returned.
+var gridLayer = createGrid();
+
+
+
+
+// var horizontal = createLine([0,20,20,20]);
+// layer.add(horizontal);
+// var vertical = createLine([500,0,480,0])
+// layer.add(vertical);
+
+
+// //add the shape to the layer
+// layer.add(circle);
 
 // add the layer to the stage
+//stage.add(gridLayer);
 stage.add(layer);
 stage.add(bgLayer);
 
 // draw the image
+//gridLayer.draw();
 layer.draw();
 bgLayer.draw();
+
+function printObject(){
+  console.log("inside printMap");
+  let children = bgLayer.getChildren();
+  children.each(function(shape){
+    console.log(shape);
+    shape.fill('red');
+    shape.on('dragmove', ()=>{
+     var position = shape.position();
+     var x = position.x;
+     console.log("x before: %i", x);
+     var y = position.y;
+     console.log("y before: %i", y);
+     var modX = (Math.round(x/cellSize)) * cellSize;
+     console.log("modX before: %i", modX);
+     var modY = (Math.round(y/cellSize)) * cellSize;
+     console.log("modY before: %i", modY);
+     newPosition = {x: modX, y: modY};
+     console.log("newPosition: %i", newPosition);
+     shape.position(newPosition);
+   });
+ });
+}

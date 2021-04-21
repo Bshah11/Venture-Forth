@@ -46,6 +46,11 @@ mainRouter.post('/loadStage', (req, res) =>{
 
 })
 
+// mainRouter.post('/setAxis', (req, res) =>{
+//   context = {};
+//   context.xAxis =
+// })
+
 // Endpoint where client Side Stage is being Sent
 // error handler
 app.use(function(err, req, res, next) {
