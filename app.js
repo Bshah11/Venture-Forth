@@ -7,12 +7,20 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var hbs = require('express-handlebars')
+var hbs = require('express-handlebars');
+var cors = require('cors');
+
 
 var mainRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+app.use(cors());
+
+//States for layers
+mapState= [];
+tokenState= [];
+
 
 // view engine setup
 app.engine('hbs',hbs({
@@ -41,18 +49,18 @@ app.use(function(req, res, next) {
 });
 
 
-mainRouter.post('/saveStage', (req, res) =>{
-  map = req.body.payload;
-  console.log(map);
+mainRouter.post('/tokenState', (req, res) =>{
+  tokenState = req.body.payload;
+  console.log(tokenState);
   res.status(200).send("Captured Map and stored");
-
 })
 
-mainRouter.post('/loadStage', (req, res) =>{
+mainRouter.get('/tokenState', (req, res) =>{
+  console.log("in token state");
   context = {};
-  context.map = map
+  context.curState = tokenState;
   res.status(200).send(context);
-
+  //res.end(curState);
 })
 
 // mainRouter.post('/setAxis', (req, res) =>{

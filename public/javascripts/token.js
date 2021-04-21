@@ -3,9 +3,9 @@ Grid Layer
 Map Layer => Shapes, Lines, some images
 token Layer
 Visibility Layer
-*/ 
+*/
 
-let curState = [];
+
 
 let srcDict = {
     "goblin" : 'images/unnamed.png'
@@ -26,11 +26,14 @@ var tokenButton = document.getElementById('create-token-button');
 tokenButton.addEventListener("click", function(){createToken(tokenType.value, 25,25)});
 
 var loadButton = document.getElementById('load-button');
-loadButton.addEventListener("click", function() {loadLayer(curState, tokenLayer)});
+loadButton.addEventListener("click", function() {loadState()});
+
+var saveButton = document.getElementById('save-button');
+saveButton.addEventListener("click", function() {saveState(curState)});
 
 
 function createToken(src, x, y){
-    // Tool bar creation 
+    // Tool bar creation
     // New piece goes on board
     var imageObj = new Image();
     imageObj.onload = function () {
@@ -61,7 +64,6 @@ function createToken(src, x, y){
             img.position(newPosition);
         })
         img.on('dragend', () => {
-            
             saveLayer(tokenLayer);
         })
     };
@@ -71,7 +73,7 @@ function createToken(src, x, y){
 
 function saveLayer(layer){
     console.log("inside saveLayer");
-    curState = []; 
+    curState = [];
     let tokens = layer.getChildren();
     console.log(tokens);
     tokens.each(function(token, n){
@@ -83,7 +85,46 @@ function saveLayer(layer){
 
 function loadLayer(curState, layer){
     // Server served token creation
-    layer.destroyChildren()
-    curState.forEach(token => createToken(token.name, token.x, token.y));
+    layer.destroyChildren();
+    console.log(curState.curState instanceof Array);
+    curState.curState.forEach(token => createToken(token.name, token.x, token.y));
 
 }
+
+function saveState(curState){
+    console.log("inside Save state");
+    var payload = {};
+    payload.curState = curState;
+    console.log(payload);
+    const headers = {'Content-Type': 'application/json'};
+        axios.post('/tokenState', {
+        headers: headers,
+        payload: payload
+        })
+        .then(function(response){
+            console.log("saved Map");
+            console.log(response.data[0]);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+        console.log("got past axios request")
+}
+function loadState(){
+    const headers = {'Content-Type': 'application/json'};
+        axios({
+            method: 'get',
+            url:'/tokenState',
+            responseType: 'json'
+        })
+        .then(function(response){
+            console.log("Load Map");
+            console.log(response.data.curState);
+            curState = response.data.curState;
+            loadLayer(curState, tokenLayer);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+        console.log("got past axios request")
+  }
