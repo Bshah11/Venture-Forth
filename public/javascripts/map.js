@@ -25,7 +25,7 @@ mapLayer.draw();
 var mapType = document.getElementById('map-type-button');
 
 var mapButton = document.getElementById('create-map-button');
-mapButton.addEventListener("click", function(){createMap(mapType.value, 25,25)});
+mapButton.addEventListener("click", function(){createMapToken(mapType.value, 25,25)});
 
 var loadMapButton = document.getElementById('load-map-button');
 loadMapButton.addEventListener("click", function() {loadMapState()});
@@ -37,8 +37,8 @@ var drawLineButton = document.getElementById('draw-line-button');
 drawLineButton.addEventListener("click", function() {drawLine()});
 
 
-function createMap(src, x, y){
-    console.log('Inside createMap')
+function createMapToken(src, x, y){
+    console.log('Inside createMapToken')
     // Tool bar creation
     // New piece goes on board
     var imageObj = new Image();
@@ -50,9 +50,10 @@ function createMap(src, x, y){
         width: 50,
         height: 50,
         name: src,
-        stroke: "red"
+        stroke: "red",
+        category: "image",
         });
-
+        //img.category = "image";
         // add the shape to the layer
         draggable = img.draggable();
         img.draggable(true);
@@ -78,14 +79,27 @@ function createMap(src, x, y){
     console.log(stage);
 }
 
+function createMapLine(points){
+    var line = new Konva.Line({
+      points: points,
+      stroke: 'red',
+      strokeWidth: 3,
+      listening: 'true',
+      lineJoin: 'round',
+      catgeory: 'line',
+    });
+    mapLayer.add(line);
+    mapLayer.batchDraw();
+}
+
 function saveMapLayer(layer){
     console.log("inside saveMapLayer");
     curMapState = [];
     let tokens = layer.getChildren();
     console.log(tokens);
     tokens.each(function(token, n){
-        console.log(token);
-        curMapState.push({"x": token.attrs.x, "y": token.attrs.y, "name" : token.attrs.name, "points" : token.attrs.points});
+        console.log("Token category: ",token.attrs.category);
+        curMapState.push({"cat": token.attrs.category, "x": token.attrs.x, "y": token.attrs.y, "name" : token.attrs.name, "points" : token.attrs.points});
     })
     console.log(curMapState);
 }
@@ -93,8 +107,15 @@ function saveMapLayer(layer){
 function loadMapLayer(curMapState, layer){
     // Server served token creation
     layer.destroyChildren();
-    console.log(curMapState.curMapState instanceof Array);
-    curMapState.curMapState.forEach(token => createMap(token.name, token.x, token.y, token.points));
+    curMapState.curMapState.forEach(token =>{
+        if (token.cat == "image"){
+            createMapToken(token.name, token.x, token.y);
+        }
+        if (token.cat == "line"){
+            createMapLine(token.points)
+        }
+
+    });
 
 }
 
@@ -149,7 +170,9 @@ function drawLine(){
             stroke: 'red',
             strokeWidth: 5,
             points: [pos.x, pos.y],
+            category: 'line',
         });
+        lastLine.category = "line";
         mapLayer.add(lastLine);
     });
 
@@ -168,6 +191,7 @@ function drawLine(){
         var newPoints = lastLine.points().concat([(Math.round(pos.x/cellSize)) * cellSize, (Math.round(pos.y/cellSize)) * cellSize]);
         lastLine.points(newPoints);
         mapLayer.batchDraw()
+        saveMapLayer(mapLayer);
     });
-    saveMapLayer(mapLayer);
+
 }
