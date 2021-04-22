@@ -104,6 +104,7 @@ function saveMapLayer(layer){
     console.log(curMapState);
 }
 
+//Draw all map objects after receiving map state from server
 function loadMapLayer(curMapState, layer){
     // Server served token creation
     layer.destroyChildren();
@@ -172,7 +173,6 @@ function drawLine(){
             points: [pos.x, pos.y],
             category: 'line',
         });
-        lastLine.category = "line";
         mapLayer.add(lastLine);
     });
 
@@ -193,5 +193,4 @@ function drawLine(){
         mapLayer.batchDraw()
         saveMapLayer(mapLayer);
     });
-
 }
