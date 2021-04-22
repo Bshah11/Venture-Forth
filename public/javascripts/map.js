@@ -9,7 +9,7 @@ Visibility Layer
 
 
 let mapDict = {
-    "elf" : 'images/elf.jpg'
+    "goblin" : 'images/elf.jpg'
 }
 
 let mapLayer = new Konva.Layer({
@@ -85,7 +85,7 @@ function saveMapLayer(layer){
     console.log(tokens);
     tokens.each(function(token, n){
         console.log(token);
-        curMapState.push({"x": token.attrs.x, "y": token.attrs.y, "name" : token.attrs.name});
+        curMapState.push({"x": token.attrs.x, "y": token.attrs.y, "name" : token.attrs.name, "points" : token.attrs.points});
     })
     console.log(curMapState);
 }
@@ -94,7 +94,7 @@ function loadMapLayer(curMapState, layer){
     // Server served token creation
     layer.destroyChildren();
     console.log(curMapState.curMapState instanceof Array);
-    curMapState.curMapState.forEach(token => createMap(token.name, token.x, token.y));
+    curMapState.curMapState.forEach(token => createMap(token.name, token.x, token.y, token.points));
 
 }
 
