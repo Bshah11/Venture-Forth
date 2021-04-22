@@ -5,34 +5,36 @@ token Layer
 Visibility Layer
 */
 
+// curmapstate = [ { verb: "POST" url: "/MAP"}, [x,y,z]]
 
 
-let srcDict = {
-    "goblin" : 'images/unnamed.png'
+let mapDict = {
+    "goblin" : 'images/elf.jpg'
 }
 
-let tokenLayer = new Konva.Layer({
-    name: 'tokenlayer',
+let mapLayer = new Konva.Layer({
+    name: 'mapLayer',
 });
 
 var gridN = 25;
 var cellSize = stage.width()/gridN;
-stage.add(tokenLayer);
-tokenLayer.draw();
+stage.add(mapLayer);
+mapLayer.draw();
 
-var tokenType = document.getElementById('token-type-button');
+var mapType = document.getElementById('map-type-button');
 
-var tokenButton = document.getElementById('create-token-button');
-tokenButton.addEventListener("click", function(){createToken(tokenType.value, 25,25)});
+var mapButton = document.getElementById('create-map-button');
+mapButton.addEventListener("click", function(){createMap(mapType.value, 25,25)});
 
-var loadButton = document.getElementById('load-button');
-loadButton.addEventListener("click", function() {loadState()});
+var loadMapButton = document.getElementById('load-map-button');
+loadMapButton.addEventListener("click", function() {loadMapState()});
 
-var saveButton = document.getElementById('save-button');
-saveButton.addEventListener("click", function() {saveState(curTokenState)});
+var saveMapButton = document.getElementById('save-map-button');
+saveMapButton.addEventListener("click", function() {saveMapState(curMapState)});
 
 
-function createToken(src, x, y){
+function createMap(src, x, y){
+    console.log('Inside createMap')
     // Tool bar creation
     // New piece goes on board
     var imageObj = new Image();
@@ -44,13 +46,14 @@ function createToken(src, x, y){
         width: 50,
         height: 50,
         name: src,
+        stroke: "red"
         });
 
         // add the shape to the layer
         draggable = img.draggable();
         img.draggable(true);
-        tokenLayer.add(img);
-        tokenLayer.batchDraw();
+        mapLayer.add(img);
+        mapLayer.batchDraw();
 
         img.on('dragmove', ()=>{
             var position = img.position();
@@ -64,40 +67,40 @@ function createToken(src, x, y){
             img.position(newPosition);
         })
         img.on('dragend', () => {
-            saveLayer(tokenLayer);
+            saveMapLayer(mapLayer);
         })
     };
-    imageObj.src = srcDict[src];
+    imageObj.src = mapDict[src];
     console.log(stage);
 }
 
-function saveLayer(layer){
-    console.log("inside saveLayer");
-    curTokenState = [];
+function saveMapLayer(layer){
+    console.log("inside saveMapLayer");
+    curMapState = [];
     let tokens = layer.getChildren();
     console.log(tokens);
     tokens.each(function(token, n){
         console.log(token);
-        curTokenState.push({"x": token.attrs.x, "y": token.attrs.y, "name" : token.attrs.name});
+        curMapState.push({"x": token.attrs.x, "y": token.attrs.y, "name" : token.attrs.name});
     })
-    console.log(curTokenState);
+    console.log(curMapState);
 }
 
-function loadLayer(curTokenState, layer){
+function loadMapLayer(curMapState, layer){
     // Server served token creation
     layer.destroyChildren();
-    console.log(curTokenState.curTokenState instanceof Array);
-    curTokenState.curTokenState.forEach(token => createToken(token.name, token.x, token.y));
+    console.log(curMapState.curMapState instanceof Array);
+    curMapState.curMapState.forEach(token => createMap(token.name, token.x, token.y));
 
 }
 
-function saveState(curTokenState){
+function saveMapState(curMapState){
     console.log("inside Save state");
     var payload = {};
-    payload.curTokenState = curTokenState;
+    payload.curMapState = curMapState;
     console.log(payload);
     const headers = {'Content-Type': 'application/json'};
-        axios.post('/tokenState', {
+        axios.post('/mapState', {
         headers: headers,
         payload: payload
         })
@@ -110,18 +113,18 @@ function saveState(curTokenState){
         });
         console.log("got past axios request")
 }
-function loadState(){
+function loadMapState(){
     const headers = {'Content-Type': 'application/json'};
         axios({
             method: 'get',
-            url:'/tokenState',
+            url:'/mapState',
             responseType: 'json'
         })
         .then(function(response){
-            console.log("Load token");
-            console.log(response.data.curTokenState);
-            curTokenState = response.data.curTokenState;
-            loadLayer(curTokenState, tokenLayer);
+            console.log("Load Map");
+            console.log(response.data.curMapState);
+            curMapState = response.data.curMapState;
+            loadMapLayer(curMapState, mapLayer);
         })
         .catch(function (error) {
             console.log(error);

@@ -18,8 +18,8 @@ var app = express();
 app.use(cors());
 
 //States for layers
-mapState= [];
-tokenState= [];
+mapState = [];
+tokenState = [];
 
 
 // view engine setup
@@ -56,12 +56,28 @@ mainRouter.post('/tokenState', (req, res) =>{
 })
 
 mainRouter.get('/tokenState', (req, res) =>{
-  console.log("in token state");
+  console.log("in map state get");
   context = {};
-  context.curState = tokenState;
+  context.curTokenState = tokenState;
   res.status(200).send(context);
   //res.end(curState);
 })
+
+mainRouter.post('/mapState', (req, res) =>{
+  mapState = req.body.payload;
+  console.log(mapState);
+  res.status(200).send("Captured Map and stored");
+})
+
+mainRouter.get('/mapState', (req, res) =>{
+  console.log("in map state load");
+  context = {};
+  context.curMapState = mapState;
+  res.status(200).send(context);
+  //res.end(curState);
+})
+
+
 
 // mainRouter.post('/setAxis', (req, res) =>{
 //   context = {};
