@@ -9,7 +9,7 @@ Visibility Layer
 
 
 let mapDict = {
-    "goblin" : 'images/elf.jpg'
+    "elf" : 'images/elf.jpg'
 }
 
 let mapLayer = new Konva.Layer({
@@ -21,6 +21,7 @@ var cellSize = stage.width()/gridN;
 stage.add(mapLayer);
 mapLayer.draw();
 
+//Button event listeners
 var mapType = document.getElementById('map-type-button');
 
 var mapButton = document.getElementById('create-map-button');
@@ -31,6 +32,9 @@ loadMapButton.addEventListener("click", function() {loadMapState()});
 
 var saveMapButton = document.getElementById('save-map-button');
 saveMapButton.addEventListener("click", function() {saveMapState(curMapState)});
+
+var drawLineButton = document.getElementById('draw-line-button');
+drawLineButton.addEventListener("click", function() {drawLine()});
 
 
 function createMap(src, x, y){
@@ -131,3 +135,39 @@ function loadMapState(){
         });
         console.log("got past axios request")
   }
+
+var isDrawing = false;
+var lastLine;
+//Add line drawing to map layer
+function drawLine(){
+    // All functions reference the stage but write to the map layer
+    stage.on('mousedown touchstart', (e) =>{
+        console.log(isDrawing)
+        isDrawing = true;
+        var pos = stage.getPointerPosition();
+        lastLine = new Konva.Line({
+            stroke: 'red',
+            strokeWidth: 5,
+            points: [pos.x, pos.y],
+        });
+        mapLayer.add(lastLine);
+    });
+
+    stage.on('mouseup touchend', () =>{
+        console.log(isDrawing)
+        isDrawing = false;
+    });
+
+    //This is to draw and snap to grid
+    stage.on('mousemove touchmove', () =>{
+        if (!isDrawing) {
+            return;
+        };
+        const pos = stage.getPointerPosition();
+        //make sure line ends on grid intersection
+        var newPoints = lastLine.points().concat([(Math.round(pos.x/cellSize)) * cellSize, (Math.round(pos.y/cellSize)) * cellSize]);
+        lastLine.points(newPoints);
+        mapLayer.batchDraw()
+    });
+    saveMapLayer(mapLayer);
+}
