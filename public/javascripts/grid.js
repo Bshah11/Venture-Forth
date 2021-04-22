@@ -19,7 +19,9 @@ var cellSize = stage.width()/gridN;
 function createLine(points){
     var line = new Konva.Line({
       points: points,
-      stroke: 'black',
+      stroke: 'cyan',
+      strokeWidth: 1,
+      opacity: .5,
       listening: 'true',
       lineJoin: 'round',
     });
