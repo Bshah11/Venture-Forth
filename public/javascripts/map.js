@@ -93,16 +93,11 @@ function createMapLine(color, token){
 }
 
 function saveMapLayer(layer){
-    console.log("inside saveMapLayer");
     curMapState = [];
     let tokens = layer.getChildren();
-
-    console.log(tokens);
     tokens.each(function(token, n){
-        console.log("Token category: ",token.attrs.category);
         curMapState.push(token.attrs);
     })
-    console.log(curMapState);
 }
 
 //Draw all map objects after receiving map state from server
@@ -131,8 +126,6 @@ function getAttributes(token){
         //console.log(entry);
         token[key] = token[key];
       });
-    console.log("token in getAttributes:",token)
-    console.log('token.category', token.category)
     return token;
 }
 
@@ -148,7 +141,6 @@ function saveMapState(curMapState){
         })
         .then(function(response){
             console.log("saved Map");
-            console.log(response.data[0]);
         })
         .catch(function (error) {
             console.log(error);
@@ -164,7 +156,6 @@ function loadMapState(){
         })
         .then(function(response){
             console.log("Load Map");
-            console.log(response.data.curMapState);
             curMapState = response.data.curMapState;
             loadMapLayer(curMapState, mapLayer);
         })
