@@ -37,15 +37,15 @@ var drawLineButton = document.getElementById('draw-line-button');
 drawLineButton.addEventListener("click", function() {drawLine()});
 
 
-function createMapToken(src, x, y){
+function createMapToken(src, token){
     console.log('Inside createMapToken')
     // Tool bar creation
     // New piece goes on board
     var imageObj = new Image();
     imageObj.onload = function () {
         var img = new Konva.Image({
-        x: x,
-        y: y,
+        x: token.x,
+        y: token.y,
         image: imageObj,
         width: 50,
         height: 50,
@@ -79,9 +79,9 @@ function createMapToken(src, x, y){
     console.log(stage);
 }
 
-function createMapLine(points){
+function createMapLine(token){
     var line = new Konva.Line({
-      points: points,
+      points: token.points,
       stroke: 'red',
       strokeWidth: 3,
       listening: 'true',
@@ -96,11 +96,11 @@ function saveMapLayer(layer){
     console.log("inside saveMapLayer");
     curMapState = [];
     let tokens = layer.getChildren();
-    
+
     console.log(tokens);
     tokens.each(function(token, n){
         console.log("Token category: ",token.attrs.category);
-        curMapState.push({"cat": token.attrs.category, "tokenAttributes": getAttributes(token.attrs) ,"x": token.attrs.x, "y": token.attrs.y, "name" : token.attrs.name, "points" : token.attrs.points});
+        curMapState.push(token.attrs);
     })
     console.log(curMapState);
 }
@@ -110,26 +110,30 @@ function loadMapLayer(curMapState, layer){
     // Server served token creation
     layer.destroyChildren();
     curMapState.curMapState.forEach(token =>{
-        if (token.cat == "image"){
-            createMapToken(token.name, token.x, token.y);
+        //token = getAttributes(token);
+        if (token.category == "image"){
+            createMapToken(token.name, token);
         }
-        if (token.cat == "line"){
-            createMapLine(token.points)
+        if (token.category == "line"){
+            createMapLine(token)
         }
 
     });
 
 }
 
+//This function may be needed later to pull out certain attributes.
 function getAttributes(token){
     console.log("inside getAttributes");
     let attDict = {};
-    Object.entries(token).forEach(entry => {
-        const [key, value] = entry;
+    console.log("token before: ", token);
+    Object.keys(token).forEach(key => {
         //console.log(entry);
-        attDict[key] = value;
+        token[key] = token[key];
       });
-    return attDict;
+    console.log("token in getAttributes:",token)
+    console.log('token.category', token.category)
+    return token;
 }
 
 function saveMapState(curMapState){
