@@ -79,10 +79,10 @@ function createMapToken(src, token){
     console.log(stage);
 }
 
-function createMapLine(token){
+function createMapLine(color, token){
     var line = new Konva.Line({
       points: token.points,
-      stroke: 'red',
+      stroke: color,
       strokeWidth: 3,
       listening: 'true',
       lineJoin: 'round',
@@ -115,7 +115,7 @@ function loadMapLayer(curMapState, layer){
             createMapToken(token.name, token);
         }
         if (token.category == "line"){
-            createMapLine(token)
+            createMapLine(token.stroke, token)
         }
 
     });
