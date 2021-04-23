@@ -1,14 +1,27 @@
 <h3>Map Toolbar</h3>
-<ul class="nav nav-tabs">
-    <li class ="active"><a href='#'>Humans</a></li>
-    <li><a href='#'>Animals</a></li>
-    <li><a href='#'>Monsters</a></li>
-</ul>
-<button id="create-map-button">Create New Token</button>
-<select name="Game Piece" id="map-type-button">
-    <option selected value="goblin">goblin</option>
-</select>
-<button id="load-map-button">Load Map</button>
-<button id="save-map-button">Save Map to server</button>
-<button id="draw-line-button">Draw line</button>
+<div class="container">
+    <ul style="margin: 20px 0px 22px; visibility: visible;" class="nav nav-tabs">
+        <li class ="nav-item">
+            <a class="nav-link active" href="#" id="line-tab-button"> Line</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" id="shape-tab-button"> Shape </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" id="environment-tab-button"> Environment</a>
+        </li>
+    </ul>
+</div>
+<div class="card-group" id="card-group">
+
+</div>
+    <button id="create-map-button">Create New Token</button>
+    <select name="Game Piece" id="map-type-button">
+        <option selected value="goblin">goblin</option>
+    </select>
+    <button id="load-map-button">Load Map</button>
+    <button id="save-map-button">Save Map to server</button>
+    <button id="draw-line-button">Draw line</button>
+
+
 

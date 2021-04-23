@@ -32,14 +32,14 @@ var saveButton = document.getElementById('save-button');
 saveButton.addEventListener("click", function() {saveState(curTokenState)});
 
 
-function createToken(src, x, y){
+function createToken(src, token){
     // Tool bar creation
     // New piece goes on board
     var imageObj = new Image();
     imageObj.onload = function () {
         var img = new Konva.Image({
-        x: x,
-        y: y,
+        x: token.x,
+        y: token.y,
         image: imageObj,
         width: 50,
         height: 50,
@@ -77,8 +77,7 @@ function saveLayer(layer){
     let tokens = layer.getChildren();
     console.log(tokens);
     tokens.each(function(token, n){
-        console.log(token);
-        curTokenState.push({"x": token.attrs.x, "y": token.attrs.y, "name" : token.attrs.name});
+        curTokenState.push(token.attrs);
     })
     console.log(curTokenState);
 }
@@ -86,8 +85,7 @@ function saveLayer(layer){
 function loadLayer(curTokenState, layer){
     // Server served token creation
     layer.destroyChildren();
-    console.log(curTokenState.curTokenState instanceof Array);
-    curTokenState.curTokenState.forEach(token => createToken(token.name, token.x, token.y));
+    curTokenState.curTokenState.forEach(token => createToken(token.name, token));
 
 }
 

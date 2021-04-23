@@ -1,9 +1,24 @@
 <h3>Token Toolbar</h3>
-<ul class="nav nav-tabs">
-    <li class ="active"><a href='#'>Humans</a></li>
-    <li><a href='#'>Animals</a></li>
-    <li><a href='#'>Monsters</a></li>
-</ul>
+<div class="container">
+    <ul style="margin: 20px 0px 22px; visibility: visible;" class="nav nav-tabs">
+        <li class ="nav-item">
+            <a class="nav-link active" href="#"> Humans </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#"> Animals </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#"> Monsters</a>
+        </li>
+    </ul>
+    <button id="create-map-button">Create New Token</button>
+    <select name="Game Piece" id="map-type-button">
+        <option selected value="goblin">goblin</option>
+    </select>
+    <button id="load-map-button">Load Map</button>
+    <button id="save-map-button">Save Map to server</button>
+    <button id="draw-line-button">Draw line</button>
+</div>
 <button id="create-token-button">Create New Token</button>
 <select name="Game Piece" id="token-type-button">
     <option selected value="goblin">goblin</option>

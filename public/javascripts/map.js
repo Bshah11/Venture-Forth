@@ -177,14 +177,14 @@ function loadMapState(){
 var isDrawing = false;
 var lastLine;
 //Add line drawing to map layer
-function drawLine(){
+function drawLine(color){
     // All functions reference the stage but write to the map layer
     stage.on('mousedown touchstart', (e) =>{
         console.log(isDrawing)
         isDrawing = true;
         var pos = stage.getPointerPosition();
         lastLine = new Konva.Line({
-            stroke: 'red',
+            stroke: color,
             strokeWidth: 5,
             points: [pos.x, pos.y],
             category: 'line',
@@ -208,5 +208,28 @@ function drawLine(){
         lastLine.points(newPoints);
         mapLayer.batchDraw()
         saveMapLayer(mapLayer);
+    });
+}
+
+/////////////////////
+//Toolbar functions//
+////////////////////
+
+var lineTab = document.getElementById('line-tab-button');
+lineTab.addEventListener("click", function(){displayLineOptions()});
+
+function displayLineOptions(){
+    colors = ["#ff0000","#0066ff","#33cc33"]
+    colors.forEach(color =>{
+        var parent = document.getElementById('card-group');
+        var newCard = document.createElement('div');
+        newCard.setAttribute("class", "card");
+        newColor = document.createElement('div');
+        newColor.setAttribute("class","card-body");
+        newColor.style.backgroundColor = color;
+        newColor.addEventListener("click",function(){drawLine(color)});
+        newCard.appendChild(newColor);
+        parent.appendChild(newCard);
+
     });
 }
