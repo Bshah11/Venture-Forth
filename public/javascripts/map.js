@@ -96,10 +96,11 @@ function saveMapLayer(layer){
     console.log("inside saveMapLayer");
     curMapState = [];
     let tokens = layer.getChildren();
+    
     console.log(tokens);
     tokens.each(function(token, n){
         console.log("Token category: ",token.attrs.category);
-        curMapState.push({"cat": token.attrs.category, "x": token.attrs.x, "y": token.attrs.y, "name" : token.attrs.name, "points" : token.attrs.points});
+        curMapState.push({"cat": token.attrs.category, "tokenAttributes": getAttributes(token.attrs) ,"x": token.attrs.x, "y": token.attrs.y, "name" : token.attrs.name, "points" : token.attrs.points});
     })
     console.log(curMapState);
 }
@@ -118,6 +119,17 @@ function loadMapLayer(curMapState, layer){
 
     });
 
+}
+
+function getAttributes(token){
+    console.log("inside getAttributes");
+    let attDict = {};
+    Object.entries(token).forEach(entry => {
+        const [key, value] = entry;
+        //console.log(entry);
+        attDict[key] = value;
+      });
+    return attDict;
 }
 
 function saveMapState(curMapState){
