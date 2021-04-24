@@ -237,12 +237,12 @@ function displayLineOptions(){
     var colorGrid = document.createElement('div');
     setAttributes(colorGrid, {"class": "grid grid-cols-3 grid-rows-3 grid-flow-col  grid-flow-row "});
     for (var key in colors){
+        var curColor = colors[key];
         var colorDiv = document.createElement('div');
-        colorDiv.setAttribute("class", "col-span-1");
         var colorChoice = document.createElement('button');
-        setAttributes(colorChoice, {"class":"py-2 px-4 "+ key + " text-white font-semibold rounded-sm shadow-md focus:outline-none", "href": "#", "content": "test", "value": colors[key]});
-        colorChoice.textContent = key;
-        colorChoice.addEventListener("click", function(){drawLine(colors[key])});
+        setAttributes(colorChoice, {"class":"py-2 px-4 "+ key + " text-white font-semibold rounded-sm shadow-md focus:outline-none", "href": "#", "content": "test", "value": curColor});
+        colorChoice.textContent = curColor;
+        colorChoice.addEventListener("click", function(){(console.log(colorChoice))});
         colorDiv.appendChild(colorChoice)
         colorGrid.appendChild(colorDiv);
     }
