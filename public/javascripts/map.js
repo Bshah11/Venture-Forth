@@ -184,10 +184,15 @@ function drawLine(color){
     });
 
     stage.on('mouseup touchend', () =>{
+        const pos = stage.getPointerPosition();
         console.log(isDrawing)
+        var newPoints = lastLine.points().concat([(Math.round(pos.x/cellSize)) * cellSize, (Math.round(pos.y/cellSize)) * cellSize]);
+        lastLine.points(newPoints);
         isDrawing = false;
+        mapLayer.batchDraw()
+        saveMapLayer(mapLayer);
     });
-
+    
     //This is to draw and snap to grid
     stage.on('mousemove touchmove', () =>{
         if (!isDrawing) {
@@ -195,11 +200,17 @@ function drawLine(color){
         };
         const pos = stage.getPointerPosition();
         //make sure line ends on grid intersection
-        var newPoints = lastLine.points().concat([(Math.round(pos.x/cellSize)) * cellSize, (Math.round(pos.y/cellSize)) * cellSize]);
+        if (lastLine.points().length = 2){
+            var newPoints = lastLine.points().concat([(Math.round(pos.x/cellSize)) * cellSize, (Math.round(pos.y/cellSize)) * cellSize]);    
+        } else {
+            newPoints = lastLine.points()[2] = (Math.round(pos.x/cellSize)) * cellSize;
+            newPoints = lastLine.points()[3] = (Math.round(pos.y/cellSize)) * cellSize;
+        }
         lastLine.points(newPoints);
         mapLayer.batchDraw()
         saveMapLayer(mapLayer);
     });
+    
 }
 
 /////////////////////
