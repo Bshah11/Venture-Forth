@@ -192,7 +192,7 @@ function drawLine(color){
         mapLayer.batchDraw()
         saveMapLayer(mapLayer);
     });
-    
+
     //This is to draw and snap to grid
     stage.on('mousemove touchmove', () =>{
         if (!isDrawing) {
@@ -201,7 +201,7 @@ function drawLine(color){
         const pos = stage.getPointerPosition();
         //make sure line ends on grid intersection
         if (lastLine.points().length = 2){
-            var newPoints = lastLine.points().concat([(Math.round(pos.x/cellSize)) * cellSize, (Math.round(pos.y/cellSize)) * cellSize]);    
+            var newPoints = lastLine.points().concat([(Math.round(pos.x/cellSize)) * cellSize, (Math.round(pos.y/cellSize)) * cellSize]);
         } else {
             newPoints = lastLine.points()[2] = (Math.round(pos.x/cellSize)) * cellSize;
             newPoints = lastLine.points()[3] = (Math.round(pos.y/cellSize)) * cellSize;
@@ -210,8 +210,43 @@ function drawLine(color){
         mapLayer.batchDraw()
         saveMapLayer(mapLayer);
     });
-    
+
 }
+
+function brushLine(color){
+    // All functions reference the stage but write to the map layer
+    stage.on('mousedown touchstart', (e) =>{
+        console.log(isDrawing)
+        isDrawing = true;
+        var pos = stage.getPointerPosition();
+        lastLine = new Konva.Line({
+            stroke: color,
+            strokeWidth: 5,
+            points: [pos.x, pos.y],
+            category: 'line',
+        });
+        mapLayer.add(lastLine);
+    });
+
+    stage.on('mouseup touchend', () =>{
+        console.log(isDrawing)
+        isDrawing = false;
+    });
+
+    //This is to draw and snap to grid
+    stage.on('mousemove touchmove', () =>{
+        if (!isDrawing) {
+            return;
+        };
+        const pos = stage.getPointerPosition();
+        //make sure line ends on grid intersection
+        var newPoints = lastLine.points().concat([(Math.round(pos.x/cellSize)) * cellSize, (Math.round(pos.y/cellSize)) * cellSize]);
+        lastLine.points(newPoints);
+        mapLayer.batchDraw()
+        saveMapLayer(mapLayer);
+    });
+}
+
 
 /////////////////////
 //Toolbar functions//
