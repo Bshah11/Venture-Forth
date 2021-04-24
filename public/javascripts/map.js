@@ -261,6 +261,26 @@ var enviroTab = document.getElementById('environment-tab-button');
 enviroTab.addEventListener("click",function(){switchTabs(mapTabs,enviroTab)});
 var mapTabs = [lineTab, shapeTab, enviroTab];
 
+//Classes to set the styling of the active tab
+var activeTabClass = "nav-link active";
+var inactiveTabClass = "nav-link";
+function switchTabs(mapTabs, newTab){
+    mapTabs.forEach(tab => {
+        tab.removeAttribute("class");
+    });
+    mapTabs.forEach(tab =>{
+        console.log("tab.id: ", tab.id);
+        if (tab.id == newTab.id){
+            newTab.setAttribute("class", activeTabClass);
+            if (newTab.id == lineTab.id){
+                displayLineOptions();
+            }
+        } else{
+            tab.setAttribute("class", inactiveTabClass);
+        }
+    });
+};
+
 // idea for helper function from https://stackoverflow.com/questions/12274748/setting-multiple-attributes-for-an-element-at-once-with-javascript
 function setAttributes(el, attrs){
     for(var key in attrs){
