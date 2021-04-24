@@ -171,6 +171,7 @@ var lastLine;
 function drawLine(color){
     // All functions reference the stage but write to the map layer
     stage.on('mousedown touchstart', (e) =>{
+        console.log(color);
         console.log(isDrawing)
         isDrawing = true;
         var pos = stage.getPointerPosition();
@@ -234,12 +235,13 @@ function displayLineOptions(){
     var lineStrokeCol = document.createElement('div');
     setAttributes(lineStrokeCol, {"class": "col-span-1 border-4 border-black h-full"});
     var colorGrid = document.createElement('div');
-    setAttributes(colorGrid, {"class": "grid grid-flow-col auto-cols-max grid-flow-row auto-rows-max"});
+    setAttributes(colorGrid, {"class": "grid grid-cols-3 grid-rows-3 grid-flow-col  grid-flow-row "});
     for (var key in colors){
         var colorDiv = document.createElement('div');
         colorDiv.setAttribute("class", "col-span-1");
         var colorChoice = document.createElement('button');
-        setAttributes(colorChoice, {"class":"py-2 px-4"+ key + "text-white font-semibold rounded-lg shadow-md focus:outline-none", "href": "#", "textContext": key, "value": colors[key]});
+        setAttributes(colorChoice, {"class":"py-2 px-4 "+ key + " text-white font-semibold rounded-sm shadow-md focus:outline-none", "href": "#", "content": "test", "value": colors[key]});
+        colorChoice.textContent = key;
         colorChoice.addEventListener("click", function(){drawLine(colors[key])});
         colorDiv.appendChild(colorChoice)
         colorGrid.appendChild(colorDiv);
