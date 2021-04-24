@@ -292,7 +292,9 @@ function setAttributes(el, id, attrs){
 var dropdownAttrs = {"class":"btn btn-secondary dropdown-toggle", "type":"button", "data-toggle":"dropdown",
                     "aria-haspopup":"true","aria-expanded":"false"}
 function displayLineOptions(){
-    colors = ["#ff0000","#0066ff","#33cc33"]
+    colors = {"Red":"#DC2626","Green":"#047857","Blue":"#2563EB","Purple":"#7C3AED",
+              "Pink":"#DB2777","Green":"#34D399","Yellow":"#F59E0B",
+              "Indigo":"#6366F1","Black":"#111827"}
     var parent = document.getElementById('card-group');
     //THis is what all of the dropdowns will evenutally attach too.
     var optionsRow = document.createElement('div');
