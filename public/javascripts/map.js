@@ -248,12 +248,26 @@ function brushLine(color){
 }
 
 
-/////////////////////
+////////////////////
 //Toolbar functions//
 ////////////////////
 
 var lineTab = document.getElementById('line-tab-button');
-lineTab.addEventListener("click", function(){displayLineOptions()});
+console.log("lineTab: ", lineTab)
+lineTab.addEventListener("click",function(){switchTabs(mapTabs,lineTab)});
+var shapeTab = document.getElementById('shape-tab-button');
+shapeTab.addEventListener("click",function(){switchTabs(mapTabs,shapeTab)});
+var enviroTab = document.getElementById('environment-tab-button');
+enviroTab.addEventListener("click",function(){switchTabs(mapTabs,enviroTab)});
+var mapTabs = [lineTab, shapeTab, enviroTab];
+
+// idea for helper function from https://stackoverflow.com/questions/12274748/setting-multiple-attributes-for-an-element-at-once-with-javascript
+function setAttributes(el, attrs){
+    for(var key in attrs){
+        el.setAttribute(key, attrs[key]);
+    }
+}
+
 
 function displayLineOptions(){
     colors = ["#ff0000","#0066ff","#33cc33"]
