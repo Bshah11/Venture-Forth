@@ -239,7 +239,7 @@ function displayLineOptions(){
         var colorDiv = document.createElement('div');
         colorDiv.setAttribute("class", "col-span-1");
         var colorChoice = document.createElement('button');
-        setAttributes(colorChoice, {"class":"py-2 px-4"+ key + "text-white font-semibold rounded-lg shadow-md focus:outline-none", "href": "#", "textContent": key, "value": colors[key]});
+        setAttributes(colorChoice, {"class":"py-2 px-4"+ key + "text-white font-semibold rounded-lg shadow-md focus:outline-none", "href": "#", "textContext": key, "value": colors[key]});
         colorChoice.addEventListener("click", function(){drawLine(colors[key])});
         colorDiv.appendChild(colorChoice)
         colorGrid.appendChild(colorDiv);
