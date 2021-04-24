@@ -282,25 +282,41 @@ function switchTabs(mapTabs, newTab){
 };
 
 // idea for helper function from https://stackoverflow.com/questions/12274748/setting-multiple-attributes-for-an-element-at-once-with-javascript
-function setAttributes(el, attrs){
+function setAttributes(el, id, attrs){
+    el.setAttribute('id', id);
     for(var key in attrs){
         el.setAttribute(key, attrs[key]);
     }
 }
 
-
+var dropdownAttrs = {"class":"btn btn-secondary dropdown-toggle", "type":"button", "data-toggle":"dropdown",
+                    "aria-haspopup":"true","aria-expanded":"false"}
 function displayLineOptions(){
     colors = ["#ff0000","#0066ff","#33cc33"]
+    var parent = document.getElementById('card-group');
+    //THis is what all of the dropdowns will evenutally attach too.
+    var optionsRow = document.createElement('div');
+    optionsRow.setAttribute("class", "row");
+    //Create the color dropdown
+    var colorDropdownParent = document.createElement('div');
+    colorDropdownParent.setAttribute('class', 'col-4');
+    var colorDropdownDiv = document.createElement('div');
+    colorDropdownDiv.setAttribute('class', 'dropdown');
+    var colorDropdownButton = document.createElement('button');
+    setAttributes(colorDropdownButton, "colorDropdownbutton", dropdownAttrs);
+    colorDropdownButton.innerHTML= "Color";
+    var colorDropdownMenu = document.createElement('div');
+    setAttributes(colorDropdownMenu, "colorDropdownMenu", {"class":"dropdown-menu", "aria-labelledby":"colorDropdownButton"});
     colors.forEach(color =>{
-        var parent = document.getElementById('card-group');
-        var newCard = document.createElement('div');
-        newCard.setAttribute("class", "card");
-        newColor = document.createElement('div');
-        newColor.setAttribute("class","card-body");
-        newColor.style.backgroundColor = color;
-        newColor.addEventListener("click",function(){drawLine(color)});
-        newCard.appendChild(newColor);
-        parent.appendChild(newCard);
-
+        var colorChoice = document.createElement('a');
+        setAttributes(colorChoice, color, {"class":"dropdown-item", "href":"#"});
+        colorChoice.style.backgroundColor = color;
+        colorChoice.addEventListener("click",function(){drawLine(color)});
+        colorDropdownMenu.appendChild(colorChoice);
     });
+    colorDropdownButton.appendChild(colorDropdownMenu);
+    colorDropdownDiv.appendChild(colorDropdownButton);
+    colorDropdownParent.appendChild(colorDropdownDiv);
+    optionsRow.appendChild(colorDropdownParent);
+    parent.appendChild(optionsRow);
 }
