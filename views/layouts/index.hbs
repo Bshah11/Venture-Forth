@@ -1,15 +1,11 @@
-<div class='container-fluid'>
-<h1>{{title}}</h1>
-<p>Prepare to {{title}}</p>
-    <div class="row">
-        <div class="col-md-8">
-            {{> konva-stage}}
-        </div>
-        <div class="col-md-4">
-            {{> token-toolbar}}
-            {{> map-toolbar}}
-        </div>
-        
+<p class="text-lg">Prepare to {{title}}</p>
+<div class='grid grid-cols-3 gap-4'>
+    <div class="col-span-2">
+        {{> konva-stage}}
+    </div>
+    <div class="...">
+        {{> token-toolbar}}
+        {{> map-toolbar}}
     </div>
 </div>
 

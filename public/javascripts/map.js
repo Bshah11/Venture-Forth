@@ -207,20 +207,74 @@ function drawLine(color){
 ////////////////////
 
 var lineTab = document.getElementById('line-tab-button');
-lineTab.addEventListener("click", function(){displayLineOptions()});
+console.log("lineTab: ", lineTab)
+lineTab.addEventListener("click",function(){switchTabs(mapTabs,lineTab)});
+var shapeTab = document.getElementById('shape-tab-button');
+shapeTab.addEventListener("click",function(){switchTabs(mapTabs,shapeTab)});
+var enviroTab = document.getElementById('environment-tab-button');
+enviroTab.addEventListener("click",function(){switchTabs(mapTabs,enviroTab)});
+var mapTabs = [lineTab, shapeTab, enviroTab];
 
-function displayLineOptions(){
-    colors = ["#ff0000","#0066ff","#33cc33"]
-    colors.forEach(color =>{
-        var parent = document.getElementById('card-group');
-        var newCard = document.createElement('div');
-        newCard.setAttribute("class", "card");
-        newColor = document.createElement('div');
-        newColor.setAttribute("class","card-body");
-        newColor.style.backgroundColor = color;
-        newColor.addEventListener("click",function(){drawLine(color)});
-        newCard.appendChild(newColor);
-        parent.appendChild(newCard);
-
-    });
+// idea for helper function from https://stackoverflow.com/questions/12274748/setting-multiple-attributes-for-an-element-at-once-with-javascript
+function setAttributes(el, attrs){
+    for(var key in attrs){
+        el.setAttribute(key, attrs[key]);
+    }
 }
+
+
+//Tab display functions
+function displayLineOptions(){
+    colors = {"bg-red-600":"#DC2626","bg-green-700":"#047857","bg-blue-600":"#2563EB","bg-purple-600":"#7C3AED",
+              "bg-pink-600":"#DB2777","bg-green-400":"#34D399","bg-yellow-500":"#F59E0B",
+              "bg-indigo-500":"#6366F1","bg-gray-900":"#111827"}
+    var parent = document.getElementById('map-toolbar-options');
+    var optionsGrid = document.createElement('div');
+    optionsGrid.setAttribute("class", "grid grid-cols-2 gap-4 border-l");
+    var lineStrokeCol = document.createElement('div');
+    setAttributes(lineStrokeCol, {"class": "col-span-1 border-4 border-black h-full"});
+    var colorGrid = document.createElement('div');
+    setAttributes(colorGrid, {"class": "grid grid-flow-col auto-cols-max grid-flow-row auto-rows-max"});
+    for (var key in colors){
+        var colorDiv = document.createElement('div');
+        colorDiv.setAttribute("class", "col-span-1");
+        var colorChoice = document.createElement('button');
+        setAttributes(colorChoice, {"class":"py-2 px-4"+ key + "text-white font-semibold rounded-lg shadow-md focus:outline-none", "href": "#", "textContent": key, "value": colors[key]});
+        colorChoice.addEventListener("click", function(){drawLine(colors[key])});
+        colorDiv.appendChild(colorChoice)
+        colorGrid.appendChild(colorDiv);
+    }
+
+
+    lineStrokeCol.appendChild(colorGrid);
+    var lineStrokeWidthCol = document.createElement('div');
+    setAttributes(lineStrokeWidthCol, {"class": "col-span-1 border-4 border-black h-full"});
+
+    optionsGrid.appendChild(lineStrokeCol);
+    optionsGrid.appendChild(lineStrokeWidthCol);
+    parent.appendChild(optionsGrid);
+
+}
+
+//Classes to set the styling of the active tab
+var activeTabClass = "bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-dark font-semibold";
+var inactiveTabClass = "bg-white inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold";
+function switchTabs(mapTabs, newTab){
+    mapTabs.forEach(tab => {
+        tab.removeAttribute("class");
+    });
+    mapTabs.forEach(tab =>{
+        console.log("tab.id: ", tab.id);
+        if (tab.id == newTab.id){
+            newTab.setAttribute("class", activeTabClass);
+            if (newTab.id == lineTab.id){
+                displayLineOptions();
+            }
+        } else{
+            tab.setAttribute("class", inactiveTabClass);
+        }
+    });
+};
+
+
+
