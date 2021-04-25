@@ -37,6 +37,45 @@ var drawLineButton = document.getElementById('draw-line-button');
 drawLineButton.addEventListener("click", function() {drawLine()});
 
 
+var shapeType = document.getElementById('shape-type-button');
+var drawShapebutton = document.getElementById('create-shape-button');
+drawShapebutton.addEventListener("click", function(){drawShape(shapeType.value)});
+
+
+function drawShape(type){
+    var rect = new Konva.Rect({
+        width: 100,
+        height: 50,
+        fill: 'red',
+        stroke: 'black',
+        strokeWidth: 5,
+        category: "shape",
+        id : "rect",
+    });
+
+    rect.on('dragmove', ()=>{
+        var position = rect.position();
+        var x = position.x;
+        //console.log(x);
+        var y = position.y;
+        //console.log(y);
+        var modX = (Math.round(x/cellSize)) * cellSize;
+        var modY = (Math.round(y/cellSize)) * cellSize;
+        newPosition = {x: modX, y: modY};
+        rect.position(newPosition);
+    })
+    rect.on('dragend', () => {
+        saveLayer(mapLayer);
+    })
+
+
+    draggable = rect.draggable();
+    rect.draggable(true);
+    mapLayer.add(rect);
+    mapLayer.batchDraw();
+};
+
+
 function createMapToken(src, token){
     console.log('Inside createMapToken')
     // Tool bar creation
@@ -110,8 +149,12 @@ function loadMapLayer(curMapState, layer){
             createMapToken(token.name, token);
         }
         if (token.category == "line"){
-            createMapLine(token.stroke, token)
+            createMapLine(token.stroke, token);
         }
+        if (token.category == "shape"){
+            drawShape("rect");
+        }
+        
 
     });
 
