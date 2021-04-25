@@ -24,8 +24,8 @@ mapLayer.draw();
 //Button event listeners
 var mapType = document.getElementById('map-type-button');
 
-var mapButton = document.getElementById('create-map-button');
-mapButton.addEventListener("click", function(){createMapToken(mapType.value, 25,25)});
+// var mapButton = document.getElementById('create-map-button');
+// mapButton.addEventListener("click", function(){createMapToken(mapType.value, 25,25)});
 
 var loadMapButton = document.getElementById('load-map-button');
 loadMapButton.addEventListener("click", function() {loadMapState()});
@@ -33,8 +33,7 @@ loadMapButton.addEventListener("click", function() {loadMapState()});
 var saveMapButton = document.getElementById('save-map-button');
 saveMapButton.addEventListener("click", function() {saveMapState(curMapState)});
 
-var drawLineButton = document.getElementById('draw-line-button');
-drawLineButton.addEventListener("click", function() {drawLine()});
+
 
 
 function createMapToken(src, token){
@@ -79,11 +78,11 @@ function createMapToken(src, token){
     console.log(stage);
 }
 
-function createMapLine(color, token){
+function createMapLine(token){
     var line = new Konva.Line({
       points: token.points,
-      stroke: color,
-      strokeWidth: 5,
+      stroke: token.stroke,
+      strokeWidth: token.strokeWidth,
       listening: 'true',
       lineJoin: 'round',
       catgeory: 'line',
@@ -110,11 +109,9 @@ function loadMapLayer(curMapState, layer){
             createMapToken(token.name, token);
         }
         if (token.category == "line"){
-            createMapLine(token.stroke, token)
+            createMapLine(token)
         }
-
     });
-
 }
 
 //This function may be needed later to pull out certain attributes.
@@ -167,8 +164,13 @@ function loadMapState(){
 
 var isDrawing = false;
 var lastLine;
+
+//Get default values from the form selection
+var formLineColor = document.getElementById("colorDropdownMenu");
+var formStrokeWidth = document.getElementById("widthDropdownMenu");
 //Add line drawing to map layer
-function drawLine(color){
+function drawLine(color, width){
+    console.log("in drawLine");
     // All functions reference the stage but write to the map layer
     stage.on('mousedown touchstart', (e) =>{
         console.log(isDrawing)
@@ -176,7 +178,7 @@ function drawLine(color){
         var pos = stage.getPointerPosition();
         lastLine = new Konva.Line({
             stroke: color,
-            strokeWidth: 5,
+            strokeWidth: width,
             points: [((Math.round(pos.x/cellSize)) * cellSize), ((Math.round(pos.y/cellSize)) * cellSize)],
             category: 'line',
         });
@@ -212,8 +214,11 @@ function drawLine(color){
     });
 
 }
+var drawLineButton = document.getElementById('draw-line-button');
+drawLineButton.addEventListener("click", function() {drawLine(formLineColor.value, formStrokeWidth.value)});
 
-function brushLine(color){
+function brushLine(color, width){
+    console.log("in brush line");
     // All functions reference the stage but write to the map layer
     stage.on('mousedown touchstart', (e) =>{
         console.log(isDrawing)
@@ -221,7 +226,7 @@ function brushLine(color){
         var pos = stage.getPointerPosition();
         lastLine = new Konva.Line({
             stroke: color,
-            strokeWidth: 5,
+            strokeWidth: width,
             points: [pos.x, pos.y],
             category: 'line',
         });
@@ -246,7 +251,8 @@ function brushLine(color){
         saveMapLayer(mapLayer);
     });
 }
-
+var brushLineButton = document.getElementById('brush-line-button');
+brushLineButton.addEventListener("click", function() {brushLine(formLineColor.value, formStrokeWidth.value)});
 
 ////////////////////
 //Toolbar functions//
