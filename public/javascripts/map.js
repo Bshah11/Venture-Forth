@@ -79,11 +79,11 @@ function createMapToken(src, token){
     console.log(stage);
 }
 
-function createMapLine(color, token){
+function createMapLine(color, strokeWidth, token){
     var line = new Konva.Line({
       points: token.points,
       stroke: color,
-      strokeWidth: 3,
+      strokeWidth: strokeWidth,
       listening: 'true',
       lineJoin: 'round',
       catgeory: 'line',
@@ -177,7 +177,7 @@ function drawLine(color){
         lastLine = new Konva.Line({
             stroke: color,
             strokeWidth: 5,
-            points: [pos.x, pos.y],
+            points: [((Math.round(pos.x/cellSize)) * cellSize), ((Math.round(pos.y/cellSize)) * cellSize)],
             category: 'line',
         });
         mapLayer.add(lastLine);
@@ -269,7 +269,7 @@ function switchTabs(mapTabs, newTab){
         tab.removeAttribute("class");
     });
     mapTabs.forEach(tab =>{
-        console.log("tab.id: ", tab.id);
+        //console.log("tab.id: ", tab.id);
         if (tab.id == newTab.id){
             newTab.setAttribute("class", activeTabClass);
             if (newTab.id == lineTab.id){
@@ -289,7 +289,7 @@ function setAttributes(el, id, attrs){
     }
 }
 
-var dropdownAttrs = {"class":"btn btn-secondary dropdown-toggle", "type":"button", "data-toggle":"dropdown",
+var dropdownAttrs = {"class":"btn btn-secondary dropdown-toggle mr-2 mb-2", "type":"button", "data-toggle":"dropdown",
                     "aria-haspopup":"true","aria-expanded":"false"}
 function displayLineOptions(){
     colors = {"Red":"#DC2626","Green":"#047857","Blue":"#2563EB","Purple":"#7C3AED",
@@ -297,7 +297,7 @@ function displayLineOptions(){
               "Indigo":"#6366F1","Black":"#111827"}
     widths = {"Largest": 5, "Large": 4, "Medium": 3, "Small": 2, "Smallest": 1}
     //drawOptions = {"Line tool": drawLine(curColor), "Free Draw": brushLine(curColor)};
-    var parent = document.getElementById('card-group');
+    var parent = document.getElementById('map-btn-toolbar');
     //THis is what all of the dropdowns will evenutally attach too.
     var optionsRow = document.createElement('div');
     optionsRow.setAttribute("class", "row");
@@ -307,21 +307,27 @@ function displayLineOptions(){
     var colorDropdownParent = document.createElement('div');
     colorDropdownParent.setAttribute('class', 'col-4');
     var colorDropdownDiv = document.createElement('div');
-    colorDropdownDiv.setAttribute('class', 'dropdown');
+    colorDropdownDiv.setAttribute('class', 'btn-toolbar');
     var colorDropdownButton = document.createElement('button');
     setAttributes(colorDropdownButton, "colorDropdownbutton", dropdownAttrs);
     colorDropdownButton.innerHTML= "Color";
     var colorDropdownMenu = document.createElement('div');
-    setAttributes(colorDropdownMenu, "colorDropdownMenu", {"class":"dropdown-menu", "aria-labelledby":"colorDropdownButton"});
+    setAttributes(colorDropdownMenu, "colorDropdownMenu", {"class":"dropdown-menu"});
+    let selectedColor = '';
     for (var key in colors){
         let curColor = colors[key];
         var colorChoice = document.createElement('a');
         setAttributes(colorChoice, curColor, {"class":"dropdown-item", "href":"#"});
         colorChoice.style.backgroundColor = curColor;
         colorChoice.innerHTML = key;
-        colorChoice.addEventListener("click",function(){drawLine(curColor)});
+        colorChoice.addEventListener("click",(function(){
+            selectedColor = curColor;
+            console.log(selectedColor);
+            drawLine(selectedColor);
+        }));
         colorDropdownMenu.appendChild(colorChoice);
     };
+    console.log(selectedColor);
     colorDropdownButton.appendChild(colorDropdownMenu);
     colorDropdownDiv.appendChild(colorDropdownButton);
     colorDropdownParent.appendChild(colorDropdownDiv);
@@ -333,12 +339,12 @@ function displayLineOptions(){
     var widthDropdownParent = document.createElement('div');
     widthDropdownParent.setAttribute('class', 'col-4');
     var widthDropdownDiv = document.createElement('div');
-    widthDropdownDiv.setAttribute('class', 'dropdown');
+    widthDropdownDiv.setAttribute('class', 'btn-toolbar');
     var widthDropdownButton = document.createElement('button');
     setAttributes(widthDropdownButton, "widthDropdownbutton", dropdownAttrs);
     widthDropdownButton.innerHTML = "Width";
     var widthDropdownMenu = document.createElement('div');
-    setAttributes(colorDropdownMenu, "widthDropdownMenu", { "class": "dropdown-menu", "aria-labelledby": "widthDropdownButton" });
+    setAttributes(widthDropdownMenu, "widthDropdownMenu", { "class": "dropdown-menu", "aria-labelledby": "widthDropdownButton" });
     for (var key in widths) {
         let curWidth = widths[key];
         var widthChoice = document.createElement('a');
