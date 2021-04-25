@@ -41,14 +41,15 @@ var shapeType = document.getElementById('shape-type-button');
 var drawShapebutton = document.getElementById('create-shape-button');
 drawShapebutton.addEventListener("click", function(){drawShape(shapeType.value)});
 
+var tr = new Konva.Transformer();
+mapLayer.add(tr);
+
 
 function drawShape(type){
     var rect = new Konva.Rect({
-        width: 100,
-        height: 50,
+        width: cellSize * 2,
+        height: cellSize,
         fill: 'red',
-        stroke: 'black',
-        strokeWidth: 5,
         category: "shape",
         id : "rect",
     });
@@ -68,6 +69,15 @@ function drawShape(type){
         saveLayer(mapLayer);
     })
 
+    rect.on('click',() => {
+        tr.nodes([rect]);
+        mapLayer.draw();
+    });
+
+    rect.on('transformend', function () {
+        tr.nodes([]);
+        mapLayer.draw();
+      });
 
     draggable = rect.draggable();
     rect.draggable(true);
