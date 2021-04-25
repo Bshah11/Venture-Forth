@@ -39,19 +39,26 @@ drawLineButton.addEventListener("click", function() {drawLine()});
 
 var shapeType = document.getElementById('shape-type-button');
 var drawShapebutton = document.getElementById('create-shape-button');
-drawShapebutton.addEventListener("click", function(){drawShape(shapeType.value)});
+drawShapebutton.addEventListener("click", function(){drawShape(shapeType.value, {x:20, y: 20,scaleX: 1, scaleY: 1})});
 
+// Transformer modifies objects for resizing.
+// by default, we need to add objects to the transformer.
+// We should limit the tranformer to 1 object a time for now 
 var tr = new Konva.Transformer();
 mapLayer.add(tr);
 
 
-function drawShape(type){
+function drawShape(type, token){
     var rect = new Konva.Rect({
         width: cellSize * 2,
         height: cellSize,
         fill: 'red',
         category: "shape",
         id : "rect",
+        scaleX: token.scaleX,
+        ScaleY: token.scaleY,
+        x: token.x,
+        y: token.y
     });
 
     rect.on('dragmove', ()=>{
@@ -162,7 +169,7 @@ function loadMapLayer(curMapState, layer){
             createMapLine(token.stroke, token);
         }
         if (token.category == "shape"){
-            drawShape("rect");
+            drawShape("rect", token);
         }
         
 
