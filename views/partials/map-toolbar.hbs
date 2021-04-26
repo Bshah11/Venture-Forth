@@ -1,13 +1,48 @@
 <h3>Map Toolbar</h3>
-<ul class="nav nav-tabs">
-    <li class ="active"><a href='#'>Humans</a></li>
-    <li><a href='#'>Animals</a></li>
-    <li><a href='#'>Monsters</a></li>
-</ul>
-<button id="create-map-button">Create New Token</button>
-<select name="Game Piece" id="map-type-button">
-    <option selected value="goblin">goblin</option>
-</select>
+<div class="container">
+    <ul style="margin: 20px 0px 22px; visibility: visible;" class="nav nav-tabs">
+        <li class ="nav-item">
+            <a class="nav-link active" href="#" id="line-tab-button"> Line</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" id="shape-tab-button"> Shape </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" id="environment-tab-button"> Environment</a>
+        </li>
+    </ul>
+    <div class="form-row" id="map-btn-toolbar">
+        <div id="line-color-form" class="col">
+            <select id="colorDropdownMenu" class="form-control" aria-label = "Default select example" style="font-size: smaller;">
+                <option selected style="font-size:smaller;">Choose a Color</option>
+                <option value="#DC2626" style="background-color: rgb(220, 38, 38); color: white;">Red</option>
+                <option value="#34D399"  style="background-color: rgb(52, 211, 153); color: white;">Green</option>
+                <option value="#2563EB" style="background-color: rgb(37, 99, 235); color: white;">Blue</option>
+                <option value="#7C3AED" style="background-color: rgb(124, 58, 237); color: white;">Purple</option>
+                <option value="#DB2777" style="background-color: rgb(219, 39, 119); color: white;">Pink</option>
+                <option value="#F59E0B" style="background-color: rgb(245, 158, 11); color: white;">Yellow</option>
+                <option value="#6366F1" style="background-color: rgb(99, 102, 241); color: white;">Indigo</option>
+                <option value="#111827" style="background-color: rgb(17, 24, 39); color: white;">Black</option>
+            </select>
+        </div>
+        <div id="width-color-form" class="col">
+            <select id="widthDropdownMenu" class="form-control" aria-label = "Default select example" style="font-size: smaller;">
+                <option selected>Choose a Width</option>
+                <option value="5">Largest</option>
+                <option value="4">Large</option>
+                <option value="3">Medium</option>
+                <option value="2">Small</option>
+                <option value="1">Smallest</option>
+            </select>
+        </div>
+    </div>
+</div>
+
 <button id="load-map-button">Load Map</button>
 <button id="save-map-button">Save Map to server</button>
+<div></div>
+<button id="draw-line-button">Draw line</button>
+<button id="brush-line-button">Brush Line</button>
+
+
 
