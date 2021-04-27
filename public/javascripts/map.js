@@ -171,6 +171,8 @@ var formStrokeWidth = document.getElementById("widthDropdownMenu");
 //Add line drawing to map layer
 function drawLine(color, width){
     console.log("in drawLine");
+    //First, make sure all event listeners are removed from the stage element
+    stage.off();
     // All functions reference the stage but write to the map layer
     stage.on('mousedown touchstart', (e) =>{
         console.log(isDrawing)
@@ -219,6 +221,8 @@ drawLineButton.addEventListener("click", function() {drawLine(formLineColor.valu
 
 function brushLine(color, width){
     console.log("in brush line");
+    //First, make sure all event listeners are removed from the stage element
+    stage.off();
     // All functions reference the stage but write to the map layer
     stage.on('mousedown touchstart', (e) =>{
         console.log(isDrawing)
