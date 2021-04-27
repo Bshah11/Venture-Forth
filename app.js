@@ -64,13 +64,16 @@ mainRouter.get('/tokenState', (req, res) =>{
 })
 
 mainRouter.post('/mapState', (req, res) =>{
-  mapState = req.body.payload;
+  console.log("in map state SAVE");
+  
+  mapState = req.body.payload["curMapState"];
   console.log(mapState);
   res.status(200).send("Captured Map and stored");
 })
 
 mainRouter.get('/mapState', (req, res) =>{
   console.log("in map state load");
+  console.log(mapState);
   context = {};
   context.curMapState = mapState;
   res.status(200).send(context);

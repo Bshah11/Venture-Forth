@@ -77,6 +77,8 @@ function saveLayer(layer){
     let tokens = layer.getChildren();
     console.log(tokens);
     tokens.each(function(token, n){
+        console.log(token);
+        console.log(token.attrs);
         curTokenState.push(token.attrs);
     })
     console.log(curTokenState);

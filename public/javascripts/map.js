@@ -6,7 +6,7 @@ Visibility Layer
 */
 
 // curmapstate = [ { verb: "POST" url: "/MAP"}, [x,y,z]]
-
+var curMapState = [];
 
 let mapDict = {
     "goblin" : 'images/elf.jpg'
@@ -39,7 +39,7 @@ drawLineButton.addEventListener("click", function() {drawLine()});
 
 var shapeType = document.getElementById('shape-type-button');
 var drawShapebutton = document.getElementById('create-shape-button');
-drawShapebutton.addEventListener("click", function(){drawShape(shapeType.value, {x:20, y: 20,scaleX: 1, scaleY: 1})});
+drawShapebutton.addEventListener("click", function(){drawShape(shapeType.value, {width:cellSize *2, height:cellSize, x:20, y: 20})});
 
 // Transformer modifies objects for resizing.
 // by default, we need to add objects to the transformer.
@@ -49,19 +49,26 @@ mapLayer.add(tr);
 
 
 function drawShape(type, token){
+    if (token.scaleX || token.scaleY){
+        let NewWidth =token.scaleX * token.x;
+        let NewHeight =token.scaleY * token.y;
+        token.width = NewWidth;
+        token.height = NewHeight;
+    }
     var rect = new Konva.Rect({
-        width: cellSize * 2,
-        height: cellSize,
+        width: token.width,
+        height: token.height,
         fill: 'red',
         category: "shape",
         id : "rect",
-        scaleX: token.scaleX,
-        ScaleY: token.scaleY,
+        scaleX: 1,
+        ScaleY: 1,
         x: token.x,
         y: token.y
     });
-
+    rect.off();
     rect.on('dragmove', ()=>{
+        console.log("Move");
         var position = rect.position();
         var x = position.x;
         //console.log(x);
@@ -72,10 +79,8 @@ function drawShape(type, token){
         newPosition = {x: modX, y: modY};
         rect.position(newPosition);
     })
-    rect.on('dragend', () => {
-        saveLayer(mapLayer);
-    })
 
+    
     rect.on('click',() => {
         tr.nodes([rect]);
         mapLayer.draw();
@@ -128,7 +133,7 @@ function createMapToken(src, token){
             img.position(newPosition);
         })
         img.on('dragend', () => {
-            saveMapLayer(mapLayer);
+            saveMapLayer(mapLayer, curMapState);
         })
     };
     imageObj.src = mapDict[src];
@@ -148,8 +153,7 @@ function createMapLine(color, token){
     mapLayer.batchDraw();
 }
 
-function saveMapLayer(layer){
-    curMapState = [];
+function saveMapLayer(layer, curMapState){
     let tokens = layer.getChildren();
     tokens.each(function(token, n){
         curMapState.push(token.attrs);
@@ -158,9 +162,15 @@ function saveMapLayer(layer){
 
 //Draw all map objects after receiving map state from server
 function loadMapLayer(curMapState, layer){
+    console.log("In LoadMapLayer MAPS");
+    console.log(curMapState.length);
     // Server served token creation
     layer.destroyChildren();
-    curMapState.curMapState.forEach(token =>{
+    console.log("after destroy children");
+
+    for(let x = 0; x < curMapState.length ; x++){
+        let token = curMapState[x];
+        console.log(token);
         //token = getAttributes(token);
         if (token.category == "image"){
             createMapToken(token.name, token);
@@ -171,10 +181,7 @@ function loadMapLayer(curMapState, layer){
         if (token.category == "shape"){
             drawShape("rect", token);
         }
-        
-
-    });
-
+    }
 }
 
 //This function may be needed later to pull out certain attributes.
@@ -191,6 +198,7 @@ function getAttributes(token){
 
 function saveMapState(curMapState){
     console.log("inside Save state");
+    saveLayer(mapLayer);
     var payload = {};
     payload.curMapState = curMapState;
     console.log(payload);
@@ -217,6 +225,7 @@ function loadMapState(){
         .then(function(response){
             console.log("Load Map");
             curMapState = response.data.curMapState;
+            console.log(curMapState);
             loadMapLayer(curMapState, mapLayer);
         })
         .catch(function (error) {
@@ -250,7 +259,7 @@ function drawLine(color){
         lastLine.points(newPoints);
         isDrawing = false;
         mapLayer.batchDraw()
-        saveMapLayer(mapLayer);
+        saveMapLayer(mapLayer, curMapState);
     });
 
     //This is to draw and snap to grid
@@ -268,7 +277,7 @@ function drawLine(color){
         }
         lastLine.points(newPoints);
         mapLayer.batchDraw()
-        saveMapLayer(mapLayer);
+        saveMapLayer(mapLayer, curMapState);
     });
 
 }
@@ -303,7 +312,7 @@ function brushLine(color){
         var newPoints = lastLine.points().concat([(Math.round(pos.x/cellSize)) * cellSize, (Math.round(pos.y/cellSize)) * cellSize]);
         lastLine.points(newPoints);
         mapLayer.batchDraw()
-        saveMapLayer(mapLayer);
+        saveMapLayer(mapLayer, curMapState);
     });
 }
 
