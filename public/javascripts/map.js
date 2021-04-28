@@ -33,6 +33,9 @@ loadMapButton.addEventListener("click", function() {loadMapState()});
 var saveMapButton = document.getElementById('save-map-button');
 saveMapButton.addEventListener("click", function() {saveMapState(curMapState)});
 
+var clearMapButton = document.getElementById('clear-map-button');
+clearMapButton.addEventListener("click", function() {clearMapState(curMapState)});
+
 
 
 
@@ -83,7 +86,7 @@ function createMapLine(token){
       points: token.points,
       stroke: token.stroke,
       strokeWidth: token.strokeWidth,
-      listening: 'true', 
+      listening: 'true',
       lineJoin: 'round',
       category: 'line',
     });
@@ -168,7 +171,28 @@ function loadMapState(){
             console.log(error);
         });
         console.log("got past axios request")
-  }
+}
+
+function clearMapState() {
+    console.log("inside clear state");
+    var payload = {};
+    curMapState = [];
+    payload.curMapState = curMapState;
+    console.log(payload);
+    const headers = {'Content-Type': 'application/json'};
+        axios.post('/mapState', {
+        headers: headers,
+        payload: payload
+        })
+        .then(function(response){
+            console.log("saved Map");
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+        console.log("got past axios request")
+        location.reload();
+}
 
 var isDrawing = false;
 var lastLine;
