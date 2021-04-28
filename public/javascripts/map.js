@@ -83,9 +83,9 @@ function createMapLine(token){
       points: token.points,
       stroke: token.stroke,
       strokeWidth: token.strokeWidth,
-      listening: 'true',
+      listening: 'true', 
       lineJoin: 'round',
-      catgeory: 'line',
+      category: 'line',
     });
     mapLayer.add(line);
     mapLayer.batchDraw();
@@ -102,16 +102,23 @@ function saveMapLayer(layer){
 //Draw all map objects after receiving map state from server
 function loadMapLayer(curMapState, layer){
     // Server served token creation
+    console.log("LoadMaplayer");
+    //console.log(curMapState);
+    //console.log(layer);
     layer.destroyChildren();
-    curMapState.curMapState.forEach(token =>{
+    //console.log(layer);
+    curMapState.forEach(token =>{
         //token = getAttributes(token);
+        //console.log(token);
         if (token.category == "image"){
             createMapToken(token.name, token);
         }
         if (token.category == "line"){
+            console.log("lets create a line");
             createMapLine(token)
         }
     });
+    saveMapLayer(layer);
 }
 
 //This function may be needed later to pull out certain attributes.
@@ -154,6 +161,7 @@ function loadMapState(){
         .then(function(response){
             console.log("Load Map");
             curMapState = response.data.curMapState;
+            console.log(curMapState);
             loadMapLayer(curMapState, mapLayer);
         })
         .catch(function (error) {

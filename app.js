@@ -64,7 +64,8 @@ mainRouter.get('/tokenState', (req, res) =>{
 })
 
 mainRouter.post('/mapState', (req, res) =>{
-  mapState = req.body.payload;
+  mapState = [];
+  mapState = req.body.payload.curMapState;
   console.log(mapState);
   res.status(200).send("Captured Map and stored");
 })
