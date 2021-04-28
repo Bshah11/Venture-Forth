@@ -35,6 +35,7 @@ saveButton.addEventListener("click", function() {saveState(curTokenState)});
 function createToken(src, token){
     // Tool bar creation
     // New piece goes on board
+    stage.off();
     var imageObj = new Image();
     imageObj.onload = function () {
         var img = new Konva.Image({
@@ -45,7 +46,7 @@ function createToken(src, token){
         height: 50,
         name: src,
         });
-
+        
         // add the shape to the layer
         draggable = img.draggable();
         img.draggable(true);
