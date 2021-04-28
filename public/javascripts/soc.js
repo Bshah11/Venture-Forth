@@ -7,16 +7,21 @@ var input = document.getElementById('input');
 form.addEventListener('submit', function(e) {
   e.preventDefault();
   if (input.value) {
-    socket.emit('chat message', input.value);
+    console.log(curMapState);
+    let payload = {};
+    payload.mapState = curMapState;
+    payload.msg = input.value;
+    socket.emit('chat message', payload);
     input.value = '';
   }
 });
 
-socket.on('chat message', function(msg) {
+socket.on('chat message', function(payload) {
   var item = document.createElement('li');
-  item.textContent = msg;
+  item.textContent = payload.msg;
   messages.appendChild(item);
   window.scrollTo(0, document.body.scrollHeight);
+  loadMapLayer(payload.mapState, mapLayer);
 });
 
 
