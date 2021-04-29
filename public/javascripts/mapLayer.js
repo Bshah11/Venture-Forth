@@ -11,17 +11,17 @@ var strokeWidth = formStrokeWidth.value;
 
 
 //EventListener
-drawLineButton.addEventListener("click", function() {drawLine(stroke, strokeWidth)});
+drawLineButton.addEventListener("click", function() {drawLine()});
 brushLineButton.addEventListener("click", function() {brushLine(formLineColor.value, formStrokeWidth.value)});
 
+
+// Listeners for stroke and strokewidth changes
 formLineColor.addEventListener("change", function(){
-    console.log("change");
     stroke = formLineColor.value;
 });
 
 formStrokeWidth.addEventListener("change", function(){
-    console.log("change");
-    formStrokeWidth = formLineColor.value;
+    strokeWidth = formStrokeWidth.value;
 });
 
 
@@ -30,7 +30,7 @@ var isDrawing = false;
 var lastLine;
 
 
-function drawLine(color, width){
+function drawLine(){
     console.log("in drawLine");
     //First, make sure all event listeners are removed from the stage element
     stage.off();
@@ -40,8 +40,8 @@ function drawLine(color, width){
         isDrawing = true;
         var pos = stage.getPointerPosition();
         lastLine = new Konva.Line({
-            stroke: color,
-            strokeWidth: width,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
             points: [((Math.round(pos.x/cellSize)) * cellSize), ((Math.round(pos.y/cellSize)) * cellSize)],
             category: 'line',
         });

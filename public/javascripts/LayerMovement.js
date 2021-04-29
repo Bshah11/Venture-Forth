@@ -1,8 +1,6 @@
 // This page contains the client side setup and the socket delivery to the server
 var socket = io();
 
-
-
 // Saving to Server
 function sendLayer(layer) {
       console.log(layer);
@@ -40,6 +38,7 @@ function loadLayer(curMapState, layer){
         if (token.category == "line"){
             console.log("lets create a line");
             console.log(token);
+            // No need to recall draw line, we should call the konva creator directly
             newline = new Konva.Line(token);
             layer.add(newline);
             layer.batchDraw();
@@ -48,10 +47,5 @@ function loadLayer(curMapState, layer){
 };
 
 socket.on('retrieveLayer', function(payload) {
-    var item = document.createElement('li');
-    //item.textContent = payload.msg;
-    //messages.appendChild(item);
-    //window.scrollTo(0, document.body.scrollHeight);
-    
     loadLayer(payload.layer, mapLayer);
   });
