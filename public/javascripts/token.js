@@ -15,8 +15,6 @@ let tokenLayer = new Konva.Layer({
     name: 'tokenlayer',
 });
 
-var gridN = 25;
-var cellSize = stage.width()/gridN;
 stage.add(tokenLayer);
 tokenLayer.draw();
 

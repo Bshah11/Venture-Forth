@@ -16,8 +16,6 @@ let mapLayer = new Konva.Layer({
     name: 'mapLayer',
 });
 
-var gridN = 25;
-var cellSize = stage.width()/gridN;
 stage.add(mapLayer);
 mapLayer.draw();
 
