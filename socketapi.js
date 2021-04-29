@@ -9,15 +9,12 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
       console.log('user disconnected');
     });
-  });
 
-
-
-io.on('connection', (socket) => {
-    socket.on('chat message', (payload) => {
-      console.log('message: ' + payload);
-      io.emit('chat message', payload);
+    socket.on('broadcastLayer', (payload) => {
+        console.log('message: ' + payload);
+        io.emit('retrieveLayer', payload);
     });
+
   });
 
 

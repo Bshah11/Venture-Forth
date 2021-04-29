@@ -16,12 +16,25 @@ form.addEventListener('submit', function(e) {
   }
 });
 
-socket.on('chat message', function(payload) {
+
+
+function sendLayer(layer) {
+    e.preventDefault();
+    if (input.value) {
+      console.log(layer);
+      let payload = {};
+      payload.layer = layer;
+      socket.emit('broadcastLayer', payload);
+    }
+  }
+
+socket.on('broadcastLayer', function(payload) {
   var item = document.createElement('li');
   item.textContent = payload.msg;
   messages.appendChild(item);
   window.scrollTo(0, document.body.scrollHeight);
-  loadMapLayer(payload.mapState, mapLayer);
+  
+  loadLayer(payload.layer);
 });
 
 

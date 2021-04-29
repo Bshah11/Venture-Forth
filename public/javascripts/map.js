@@ -35,8 +35,6 @@ var clearMapButton = document.getElementById('clear-map-button');
 clearMapButton.addEventListener("click", function() {clearMapState(curMapState)});
 
 
-
-
 function createMapToken(src, token){
     console.log('Inside createMapToken')
     // Tool bar creation
