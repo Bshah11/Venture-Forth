@@ -6,10 +6,24 @@ var mapType = document.getElementById('map-type-button');
 var drawLineButton = document.getElementById('draw-line-button');
 var brushLineButton = document.getElementById('brush-line-button');
 
+var stroke = formLineColor.value;
+var strokeWidth = formStrokeWidth.value;
+
 
 //EventListener
-drawLineButton.addEventListener("click", function() {drawLine(formLineColor.value, formStrokeWidth.value)});
+drawLineButton.addEventListener("click", function() {drawLine(stroke, strokeWidth)});
 brushLineButton.addEventListener("click", function() {brushLine(formLineColor.value, formStrokeWidth.value)});
+
+formLineColor.addEventListener("change", function(){
+    console.log("change");
+    stroke = formLineColor.value;
+});
+
+formStrokeWidth.addEventListener("change", function(){
+    console.log("change");
+    formStrokeWidth = formLineColor.value;
+});
+
 
 // line drawing flag
 var isDrawing = false;

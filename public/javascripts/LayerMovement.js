@@ -39,7 +39,10 @@ function loadLayer(curMapState, layer){
         }
         if (token.category == "line"){
             console.log("lets create a line");
-            drawLine(token.color, token.width);
+            console.log(token);
+            newline = new Konva.Line(token);
+            layer.add(newline);
+            layer.batchDraw();
         }
     });
 };

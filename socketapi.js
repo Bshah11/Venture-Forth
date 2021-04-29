@@ -9,10 +9,9 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
       console.log('user disconnected');
     });
-
     socket.on('broadcastLayer', (payload) => {
         console.log('message: ' + payload);
-        io.emit('retrieveLayer', payload);
+        socket.broadcast.emit('retrieveLayer', payload);
     });
 
   });
