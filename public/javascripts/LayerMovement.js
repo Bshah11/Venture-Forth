@@ -2,34 +2,43 @@
 var socket = io();
 
 // Saving to Server
-function sendLayer(layer) {
+function sendLayer(payload) {
       //console.log(layer);
-      let payload = {};
-      payload.layer = layer;
       socket.emit('broadcastLayer', payload);
 }
 
 function saveLayer(layer){
 // Input: Layer should be the created layer object
 // Return: The list of json object that will be sent to the server
-    curMapState = [];
+    var payload = {};
+    payload.layerName = layer.attrs.name;
+    var curMapState = [];
     let tokens = layer.getChildren();
     tokens.each(function(token, n){
         curMapState.push(token.attrs);
-    })
-    return curMapState;
+    });
+    payload.curMapState =curMapState;
+    return payload;
 };
 
 //Loading from Server
 
-function loadLayer(curMapState, layer){
+function loadLayer(payload){
     // Server served token creation
     console.log("Load Layer");
     //console.log(curMapState);
     //console.log(layer);
-    layer.destroyChildren();
+    console.log(payload.layerName);
+    if (payload.layerName == "tokenLayer"){
+        tokenLayer.destroyChildren();
+    }
+    if (payload.layerName == "mapLayer"){
+        mapLayer.destroyChildren();
+    }
+    
+
     //console.log(layer);
-    curMapState.forEach(token =>{
+    payload.curMapState.forEach(token =>{
         //token = getAttributes(token);
         //console.log(token);
         if (token.category == "token"){
@@ -46,5 +55,5 @@ function loadLayer(curMapState, layer){
 };
 
 socket.on('retrieveLayer', function(payload) {
-    loadLayer(payload.layer, mapLayer);
+    loadLayer(payload);
   });

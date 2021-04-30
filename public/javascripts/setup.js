@@ -17,8 +17,9 @@ stage.add(mapLayer);
 mapLayer.draw();
 
 let tokenLayer = new Konva.Layer({
-    name: 'tokenlayer',
+    name: 'tokenLayer',
 });
+
 
 stage.add(tokenLayer);
 tokenLayer.draw();
