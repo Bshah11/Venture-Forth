@@ -77,7 +77,7 @@ function createMapToken(src, token){
     console.log(stage);
 }
 
-function createMapLine(token){
+function loadMapLine(token){
     var line = new Konva.Line({
       points: token.points,
       stroke: token.stroke,

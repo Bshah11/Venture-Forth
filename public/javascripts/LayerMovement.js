@@ -3,7 +3,7 @@ var socket = io();
 
 // Saving to Server
 function sendLayer(layer) {
-      console.log(layer);
+      //console.log(layer);
       let payload = {};
       payload.layer = layer;
       socket.emit('broadcastLayer', payload);
@@ -17,7 +17,7 @@ function saveLayer(layer){
     tokens.each(function(token, n){
         curMapState.push(token.attrs);
     })
-    sendLayer(curMapState);
+    return curMapState;
 };
 
 //Loading from Server
@@ -32,16 +32,15 @@ function loadLayer(curMapState, layer){
     curMapState.forEach(token =>{
         //token = getAttributes(token);
         //console.log(token);
-        if (token.category == "image"){
-            createMapToken(token.name, token);
+        if (token.category == "token"){
+            console.log("lets create a token");
+            loadToken(token);
         }
         if (token.category == "line"){
             console.log("lets create a line");
             console.log(token);
             // No need to recall draw line, we should call the konva creator directly
-            newline = new Konva.Line(token);
-            layer.add(newline);
-            layer.batchDraw();
+            loadMapLine(token);
         }
     });
 };

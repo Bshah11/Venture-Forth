@@ -55,7 +55,7 @@ function drawLine(){
         lastLine.points(newPoints);
         isDrawing = false;
         mapLayer.batchDraw()
-        saveLayer(mapLayer);
+        sendLayer(saveLayer(mapLayer));
     });
 
     //This is to draw and snap to grid
@@ -78,6 +78,19 @@ function drawLine(){
 
 };
 
+function loadMapLine(token){
+    var line = new Konva.Line({
+      points: token.points,
+      stroke: token.stroke,
+      strokeWidth: token.strokeWidth,
+      listening: 'true',
+      lineJoin: 'round',
+      category: 'line',
+    });
+    mapLayer.add(line);
+    mapLayer.batchDraw();
+}
+
 function brushLine(color, width){
     console.log("in brush line");
     //First, make sure all event listeners are removed from the stage element
@@ -99,7 +112,7 @@ function brushLine(color, width){
     stage.on('mouseup touchend', () =>{
         console.log(isDrawing)
         isDrawing = false;
-        saveLayer(mapLayer);
+        sendLayer(saveLayer(mapLayer));
     });
 
     //This is to draw and snap to grid

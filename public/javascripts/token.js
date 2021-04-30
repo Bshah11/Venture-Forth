@@ -7,7 +7,7 @@ Visibility Layer
 
 
 
-let srcDict = {
+let dddsrcDict = {
     "goblin" : 'images/unnamed.png'
 }
 

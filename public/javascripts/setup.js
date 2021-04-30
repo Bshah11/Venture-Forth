@@ -20,9 +20,21 @@ let tokenLayer = new Konva.Layer({
     name: 'tokenlayer',
 });
 
+stage.add(tokenLayer);
+tokenLayer.draw();
+
 //CONST//
 const gridN = 25;
 const cellSize = stage.width()/gridN;
+
+
+
+//Image Dicts//
+
+let srcDict = {
+  "goblin" : 'images/goblin.png',
+  "elf" :'images/elf.jpg'
+};
 
 ///////////////
 //CREATE GRID//
