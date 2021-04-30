@@ -5,6 +5,7 @@ var stage = new Konva.Stage({
     height: 500
   });
 
+//Instantiate layer objects and prepare them to be added to the stage and modified by users
 var gridLayer = new Konva.Layer({
     name: 'gridLayer',
 });
@@ -23,12 +24,14 @@ let tokenLayer = new Konva.Layer({
 
 
 //CONST//
+
+//The grid will be a square with a gridN cells in the X and Y direction. This can be modified later to be based on user input.
 const gridN = 25;
 const cellSize = stage.width()/gridN;
 
 
 
-//Image Dicts//
+//Image Dicts used to load the token fill images//
 
 let srcDict = {
   "goblin" : 'images/goblin.png',
@@ -76,13 +79,14 @@ function createGrid(layer){
     return;
   }
 
-
+//These functions create the correct hierarchy of the canvas to properly display the game. Modifying the order will result
+// in undesireable behavior.
 createGrid(gridLayer); // Adds grids to Layer
 stage.add(gridLayer);
 gridLayer.draw();
 
-stage.add(mapLayer);
+stage.add(mapLayer); //Adds map layer on top of grid layer
 mapLayer.draw();
 
-stage.add(tokenLayer);
+stage.add(tokenLayer); //Adds token layer on top of map layer
 tokenLayer.draw();
