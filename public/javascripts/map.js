@@ -16,8 +16,6 @@ let mapLayer = new Konva.Layer({
     name: 'mapLayer',
 });
 
-var gridN = 25;
-var cellSize = stage.width()/gridN;
 stage.add(mapLayer);
 mapLayer.draw();
 
@@ -35,8 +33,6 @@ saveMapButton.addEventListener("click", function() {saveMapState(curMapState)});
 
 var clearMapButton = document.getElementById('clear-map-button');
 clearMapButton.addEventListener("click", function() {clearMapState(curMapState)});
-
-
 
 
 function createMapToken(src, token){
@@ -81,7 +77,7 @@ function createMapToken(src, token){
     console.log(stage);
 }
 
-function createMapLine(token){
+function loadMapLine(token){
     var line = new Konva.Line({
       points: token.points,
       stroke: token.stroke,

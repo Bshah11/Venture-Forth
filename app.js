@@ -25,7 +25,7 @@ tokenState = [];
 // view engine setup
 app.engine('hbs',hbs({
   extname: 'hbs',
-  defaultLayout: 'layout',
+  defaultLayout: 'layout1', // MODIFIED FOR TESTING
   layoutsDir: path.join(__dirname, 'views/layouts'),
   partialsDir : [
     path.join(__dirname, 'views/partials')

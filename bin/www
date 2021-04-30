@@ -4,9 +4,11 @@
  * Module dependencies.
  */
 
+
 var app = require('../app');
 var debug = require('debug')('hbs-vf:server');
 var http = require('http');
+let socketapi = require("../socketapi");
 
 
 /**
@@ -21,10 +23,12 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+socketapi.io.attach(server);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
+
 
 server.listen(port);
 server.on('error', onError);
