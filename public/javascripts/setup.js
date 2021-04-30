@@ -9,20 +9,18 @@ var gridLayer = new Konva.Layer({
     name: 'gridLayer',
 });
 
+
 var mapLayer = new Konva.Layer({
     name: 'mapLayer',
 });
 
-stage.add(mapLayer);
-mapLayer.draw();
 
 let tokenLayer = new Konva.Layer({
     name: 'tokenLayer',
 });
 
 
-stage.add(tokenLayer);
-tokenLayer.draw();
+
 
 //CONST//
 const gridN = 25;
@@ -82,3 +80,9 @@ function createGrid(layer){
 createGrid(gridLayer); // Adds grids to Layer
 stage.add(gridLayer);
 gridLayer.draw();
+
+stage.add(mapLayer);
+mapLayer.draw();
+
+stage.add(tokenLayer);
+tokenLayer.draw();
