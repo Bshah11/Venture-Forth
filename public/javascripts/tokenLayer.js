@@ -25,7 +25,7 @@ function createToken(){
     console.log("In createToken");
     // Tool bar creation
     // New piece goes on board
-    //stage.off();
+    stage.off();
     var imageObj = new Image();
     imageObj.onload = function () {
         var img = new Konva.Image({
@@ -38,7 +38,7 @@ function createToken(){
         height: 50,
         name: tokenType.value,
         });
-        
+
         // add the shape to the layer
         draggable = img.draggable();
         img.draggable(true);
@@ -68,6 +68,7 @@ function createToken(){
 }
 
 function loadToken(token){
+    stage.off();
     var imageObj = new Image();
     imageObj.onload = function () {
         var img = new Konva.Image({
@@ -80,7 +81,7 @@ function loadToken(token){
         height: token.height,
         name: token.name,
         });
-        
+
         // add the shape to the layer
         draggable = img.draggable();
         img.draggable(true);
