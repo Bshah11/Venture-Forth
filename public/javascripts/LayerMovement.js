@@ -1,6 +1,12 @@
 // This page contains the client side setup and the socket delivery to the server
 var socket = io();
 
+//Event listener to reset game board by layer
+var clearLayerButton = document.getElementById('clear-layer-button');
+var clearLayerSelect = document.getElementById('clear-layer');
+
+clearLayerButton.addEventListener('click', function(){clearLayer()});
+
 // Saving to Server
 function sendLayer(payload) {
       //console.log(layer);
@@ -21,6 +27,16 @@ function saveLayer(layer){
     return payload;
 };
 
+function clearLayer(){
+    console.log("in clear layer");
+    var payload = {};
+    payload.layerName = clearLayerSelect.value;
+    var curMapState = [];
+    payload.curMapState = curMapState;
+    sendLayer(payload);
+}
+
+
 //Loading from Server
 
 function loadLayer(payload){
@@ -35,7 +51,7 @@ function loadLayer(payload){
     if (payload.layerName == "mapLayer"){
         mapLayer.destroyChildren();
     }
-    
+
 
     //console.log(layer);
     payload.curMapState.forEach(token =>{
