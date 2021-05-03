@@ -28,12 +28,26 @@ function saveLayer(layer){
 };
 
 function clearLayer(){
-    console.log("in clear layer");
-    var payload = {};
-    payload.layerName = clearLayerSelect.value;
-    var curMapState = [];
-    payload.curMapState = curMapState;
-    sendLayer(payload);
+    if (clearLayerSelect.value == 'mapLayer'){
+        console.log("in clear map layer");
+        var payload = {};
+        payload.layerName = clearLayerSelect.value;
+        var curMapState = [];
+        payload.curMapState = curMapState;
+        sendLayer(payload);
+        mapLayer.destroyChildren();
+        mapLayer.draw();
+    }
+    else if (clearLayerSelect.value == 'tokenLayer'){
+        console.log("in clear token layer");
+        var payload = {};
+        payload.layerName = clearLayerSelect.value;
+        var curMapState = [];
+        payload.curMapState = curMapState;
+        sendLayer(payload);
+        tokenLayer.destroyChildren();
+        tokenLayer.draw();
+    }
 }
 
 
@@ -42,6 +56,7 @@ function clearLayer(){
 function loadLayer(payload){
     // Server served token creation
     console.log("Load Layer");
+    console.log(payload);
     //console.log(curMapState);
     //console.log(layer);
     console.log(payload.layerName);
