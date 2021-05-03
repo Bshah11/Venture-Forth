@@ -61,10 +61,14 @@ function loadLayer(payload){
     //console.log(layer);
     console.log(payload.layerName);
     if (payload.layerName == "tokenLayer"){
+        console.log("destroy tokenLayer");
         tokenLayer.destroyChildren();
+        tokenLayer.draw();
     }
     if (payload.layerName == "mapLayer"){
+        console.log("destroy mapLayer");
         mapLayer.destroyChildren();
+        mapLayer.draw();
     }
 
 
