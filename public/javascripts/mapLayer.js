@@ -5,6 +5,7 @@ var formStrokeWidth = document.getElementById("widthDropdownMenu");
 var mapType = document.getElementById('map-type-button');
 var drawLineButton = document.getElementById('draw-line-button');
 var brushLineButton = document.getElementById('brush-line-button');
+var newRectButton = document.getElementById('create-rect-button');
 
 var stroke = formLineColor.value;
 var strokeWidth = formStrokeWidth.value;
@@ -12,6 +13,7 @@ var strokeWidth = formStrokeWidth.value;
 
 //EventListener
 drawLineButton.addEventListener("click", function() {drawLine()});
+newRectButton.addEventListener("click", function() {drawRect()});
 brushLineButton.addEventListener("click", function() {brushLine(formLineColor.value, formStrokeWidth.value)});
 
 
@@ -29,6 +31,73 @@ formStrokeWidth.addEventListener("change", function(){
 var isDrawing = false;
 var lastLine;
 
+//shape transformer
+var tr = new Konva.Transformer();
+mapLayer.add(tr);
+
+
+function drawRect(){
+    console.log("in drawRect");
+    //First, make sure all event listeners are removed from the stage element
+    stage.off();
+    stage.on('click', (e) =>{
+        console.log("clicked");
+        var pos = stage.getPointerPosition();
+        let newRect = createRect(pos);
+        mapLayer.add(newRect);
+        mapLayer.draw();
+        sendLayer(saveLayer(mapLayer));
+        stage.off();
+    });
+}
+
+function createRect(pos){
+    newRect = new Konva.Rect({
+        width: cellSize,
+        height: cellSize,
+        x: ((Math.round(pos.x/cellSize)) * cellSize),
+        y: ((Math.round(pos.y/cellSize)) * cellSize),
+        category: 'rect',
+        fill: stroke,
+        stroke: 'black',
+        strokeWidth: 2
+    });
+
+    newRect.on('click', (e)=>{
+        console.log("rect clicked");
+        console.log(e.currentTarget);
+        tr.nodes([e.currentTarget]);
+        mapLayer.draw();
+    });
+
+    newRect.on('transformend', (e) =>{
+        console.log("end of transform");
+        tr.detach();
+        mapLayer.draw();
+        sendLayer(saveLayer(mapLayer));
+
+    });
+    return newRect;
+}
+
+function loadRect(token){
+    loadedRect = new Konva.Rect(token);
+    loadedRect.on('click', (e)=>{
+        console.log("rect clicked");
+        console.log(e.currentTarget);
+        tr.nodes([e.currentTarget]);
+        mapLayer.draw();
+    });
+
+    loadedRect.on('transformend', (e) =>{
+        console.log("end of transform");
+        tr.detach();
+        mapLayer.draw();
+        sendLayer(saveLayer(mapLayer));
+    });
+    mapLayer.add(loadedRect);
+    mapLayer.draw();
+};
 
 function drawLine(){
     console.log("in drawLine");

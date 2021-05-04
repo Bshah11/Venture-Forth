@@ -86,6 +86,10 @@ function loadLayer(payload){
             // No need to recall draw line, we should call the konva creator directly
             loadMapLine(token);
         }
+        if (token.category == "rect"){
+            console.log("lets create a rect");
+            loadRect(token);
+        }
     });
 };
 
