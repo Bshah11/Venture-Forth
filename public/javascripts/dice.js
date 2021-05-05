@@ -30,6 +30,10 @@ turnDisplay.style.fontSize='larger';
 turnDisplay.style.fontWeight='bold';
 turnDisplay.appendChild(turnDisplayTextNode);
 
+//Clear dice rolls
+var clearDisplay = document.getElementById('clear-results');
+clearDisplay.addEventListener('click', function(){clearDisplayNodes()});
+
 //Roll dice function
 function rollDice(typeDie){
     //input is the sides of the die to roll.
@@ -52,4 +56,11 @@ function rollDisplay(dice) {
         diceResultNode.nodeValue = diceResult;
         turnDisplayTextNode.nodeValue = rollResult;
     }
+}
+
+function clearDisplayNodes(){
+    diceResultNode.nodeValue = '';
+    turnDisplayTextNode.nodeValue= '';
+    diceResult = '';
+    rollResult=0;
 }
