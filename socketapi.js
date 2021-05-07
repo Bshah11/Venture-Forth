@@ -13,6 +13,10 @@ io.on('connection', (socket) => {
         console.log('message: ' + payload);
         socket.broadcast.emit('retrieveLayer', payload);
     });
+    socket.on('sendChat', (payload)=> {
+      console.log("message in sendChat: " +payload.diceResult);
+      socket.broadcast.emit('displayChat', payload);
+    });
 
   });
 
