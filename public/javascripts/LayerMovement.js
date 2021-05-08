@@ -23,7 +23,7 @@ function saveLayer(layer){
     tokens.each(function(token, n){
         curMapState.push(token.attrs);
     });
-    payload.curMapState =curMapState;
+    payload.curMapState = curMapState;
     return payload;
 };
 
@@ -85,6 +85,21 @@ function loadLayer(payload){
             console.log(token);
             // No need to recall draw line, we should call the konva creator directly
             loadMapLine(token);
+        }
+        if (token.category == "rect"){
+            console.log("lets create a rect");
+            token.draggable = false;
+            loadRect(token);
+        }
+        if (token.category == "cir"){
+            console.log("lets create a cir");
+            token.draggable = false;
+            loadCir(token);
+        }
+        if (token.category == "tri"){
+            console.log("lets create a tri");
+            token.draggable = false;
+            loadTri(token);
         }
     });
 };
