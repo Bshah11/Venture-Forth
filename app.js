@@ -50,36 +50,6 @@ app.use(function(req, res, next) {
 });
 
 
-mainRouter.post('/tokenState', (req, res) =>{
-  tokenState = req.body.payload;
-  console.log(tokenState);
-  res.status(200).send("Captured Map and stored");
-})
-
-mainRouter.get('/tokenState', (req, res) =>{
-  console.log("in map state get");
-  context = {};
-  context.curTokenState = tokenState;
-  res.status(200).send(context);
-  //res.end(curState);
-})
-
-mainRouter.post('/mapState', (req, res) =>{
-  mapState = [];
-  mapState = req.body.payload.curMapState;
-  console.log(mapState);
-  res.status(200).send("Captured Map and stored");
-})
-
-mainRouter.get('/mapState', (req, res) =>{
-  console.log("in map state load");
-  context = {};
-  context.curMapState = mapState;
-  res.status(200).send(context);
-  //res.end(curState);
-})
-
-
 
 // mainRouter.post('/setAxis', (req, res) =>{
 //   context = {};
