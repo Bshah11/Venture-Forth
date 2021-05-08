@@ -4,6 +4,7 @@ var map;
 
 var createError = require('http-errors');
 var express = require('express');
+const session = require('express-session');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -40,20 +41,32 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(function (req, res, next){
-  var cookie = req.cookies.cookieName;
-  if (cookie == undefined){
-    //If no cookie exists, we need to set one
-    var randomNumber = Math.random().toString();
-    randomNumber = randomNumber.substring(2, randomNumber.length);
-    res.cookie('cookieName', randomNumber, {maxAge: 900000, httpOnly: true});
-    console.log('cookie created successfully');
-  } else {
-    //cookie was already present
-    console.log('cookie exists', cookie);
-  }
-  next();
-});
+// //Set cookie to random number
+// app.use(function (req, res, next){
+//   var cookie = req.cookies.cookieName;
+//   if (cookie == undefined){
+//     //If no cookie exists, we need to set one
+//     var randomNumber = Math.random().toString();
+//     randomNumber = randomNumber.substring(2, randomNumber.length);
+//     res.cookie('cookieName', randomNumber, {maxAge: 900000, httpOnly: true});
+//     console.log('cookie created successfully');
+//   } else {
+//     //cookie was already present
+//     console.log('cookie exists', cookie);
+//   }
+//   next();
+
+// });
+function genuuid(){
+  var randomNumber = Math.random().toString();
+  randomNumber = randomNumber.substring(2, randomNumber.length);
+  return randomNumber;
+}
+
+const sessionMiddleware = session({genid: function(req) {
+  return genuuid();
+}, secret: "venture-forth", resave:true, saveUninitialized: true, cookie :{maxAge: 900000}});
+app.use(sessionMiddleware);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', mainRouter); // USE THIS ROUTER FOR CALLS TO AND FROM CLIETNT SIDE SCRIPTS
