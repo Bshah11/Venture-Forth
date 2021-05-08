@@ -6,6 +6,8 @@ const socketapi = {
 // Add your socket.io logic here!
 io.on('connection', (socket) => {
     console.log('a user connected');
+    console.log("url: " + socket.request);
+
     socket.on('disconnect', () => {
       console.log('user disconnected');
     });
