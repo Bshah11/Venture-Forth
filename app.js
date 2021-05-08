@@ -39,6 +39,21 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(function (req, res, next){
+  var cookie = req.cookies.cookieName;
+  if (cookie == undefined){
+    //If no cookie exists, we need to set one
+    var randomNumber = Math.random().toString();
+    randomNumber = randomNumber.substring(2, randomNumber.length);
+    res.cookie('cookieName', randomNumber, {maxAge: 900000, httpOnly: true});
+    console.log('cookie created successfully');
+  } else {
+    //cookie was already present
+    console.log('cookie exists', cookie);
+  }
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', mainRouter); // USE THIS ROUTER FOR CALLS TO AND FROM CLIETNT SIDE SCRIPTS
