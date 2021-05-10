@@ -1,5 +1,17 @@
-// This page contains the client side setup and the socket delivery to the server
-var socket = io();
+// // This page contains the client side setup and the socket delivery to the server
+// var socket = io();
+
+// const ioClient = require('socket.io-client');
+const socket = io({autoConnect: false});
+
+//Load the session and user id from local storage and connect to socket
+var username = localStorage.getItem("username");
+var sessionID = localStorage.getItem("sessionID");
+socket.auth = {sessionID};
+socket.auth = { username };
+console.log("connecting");
+socket.connect();
+
 
 //Event listener to reset game board by layer
 var clearLayerButton = document.getElementById('clear-layer-button');

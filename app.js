@@ -11,8 +11,8 @@ var hbs = require('express-handlebars');
 var cors = require('cors');
 
 
-
 var mainRouter = require('./routes/index');
+var dmRouter = require('./routes/dm');
 var usersRouter = require('./routes/users');
 
 var app = express();
@@ -42,6 +42,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', mainRouter); // USE THIS ROUTER FOR CALLS TO AND FROM CLIETNT SIDE SCRIPTS
+app.use('/dm', dmRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
