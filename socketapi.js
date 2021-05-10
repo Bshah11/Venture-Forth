@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
       });
     }
     socket.on('disconnect', () => {
-      console.log('user disconnected');
+      console.log('user: '+socket.username+' disconnected');
     });
     socket.on('broadcastLayer', (payload) => {
         console.log('message: ' + payload);
