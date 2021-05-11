@@ -7,10 +7,18 @@ const socket = io({autoConnect: false});
 //Load the session and user id from local storage and connect to socket
 var username = localStorage.getItem("username");
 var sessionID = localStorage.getItem("sessionID");
+var role = localStorage.getItem("role");
+console.log("Role is: "+ role);
 socket.auth = {sessionID};
 socket.auth = { username };
+socket.gameRole = role;
+//console.log("Socket.gameRole: "+socket.gameRole);
 console.log("connecting");
 socket.connect();
+
+
+
+
 
 
 //Event listener to reset game board by layer

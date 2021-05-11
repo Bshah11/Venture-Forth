@@ -31,31 +31,47 @@ io.use(async (socket, next) => {
 
 // Add your socket.io logic here!
 io.on('connection', (socket) => {
+  //Join the socket to the room
+  socket.join(socket.userID);
+  //Display the session information to all players connected to scoket
   socket.emit("session", {
     sessionID: socket.sessionID,
     userID: socket.userID,
   });
-    console.log('user: '+socket.username+" connected");
-    const users = [];
-    for(let [id, socket] of io.of('/').sockets){
-      users.push({
-        userID: id,
-        username: socket.username,
-      });
-    }
-    socket.on('disconnect', () => {
-      console.log('user: '+socket.username+' disconnected');
+  const users = [];
+  for(let [id, socket] of io.of('/').sockets){
+    users.push({
+      userID: id,
+      username: socket.username,
+      //role: localStorage.getItem("role"),
     });
-    socket.on('broadcastLayer', (payload) => {
-        console.log('message: ' + payload);
-        socket.broadcast.emit('retrieveLayer', payload);
-    });
-    socket.on('sendChat', (payload)=> {
-      console.log("message in sendChat: " +payload.diceResult);
-      socket.broadcast.emit('displayChat', payload);
-    });
+  }
+  //Update the drop down menu that has all currently connected users
+  console.log(users);
+  //Emit the current list of players to all connected players
 
+  socket.broadcast.emit("user connected", {
+    userID: socket.id,
+    username: socket.username,
   });
+  console.log('user: '+socket.username+" connected");
+  //Add users to array containing all users
+
+
+
+  socket.on('disconnect', () => {
+    console.log('user: '+socket.username+' disconnected');
+  });
+  socket.on('broadcastLayer', (payload) => {
+      console.log('message: ' + payload);
+      socket.broadcast.emit('retrieveLayer', payload);
+  });
+  socket.on('sendChat', (payload)=> {
+    console.log("message in sendChat: " +payload.diceResult);
+    socket.broadcast.emit('displayChat', payload);
+  });
+
+});
 
 
 // end of socket.io logic

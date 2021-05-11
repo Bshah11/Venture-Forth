@@ -1,7 +1,7 @@
 // arrays of possible values for different dice
 dice = {"d4": _.range(1,5), "d6": _.range(1,7),"d8": _.range(1,9),"d10": _.range(1,11),"d12":_.range(1,13),"d20": _.range(1,21)}
 
-//Event listners
+//Event listners for dice buttons
 var d4 = document.getElementById('d4Dice');
 d4.addEventListener('click',function(){rollDisplay(d4.value)});
 var d6 = document.getElementById('d6Dice');
@@ -15,8 +15,12 @@ d12.addEventListener('click',function(){rollDisplay(d12.value)});
 var d20 = document.getElementById('d20Dice');
 d20.addEventListener('click',function(){rollDisplay(d20.value)});
 
+//Get the necessary elements to append to in chat box
 var chatLog = document.getElementById('chatLog');
 var chatCard = document.getElementById('chatCard');
+
+//Get the select bar to be able to update when users join room
+var playerList = document.getElementById('playerList');
 
 var diceResult = '';
 var rollResult = 0;
@@ -50,30 +54,16 @@ function rollDisplay(dice) {
     var curRoll = rollDice(dice);
     rollResult = rollResult + curRoll;
     let payload = {};
-    if (diceResult == ''){
-        diceResult = curRoll;
-        // diceResultNode.nodeValue = diceResult;
-        // turnDisplayTextNode.nodeValue = rollResult;
-        payload.diceResult = diceResult;
-        socket.emit("sendChat",payload);
-        var item = document.createElement('li');
-        item.className +='list-group-item';
-        item.textContent = payload.diceResult;
-        chatLog.appendChild(item);
-        stayScrolled(chatCard);
-    }
-    else{
-        diceResult = diceResult+"+"+curRoll
-        //diceResultNode.nodeValue = diceResult;
-        payload.diceResult = diceResult;
-        socket.emit("sendChat",payload);
-        //turnDisplayTextNode.nodeValue = rollResult;
-        var item = document.createElement('li');
-        item.className +='list-group-item';
-        item.textContent = payload.diceResult;
-        chatLog.appendChild(item);
-        stayScrolled(chatCard);
-    }
+    diceResult = socket.auth.username + ": rolled a "+ dice + " for: "+curRoll
+    //diceResultNode.nodeValue = diceResult;
+    payload.diceResult = diceResult;
+    socket.emit("sendChat",payload);
+    //turnDisplayTextNode.nodeValue = rollResult;
+    var item = document.createElement('li');
+    item.className +='list-group-item';
+    item.textContent = payload.diceResult;
+    chatLog.appendChild(item);
+    stayScrolled(chatCard);
 }
 
 socket.on('displayChat', function(payload) {
@@ -85,10 +75,19 @@ socket.on('displayChat', function(payload) {
     stayScrolled(chatCard);
   });
 
-  function stayScrolled(elem){
-      //console.log("in stayScrolled");
-      elem.scrollTop = elem.scrollHeight;
-  }
+socket.on("user connected", ({userID, username}) => {
+    console.log('in user connected');
+    var item = document.createElement('option');
+    item.style.fontSize = "smaller";
+    item.value = userID;
+    item.textContent = username;
+    playerList.appendChild(item);
+});
+
+function stayScrolled(elem){
+    //console.log("in stayScrolled");
+    elem.scrollTop = elem.scrollHeight;
+}
 
 // function clearDisplayNodes(){
 //     diceResultNode.nodeValue = '';

@@ -10,9 +10,11 @@ function onboard() {
     // socket.connect();
     if (dmRadio.checked){
         document.location.href='/dm';
+        localStorage.setItem("role", "dm");
     }
     if (pcRadio.checked){
         document.location.href = '/users';
+        localStorage.setItem("role", "pc");
     }
 };
 
