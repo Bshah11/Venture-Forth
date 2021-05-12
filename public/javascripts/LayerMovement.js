@@ -1,7 +1,6 @@
 // // This page contains the client side setup and the socket delivery to the server
 // var socket = io();
 
-// const ioClient = require('socket.io-client');
 const socket = io({autoConnect: false});
 
 //Load the session and user id from local storage and connect to socket
@@ -15,6 +14,21 @@ socket.gameRole = role;
 //console.log("Socket.gameRole: "+socket.gameRole);
 console.log("connecting");
 socket.connect();
+
+socket.onAny((event, ...args) =>{
+    console.log(event,args);
+});
+
+socket.on("session", ({sessionID, userID}) =>{
+    //attach the session ID to the next reconnection
+    socket.auth = { sessionID };
+    console.log("session ID in browser: "+sessionID);
+    //Store it
+    localStorage.setItem("sesionID", sessionID);
+    //Save user ID
+    socket.userID = userID;
+})
+
 
 
 

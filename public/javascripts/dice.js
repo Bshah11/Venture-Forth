@@ -57,7 +57,9 @@ function rollDisplay(dice) {
     diceResult = socket.auth.username + ": rolled a "+ dice + " for: "+curRoll
     //diceResultNode.nodeValue = diceResult;
     payload.diceResult = diceResult;
-    socket.emit("sendChat",payload);
+    recipient = playerList.value;
+    console.log(recipient);
+    socket.emit("sendChat",{payload, recipient});
     //turnDisplayTextNode.nodeValue = rollResult;
     var item = document.createElement('li');
     item.className +='list-group-item';
@@ -66,23 +68,37 @@ function rollDisplay(dice) {
     stayScrolled(chatCard);
 }
 
-socket.on('displayChat', function(payload) {
+socket.on('sendChat',({payload, from}) => {
     //console.log("displayChat diceResult: "+payload.diceResult);
-    var item = document.createElement('li');
-    item.className +='list-group-item';
-    item.textContent = payload.diceResult;
-    chatLog.appendChild(item);
-    stayScrolled(chatCard);
-  });
+    console.log("in sendchat browser");
+    for(let i=0; i<payload.users.length;i++){
+        const user = payload.users[i];
+        console.log("user in displaychat:"+user)
+        console.log("from in displayChat"+from);
+        if (user.userID ===from){
+            var item = document.createElement('li');
+            item.className +='list-group-item';
+            item.textContent = payload.diceResult;
+            chatLog.appendChild(item);
+            stayScrolled(chatCard);
+        };
+        break;
+    };
+});
+socket.on('get users', (users) => {
 
+});
 socket.on("user connected", ({userID, username}) => {
     console.log('in user connected');
     var item = document.createElement('option');
     item.style.fontSize = "smaller";
     item.value = userID;
+    console.log("userID when making list: "+userID);
     item.textContent = username;
     playerList.appendChild(item);
 });
+
+socket.on("private message")
 
 function stayScrolled(elem){
     //console.log("in stayScrolled");
