@@ -54,12 +54,14 @@ function rollDisplay(dice) {
     var curRoll = rollDice(dice);
     rollResult = rollResult + curRoll;
     let payload = {};
-    diceResult = socket.auth.username + ": rolled a "+ dice + " for: "+curRoll
+    console.log("Socket: "+socket.username);
+    diceResult = socket.username + ": rolled a "+ dice + " for: "+curRoll
     //diceResultNode.nodeValue = diceResult;
     payload.diceResult = diceResult;
     recipient = playerList.value;
-    console.log(recipient);
-    socket.emit("sendChat",{payload, recipient});
+    payload.to = recipient;
+    console.log("Recipient "+ recipient);
+    socket.emit("sendChat",(payload));
     //turnDisplayTextNode.nodeValue = rollResult;
     var item = document.createElement('li');
     item.className +='list-group-item';
@@ -68,21 +70,26 @@ function rollDisplay(dice) {
     stayScrolled(chatCard);
 }
 
-socket.on('sendChat',({payload, from}) => {
+socket.on('sendChat',(payload, from) => {
     //console.log("displayChat diceResult: "+payload.diceResult);
     console.log("in sendchat browser");
-    for(let i=0; i<payload.users.length;i++){
-        const user = payload.users[i];
-        console.log("user in displaychat:"+user)
-        console.log("from in displayChat"+from);
-        if (user.userID ===from){
-            var item = document.createElement('li');
-            item.className +='list-group-item';
-            item.textContent = payload.diceResult;
-            chatLog.appendChild(item);
-            stayScrolled(chatCard);
-        };
-        break;
+    console.log(payload);
+    var users = payload.payload.users;
+    console.log(users);
+    for(let i=0; i<users.length;i++){
+        const user = users[i];
+        console.log("user in displaychat: "+user)
+        console.log(user);
+        console.log("from in displayChat "+ payload.from);
+        console.log(payload.from);
+
+        console.log("this is true");
+        var item = document.createElement('li');
+        item.className +='list-group-item';
+        item.textContent = payload.payload.diceResult;
+        chatLog.appendChild(item);
+        stayScrolled(chatCard);
+
     };
 });
 socket.on('get users', (users) => {

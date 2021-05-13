@@ -3,6 +3,21 @@
 
 const socket = io({autoConnect: false});
 
+socket.onAny((event, ...args) =>{
+    console.log(event,args);
+});
+
+socket.on("session", ({sessionID, userID, username}) =>{
+    //attach the session ID to the next reconnection
+    socket.auth = { sessionID };
+    console.log("session ID in browser: "+sessionID);
+    //Store it
+    localStorage.setItem("sesionID", sessionID);
+    //Save user ID
+    socket.userID = userID;
+    socket.username = username;
+});
+
 //Load the session and user id from local storage and connect to socket
 var username = localStorage.getItem("username");
 var sessionID = localStorage.getItem("sessionID");
@@ -15,19 +30,6 @@ socket.gameRole = role;
 console.log("connecting");
 socket.connect();
 
-socket.onAny((event, ...args) =>{
-    console.log(event,args);
-});
-
-socket.on("session", ({sessionID, userID}) =>{
-    //attach the session ID to the next reconnection
-    socket.auth = { sessionID };
-    console.log("session ID in browser: "+sessionID);
-    //Store it
-    localStorage.setItem("sesionID", sessionID);
-    //Save user ID
-    socket.userID = userID;
-})
 
 
 

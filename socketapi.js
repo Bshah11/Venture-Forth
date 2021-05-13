@@ -1,5 +1,5 @@
 
-const io = require("socket.io")();
+const io = require("socket.io")()
 const socketapi = {
   io:io
 };
@@ -9,19 +9,44 @@ function getRandID(){
   return id;
 }
 
+
+
+var sessionStore = [];
+
+function findSession(sessionID){
+  console.log('in findSession looking up session id: '+sessionID);
+  console.log(sessionStore);
+  const session = sessionStore.find(({id}) => id  === sessionID);
+  console.log("session returned: "+session);
+  return session;
+};
+
+function saveSession(id, userID, username, connected){
+  console.log("saving session: "+id);
+  console.log("saving userID: "+userID);
+  console.log("saving username: "+username);
+  console.log("is connected?"+connected);
+  let session = {};
+  session.id = id;
+  session.userID = userID;
+  session.username = username;
+  session.connected = connected;
+  sessionStore.push(session);
+};
+
 //Middleware taken from socket.io docs
 io.use(async (socket, next) => {
   const sessionID = socket.handshake.auth.sessionID;
   console.log("socket session ID: "+ sessionID);
-  // if (sessionID) {
-  //   const session = await sessionStore.findSession(sessionID);
-  //   if (session) {
-  //     socket.sessionID = sessionID;
-  //     socket.userID = session.userID;
-  //     socket.username = session.username;
-  //     return next();
-  //   }
-  // }
+  if (sessionID) {
+    const session = await findSession(sessionID);
+    if (session) {
+      socket.sessionID = sessionID;
+      socket.userID = session.userID;
+      socket.username = session.username;
+      return next();
+    }
+  }
   const username = socket.handshake.auth.username;
   if (!username) {
     return next(new Error("invalid username"));
@@ -34,12 +59,15 @@ io.use(async (socket, next) => {
 
 // Add your socket.io logic here!
 io.on('connection', (socket) => {
+  saveSession(socket.sessionID,socket.userID,socket.username,socket.connected = true);
+  console.log(sessionStore);
   //Join the socket to the room
   socket.join(socket.userID);
   //Display the session information to all players connected to scoket
   socket.emit("session", {
     sessionID: socket.sessionID,
     userID: socket.userID,
+    username: socket.username,
   });
   const users = [];
   for(let [id, socket] of io.of('/').sockets){
@@ -70,11 +98,13 @@ io.on('connection', (socket) => {
       console.log('message: ' + payload);
       socket.broadcast.emit('retrieveLayer', payload);
   });
-  socket.on('sendChat', ({payload, to})=> {
+  socket.on('sendChat', (payload)=> {
     payload.users =users;
-    console.log(to);
+    console.log("payload "+payload)
+    var to = payload.to;
+    //console.log("to "+ to);
     console.log("message in sendChat: " +payload.diceResult);
-    socket.to(to).to(socket.userID).emit('sendChat',{
+    socket.to(payload.to).to(socket.userID).emit('sendChat',{
       payload,
       from:socket.userID,
       to,
