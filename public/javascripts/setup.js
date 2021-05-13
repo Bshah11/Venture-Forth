@@ -20,6 +20,10 @@ let tokenLayer = new Konva.Layer({
     name: 'tokenLayer',
 });
 
+let opacityLayer = new Konva.Layer({
+  name: 'opacityLayer',
+});
+
 
 
 
@@ -90,3 +94,6 @@ mapLayer.draw();
 
 stage.add(tokenLayer); //Adds token layer on top of map layer
 tokenLayer.draw();
+
+stage.add(opacityLayer); //Adds token layer on top of map layer
+opacityLayer.draw();
