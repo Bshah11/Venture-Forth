@@ -13,6 +13,8 @@ var newRectButton = document.getElementById('create-rect-button');
 var newTriButton = document.getElementById('create-tri-button');
 var newCirButton = document.getElementById('create-cir-button');
 
+//opacity
+var newOpacityButton = document.getElementById('create-Opacity-button');
 
 // Universal options for Map tool
 var stroke = formLineColor.value;
@@ -22,36 +24,42 @@ var strokeWidth = formStrokeWidth.value;
 // Tabs
 var lineTabButton = document.getElementById('line-tab-button');
 var shapeTabButton = document.getElementById('shape-tab-button');
+var opacityTabButton = document.getElementById('opacity-tab-button');
 var lineTab = document.getElementById("line-tab");
 var shapeTab = document.getElementById("shape-tab");
+var opacityTab = document.getElementById("opacity-tab");
 
 // Listeners for tabs
 lineTabButton.addEventListener("click", function(){
     console.log(lineTab);
     shapeTab.hidden = true;
-    if (lineTab.hidden == true){
-        lineTab.hidden = false;
-    } else {
-        lineTab.hidden = true;
-    }
+    opacityTab.hidden = true;
+    lineTab.hidden = false;
 });
 
 shapeTabButton.addEventListener("click", function(){
     console.log(shapeTab);
+    shapeTab.hidden = false;
+    opacityTab.hidden = true;
     lineTab.hidden = true;
-    if (shapeTab.hidden == true){
-        shapeTab.hidden = false;
-    } else {
-        shapeTab.hidden = true;
-    }
+});
+
+opacityTabButton.addEventListener("click", function(){
+    console.log(opacityTab);
+    shapeTab.hidden = true;
+    opacityTab.hidden = false;
+    lineTab.hidden = true;
 });
 
 //EventListener
-drawLineButton.addEventListener("click", function() {drawLine()});
 newRectButton.addEventListener("click", function() {drawRect()});
 newTriButton.addEventListener("click", function() {drawTri()});
 newCirButton.addEventListener("click", function() {drawCir()});
+
+drawLineButton.addEventListener("click", function() {drawLine()});
 brushLineButton.addEventListener("click", function() {brushLine(formLineColor.value, formStrokeWidth.value)});
+
+newOpacityButton.addEventListener("click", function() {drawOpacity()});
 
 
 // Listeners for stroke and strokewidth changes
@@ -72,6 +80,25 @@ var lastLine;
 //shape transformer
 var tr = new Konva.Transformer();
 mapLayer.add(tr);
+
+var trO = new Konva.Transformer();
+opacityLayer.add(trO);
+
+function drawOpacity(){
+    console.log("in draw Opacity");
+    //First, make sure all event listeners are removed from the stage element
+    stage.off();
+    stage.on('click', (e) =>{
+        console.log("clicked");
+        var pos = stage.getPointerPosition();
+        let newOpacity = createOpacity(pos);
+        opacityLayer.add(newOpacity);
+        opacityLayer.draw();
+        sendLayer(saveLayer(opacityLayer));
+        stage.off();
+    });
+};
+
 
 
 function drawRect(){
@@ -119,6 +146,52 @@ function drawCir(){
     })
 };
 
+
+function createOpacity(pos){
+    newOpacity = new Konva.Rect({
+        width: cellSize,
+        height: cellSize,
+        x: ((Math.round(pos.x/cellSize)) * cellSize),
+        y: ((Math.round(pos.y/cellSize)) * cellSize),
+        category: 'opacity',
+        fill: 'black',
+        stroke: 'black',
+        strokeWidth: 2,
+        draggable: true,
+        opacity: 0.25
+    });
+
+    newOpacity.on('dblclick', (e) => {
+        console.log("opacity dblclick");
+        trO.detach();
+        e.currentTarget.destroy();
+        opacityLayer.draw();
+        sendLayer(saveLayer(opacityLayer));
+
+    })
+
+    newOpacity.on('click', (e)=>{
+        console.log("opacity clicked");
+        console.log(e.currentTarget);
+        trO.nodes([e.currentTarget]);
+        console.log(trO);
+        opacityLayer.draw();
+        sendLayer(saveLayer(opacityLayer));
+    });
+
+    newOpacity.on('transformend', (e) =>{
+        console.log("end of transform");
+        trO.detach();
+        opacityLayer.draw();
+        sendLayer(saveLayer(opacityLayer));
+    });
+
+    newOpacity.on('dragend', (e) =>{
+        sendLayer(saveLayer(opacityLayer));
+
+    });
+    return newOpacity;
+}
 
 
 
@@ -243,6 +316,15 @@ function loadRect(token){
     mapLayer.add(loadedRect);
     mapLayer.draw();
 };
+
+function loadOpacity(token){
+    console.log(token);
+    loadedOpacity = new Konva.Rect(token);
+    //loadedRect.opacity(1);
+    opacityLayer.add(loadedOpacity);
+    opacityLayer.draw();
+};
+
 
 function loadCir(token){
     loadedCir = new Konva.Circle(token);

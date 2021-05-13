@@ -104,6 +104,11 @@ function loadLayer(payload){
         mapLayer.destroyChildren();
         mapLayer.draw();
     }
+    if (payload.layerName == "opacityLayer"){
+        console.log("destroy opacityLayer");
+        opacityLayer.destroyChildren();
+        opacityLayer.draw();
+    }
 
 
     //console.log(layer);
@@ -134,6 +139,14 @@ function loadLayer(payload){
             console.log("lets create a tri");
             token.draggable = false;
             loadTri(token);
+        }
+        if (token.category == "opacity"){
+            console.log("lets create a opacity");
+            console.log(token);
+            token.draggable = false;
+            token.opacity = 1;
+            console.log(token);
+            loadOpacity(token);
         }
     });
 };
