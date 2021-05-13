@@ -1,5 +1,41 @@
-// This page contains the client side setup and the socket delivery to the server
-var socket = io();
+// // This page contains the client side setup and the socket delivery to the server
+// var socket = io();
+
+const socket = io({autoConnect: false});
+
+socket.onAny((event, ...args) =>{
+    console.log(event,args);
+});
+
+socket.on("session", ({sessionID, userID, username}) =>{
+    //attach the session ID to the next reconnection
+    socket.auth = { sessionID };
+    console.log("session ID in browser: "+sessionID);
+    //Store it
+    localStorage.setItem("sesionID", sessionID);
+    //Save user ID
+    socket.userID = userID;
+    socket.username = username;
+});
+
+//Load the session and user id from local storage and connect to socket
+var username = localStorage.getItem("username");
+var sessionID = localStorage.getItem("sessionID");
+var role = localStorage.getItem("role");
+console.log("Role is: "+ role);
+socket.auth = {sessionID};
+socket.auth = { username };
+socket.gameRole = role;
+//console.log("Socket.gameRole: "+socket.gameRole);
+console.log("connecting");
+socket.connect();
+
+
+
+
+
+
+
 
 //Event listener to reset game board by layer
 var clearLayerButton = document.getElementById('clear-layer-button');
@@ -23,7 +59,7 @@ function saveLayer(layer){
     tokens.each(function(token, n){
         curMapState.push(token.attrs);
     });
-    payload.curMapState =curMapState;
+    payload.curMapState = curMapState;
     return payload;
 };
 
@@ -85,6 +121,21 @@ function loadLayer(payload){
             console.log(token);
             // No need to recall draw line, we should call the konva creator directly
             loadMapLine(token);
+        }
+        if (token.category == "rect"){
+            console.log("lets create a rect");
+            token.draggable = false;
+            loadRect(token);
+        }
+        if (token.category == "cir"){
+            console.log("lets create a cir");
+            token.draggable = false;
+            loadCir(token);
+        }
+        if (token.category == "tri"){
+            console.log("lets create a tri");
+            token.draggable = false;
+            loadTri(token);
         }
     });
 };

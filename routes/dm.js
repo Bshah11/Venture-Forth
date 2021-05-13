@@ -3,9 +3,10 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.render('user-index', { title: 'Venture Forth' });
+  res.render('index1', { title: 'Venture Forth' });
 });
 
 
 
 module.exports = router;
+

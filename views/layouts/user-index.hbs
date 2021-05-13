@@ -1,17 +1,22 @@
 <div class='container-fluid'>
 <h1>{{title}}</h1>
-<p>Prepare to {{title}}</p>
+<p>Prepare to {{title}} Player</p>
     <div class="row">
         <div class="col-md-8">
             {{> konva-stage}}
         </div>
         <div class="col-md-4">
             {{> token-toolbar}}
-            {{> map-toolbar}}
-            {{> chat-toolbar}}
         </div>
-        
+        <div hidden>
+            {{> map-toolbar}}
+            {{> clear-layers}}
+        </div>
     </div>
+    <div>
+        {{> chat-toolbar}}
+    </div>
+    {{> dice-toolbar}}
 </div>
 
 

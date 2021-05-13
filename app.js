@@ -12,6 +12,7 @@ var cors = require('cors');
 
 
 var mainRouter = require('./routes/index');
+var dmRouter = require('./routes/dm');
 var usersRouter = require('./routes/users');
 
 var app = express();
@@ -41,42 +42,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', mainRouter); // USE THIS ROUTER FOR CALLS TO AND FROM CLIETNT SIDE SCRIPTS
+app.use('/dm', dmRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
-
-mainRouter.post('/tokenState', (req, res) =>{
-  tokenState = req.body.payload;
-  console.log(tokenState);
-  res.status(200).send("Captured Map and stored");
-})
-
-mainRouter.get('/tokenState', (req, res) =>{
-  console.log("in map state get");
-  context = {};
-  context.curTokenState = tokenState;
-  res.status(200).send(context);
-  //res.end(curState);
-})
-
-mainRouter.post('/mapState', (req, res) =>{
-  mapState = [];
-  mapState = req.body.payload.curMapState;
-  console.log(mapState);
-  res.status(200).send("Captured Map and stored");
-})
-
-mainRouter.get('/mapState', (req, res) =>{
-  console.log("in map state load");
-  context = {};
-  context.curMapState = mapState;
-  res.status(200).send(context);
-  //res.end(curState);
-})
 
 
 

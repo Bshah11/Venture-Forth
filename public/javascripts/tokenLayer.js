@@ -62,6 +62,10 @@ function createToken(){
             //saveLayer(tokenLayer);
             sendLayer(saveLayer(tokenLayer));
         })
+        img.on('dblclick', (e) => {
+            e.currentTarget.destroy();
+            tokenLayer.draw();
+        });
     };
     imageObj.src = srcDict[tokenType.value];
     //console.log(stage);
