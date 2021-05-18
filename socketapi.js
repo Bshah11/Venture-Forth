@@ -103,12 +103,30 @@ io.on('connection', (socket) => {
       console.log('message: ' + payload);
       socket.broadcast.emit('retrieveLayer', payload);
   });
-  socket.on('sendChat', (payload)=> {
+
+  socket.on('sendRoll', (payload)=> {
     payload.users =users;
     console.log("payload "+payload)
     var to = payload.to;
     //console.log("to "+ to);
     console.log("message in sendChat: " +payload.diceResult);
+    socket.to(payload.to).to(socket.userID).emit('sendRoll',{
+      payload,
+      from:socket.userID,
+      to,
+    });
+  });
+  socket.on('globalRoll', (payload)=>{
+    console.log("globalRoll: "+payload.diceResult)
+    socket.broadcast.emit("allRoll", payload);
+  });
+
+  socket.on('sendChat', (payload)=> {
+    payload.users =users;
+    console.log("payload "+payload)
+    var to = payload.to;
+    //console.log("to "+ to);
+    console.log("message in sendChat: " +payload.chat);
     socket.to(payload.to).to(socket.userID).emit('sendChat',{
       payload,
       from:socket.userID,
@@ -116,9 +134,9 @@ io.on('connection', (socket) => {
     });
   });
   socket.on('globalChat', (payload)=>{
-    console.log("globalChat: "+payload.diceResult)
+    console.log("globalChat: "+payload.chat)
     socket.broadcast.emit("allChat", payload);
-  })
+  });
 
 });
 
