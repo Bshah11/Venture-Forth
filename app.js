@@ -18,9 +18,75 @@ var usersRouter = require('./routes/users');
 var app = express();
 app.use(cors());
 
-//States for layers
-mapState = [];
-tokenState = [];
+
+// DB setup Google Cloud Storage
+const {Datastore} = require('@google-cloud/datastore');
+const bodyParser = require('body-parser');
+const datastore = new Datastore();
+const LAYERS = "layers";
+
+function fromDatastore(item){
+  item.id = item[Datastore.KEY].id;
+  return item;
+}
+
+function toDatastore (obj, nonIndexed) {
+  nonIndexed = nonIndexed || [];
+  const results = [];
+  Object.keys(obj).forEach((k) => {
+    if (obj[k] === undefined) {
+      return;
+    }
+    results.push({
+      name: k,
+      value: obj[k],
+      excludeFromIndexes: nonIndexed.indexOf(k) !== -1
+    });
+  });
+  return results;
+}
+
+/* --- Layer  model Functions ---- */
+
+async function post_layer(name, layer){
+  console.log("send to DB");
+  var key = datastore.key(LAYERS);
+  const new_Layer = {"name": name, "layer": layer};
+  // const new_Layer = {"name": name, "map": map, user : user};
+  await datastore.save({ "key": key, "data": new_Layer});
+  return key;
+}
+
+async function get_layer(){
+  const q = datastore.createQuery(LAYERS);
+  const entities = await datastore.runQuery(q);
+  return entities[0].map(fromDatastore);
+}
+
+
+
+/* --- Datastore API calls ---*/
+
+mainRouter.post('/layers', function(req, res){
+  console.log("inside post")
+  post_layer(req.body.name, req.body.layer)
+  .then(key =>{
+    let reString = {
+      "id" : key.id,
+      "name" : req.body.name,
+      "layer" : req.body.layer
+    }
+    console.log(reString)
+    res.status(201).send(reString);
+  })
+});
+
+mainRouter.get('/layers', function(req, res){
+  const layer = get_layer()
+.then( (layer) => {
+      res.status(200).json(layer);
+  });
+});
 
 
 // view engine setup

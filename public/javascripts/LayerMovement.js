@@ -31,18 +31,6 @@ console.log("connecting");
 socket.connect();
 
 
-
-
-
-
-
-
-//Event listener to reset game board by layer
-var clearLayerButton = document.getElementById('clear-layer-button');
-var clearLayerSelect = document.getElementById('clear-layer');
-
-clearLayerButton.addEventListener('click', function(){clearLayer()});
-
 // Saving to Server
 function sendLayer(payload) {
       //console.log(layer);
