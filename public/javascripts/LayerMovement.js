@@ -111,7 +111,11 @@ function loadLayer(payload){
         opacityLayer.destroyChildren();
         opacityLayer.draw();
     }
-
+    if (payload.layerName == "imageLayer"){
+        console.log("destroy imageLayer");
+        imageLayer.destroyChildren();
+        imageLayer.draw();
+    }
 
     //console.log(layer);
     payload.curMapState.forEach(token =>{

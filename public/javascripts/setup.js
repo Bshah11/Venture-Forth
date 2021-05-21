@@ -100,3 +100,6 @@ tokenLayer.draw();
 
 stage.add(opacityLayer); //Adds token layer on top of map layer
 opacityLayer.draw();
+
+stage.add(imageLayer);
+imageLayer.draw();
