@@ -1,15 +1,15 @@
 //create buttons to add event listeners
-var imageButton = document.getElementById('controlImageButton');
-var imageInput = document.getElementById('imageInput');
-imageButton.addEventListener('click',controlImage);
+var overlayImageButton = document.getElementById('overlayImageButton');
+var overlayImageInput = document.getElementById('overlayImageInput');
+overlayImageButton.addEventListener('click',displayImage);
 
 
-//Depending on the innerHTML of imageButton, create or destroy image
+//Depending on the innerHTML of overlayImageButton, create or destroy image
 function displayImage(e){
     console.log("inside controlImage");
-    var controlText = imageButton.innerText;
+    var controlText = overlayImageButton.innerText;
     var corsAnywhere = 'https://secret-ocean-49799.herokuapp.com/'
-    var url = corsAnywhere+imageInput.value;
+    var url = corsAnywhere+overlayImageInput.value;
     Konva.Image.fromURL(url, function(imageNode){
         imageNode.setAttrs({
             x:0,
@@ -17,9 +17,11 @@ function displayImage(e){
             height: 500,
             width: 500,
             url: url,
+            category: 'image',
         });
         imageLayer.add(imageNode);
         imageLayer.batchDraw();
+        sendLayer(saveLayer(imageLayer));
         imageNode.on('dblclick', (e) => {
             console.log("opacity dblclick");
             //trO.detach();
@@ -28,18 +30,19 @@ function displayImage(e){
             sendLayer(saveLayer(imageLayer));
         })
     });
-    imageInput.value = '';
+    overlayImageInput.value = '';
 };
 
 function loadImage(image){
-    Konva.Image.fromURL(url, function(imageNode){
+    console.log("loading image...")
+    Konva.Image.fromURL(image.url, function(imageNode){
         imageNode.setAttrs({
             x:0,
             y:0,
             height: 500,
             width: 500,
-            url: url,
         });
         imageLayer.add(imageNode);
         imageLayer.batchDraw();
+    });
 }

@@ -154,6 +154,11 @@ function loadLayer(payload){
             console.log(token);
             loadOpacity(token);
         }
+        if(token.category == "image"){
+            console.log(token);
+            console.log("loading image");
+            loadImage(token);
+        }
     });
 };
 
