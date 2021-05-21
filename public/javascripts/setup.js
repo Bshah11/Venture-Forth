@@ -5,16 +5,19 @@ var stage = new Konva.Stage({
     height: 500
   });
 
+
 //Instantiate layer objects and prepare them to be added to the stage and modified by users
+var backgroundImageLayer = new Konva.Layer({
+  name: 'backgroundImageLayer'
+});
+
 var gridLayer = new Konva.Layer({
     name: 'gridLayer',
 });
 
-
 var mapLayer = new Konva.Layer({
     name: 'mapLayer',
 });
-
 
 let tokenLayer = new Konva.Layer({
     name: 'tokenLayer',
@@ -24,8 +27,8 @@ let opacityLayer = new Konva.Layer({
   name: 'opacityLayer',
 });
 
-let imageLayer = new Konva.Layer({
-  name: 'imageLayer',
+let overlayImageLayer = new Konva.Layer({
+  name: 'overlayImageLayer',
 })
 
 
@@ -89,6 +92,10 @@ function createGrid(layer){
 //These functions create the correct hierarchy of the canvas to properly display the game. Modifying the order will result
 // in undesireable behavior.
 createGrid(gridLayer); // Adds grids to Layer
+
+stage.add(backgroundImageLayer);
+backgroundImageLayer.draw();
+
 stage.add(gridLayer);
 gridLayer.draw();
 
@@ -101,5 +108,5 @@ tokenLayer.draw();
 stage.add(opacityLayer); //Adds token layer on top of map layer
 opacityLayer.draw();
 
-stage.add(imageLayer);
-imageLayer.draw();
+stage.add(overlayImageLayer);
+overlayImageLayer.draw();

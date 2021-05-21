@@ -111,11 +111,17 @@ function loadLayer(payload){
         opacityLayer.destroyChildren();
         opacityLayer.draw();
     }
-    if (payload.layerName == "imageLayer"){
+    if (payload.layerName == "overlayImageLayer"){
         console.log("destroy imageLayer");
-        imageLayer.destroyChildren();
-        imageLayer.draw();
+        overlayImageLayer.destroyChildren();
+        overlayImageLayer.draw();
     }
+    if (payload.layerName == "backgroundImageLayer"){
+        console.log("destroy imageLayer");
+        backgroundImageLayer.destroyChildren();
+        backgroundImageLayer.draw();
+    }
+
 
     //console.log(layer);
     payload.curMapState.forEach(token =>{
@@ -157,7 +163,7 @@ function loadLayer(payload){
         if(token.category == "image"){
             console.log(token);
             console.log("loading image");
-            loadImage(token);
+            loadImage(token, payload.layerName);
         }
     });
 };
