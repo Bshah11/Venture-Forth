@@ -17,7 +17,17 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 app.use(cors());
-
+app.options('*',cors());
+// Add headers
+// Add Access Control Allow Origin headers
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 //States for layers
 mapState = [];
 tokenState = [];

@@ -24,6 +24,9 @@ let opacityLayer = new Konva.Layer({
   name: 'opacityLayer',
 });
 
+let imageLayer = new Konva.Layer({
+  name: 'imageLayer',
+})
 
 
 
