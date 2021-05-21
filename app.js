@@ -23,7 +23,7 @@ app.use(cors());
 const {Datastore} = require('@google-cloud/datastore');
 const bodyParser = require('body-parser');
 const datastore = new Datastore();
-const LAYERS = "layers";
+const MAPS = "map";
 
 function fromDatastore(item){
   item.id = item[Datastore.KEY].id;
@@ -48,45 +48,70 @@ function toDatastore (obj, nonIndexed) {
 
 /* --- Layer  model Functions ---- */
 
-async function post_layer(name, layer){
+async function post_Map(name, map){
   console.log("send to DB");
-  var key = datastore.key(LAYERS);
-  const new_Layer = {"name": name, "layer": layer};
+  var key = datastore.key(MAPS);
+  const newMap = {"name": name, "map": map};
   // const new_Layer = {"name": name, "map": map, user : user};
-  await datastore.save({ "key": key, "data": new_Layer});
+  await datastore.save({ "key": key, "data": newMap});
   return key;
 }
 
-async function get_layer(){
-  const q = datastore.createQuery(LAYERS);
+async function get_Maps(){
+  const q = datastore.createQuery(MAPS);
   const entities = await datastore.runQuery(q);
   return entities[0].map(fromDatastore);
 }
+
+async function get_Map(key){
+  const data = await datastore.get(key);
+  return data;
+};
 
 
 
 /* --- Datastore API calls ---*/
 
-mainRouter.post('/layers', function(req, res){
+mainRouter.post('/map', function(req, res){
   console.log("inside post")
-  post_layer(req.body.name, req.body.layer)
+  post_Map(req.body.name, req.body.map)
   .then(key =>{
     let reString = {
       "id" : key.id,
       "name" : req.body.name,
-      "layer" : req.body.layer
+      "nam" : req.body.map
     }
     console.log(reString)
     res.status(201).send(reString);
   })
 });
 
-mainRouter.get('/layers', function(req, res){
-  const layer = get_layer()
+mainRouter.get('/map', function(req, res){
+  const layer = get_Maps()
 .then( (layer) => {
       res.status(200).json(layer);
   });
 });
+
+mainRouter.get('/map/:id', function(req, res){
+  console.log("Inside get MAP ID") 
+  const key = datastore.key([MAPS, parseInt(req.params.id, 10)]);
+  
+  get_Map(key).then(map => {
+      console.log("Found Map");
+      console.log(map);
+      if(map[0]){
+          console.log(map);
+          res.status(200).send(map[0]);
+
+      }else {
+          console.log("No id found");
+          let erString = {"Error": "No map with this boat_id exists"};
+          res.status(404).send(erString);
+      }
+  })}
+);
+
 
 
 // view engine setup
