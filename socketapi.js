@@ -77,19 +77,24 @@ io.on('connection', (socket) => {
       //role: localStorage.getItem("role"),
     });
   }
+
   //Update the drop down menu that has all currently connected users
   console.log(users);
   //Emit the current list of players to all connected players
-  socket.emit('get users', users);
+
   socket.broadcast.emit("user connected", {
     userID: socket.id,
     username: socket.username,
   });
-
   console.log('user: '+socket.username+" connected");
-  //Add users to array containing all users
 
-
+  //Send the users array to all players so that the dropdown is properly updated.
+  //This could be done more succintly i'm sure however I could not get it to broadcast
+  //To everyone on a new user connecting or have the updated player list. This ensures
+  //That a new player joining the game has the most up to date player list and all players already
+  //connected have their player list updated on new player connection.
+  socket.emit('get users', users);
+  socket.broadcast.emit('get users', users);
 
   socket.on('disconnect', () => {
     console.log('user: '+socket.username+' disconnected');
@@ -98,25 +103,41 @@ io.on('connection', (socket) => {
       console.log('message: ' + payload);
       socket.broadcast.emit('retrieveLayer', payload);
   });
-  socket.on('sendChat', (payload)=> {
+
+  socket.on('sendRoll', (payload)=> {
     payload.users =users;
     console.log("payload "+payload)
     var to = payload.to;
     //console.log("to "+ to);
     console.log("message in sendChat: " +payload.diceResult);
+    socket.to(payload.to).to(socket.userID).emit('sendRoll',{
+      payload,
+      from:socket.userID,
+      to,
+    });
+  });
+  socket.on('globalRoll', (payload)=>{
+    console.log("globalRoll: "+payload.diceResult)
+    socket.broadcast.emit("allRoll", payload);
+  });
+
+  socket.on('sendChat', (payload)=> {
+    payload.users =users;
+    console.log("payload "+payload)
+    var to = payload.to;
+    //console.log("to "+ to);
+    console.log("message in sendChat: " +payload.chat);
     socket.to(payload.to).to(socket.userID).emit('sendChat',{
       payload,
       from:socket.userID,
       to,
     });
   });
-  socket.on('private message', ({content, to}) =>{
-    socket.to(to).to(socket.userID).emit("private message", {
-      content,
-      from: socket.userID,
-      to,
-    });
+  socket.on('globalChat', (payload)=>{
+    console.log("globalChat: "+payload.chat)
+    socket.broadcast.emit("allChat", payload);
   });
+
 });
 
 

@@ -22,6 +22,10 @@ var chatCard = document.getElementById('chatCard');
 //Get the select bar to be able to update when users join room
 var playerList = document.getElementById('playerList');
 
+//Set up the chat form
+var chatInput = document.getElementById("chatInput");
+var sendChatButton = document.getElementById('sendChatButton')
+sendChatButton.addEventListener('click',function(){chatDisplay(chatInput.value)});
 var diceResult = '';
 var rollResult = 0;
 
@@ -59,62 +63,145 @@ function rollDisplay(dice) {
     //diceResultNode.nodeValue = diceResult;
     payload.diceResult = diceResult;
     recipient = playerList.value;
-    payload.to = recipient;
-    console.log("Recipient "+ recipient);
-    socket.emit("sendChat",(payload));
-    //turnDisplayTextNode.nodeValue = rollResult;
+    //If the recipient is global, we broadcast to all players
+    if(recipient == 'global'){
+        socket.emit("globalRoll", payload);
+        var item = document.createElement('li');
+        item.className +='list-group-item';
+        item.textContent = payload.diceResult;
+        chatLog.appendChild(item);
+        stayScrolled(chatCard);
+    }
+    else if(recipient == 'private'){
+        var item = document.createElement('li');
+        item.className +='list-group-item';
+        item.textContent = payload.diceResult;
+        chatLog.appendChild(item);
+        stayScrolled(chatCard);
+    }
+    //Else we send a directed message using sendChat
+    else {
+        payload.to = recipient;
+        console.log("Recipient "+ recipient);
+        socket.emit("sendRoll", payload);
+        //turnDisplayTextNode.nodeValue = rollResult;
+        var item = document.createElement('li');
+        item.className +='list-group-item';
+        item.textContent = payload.diceResult;
+        chatLog.appendChild(item);
+        stayScrolled(chatCard);
+    }
+}
+
+//Function to display chats
+function chatDisplay(chat) {
+    chatInput.value='';
+    let payload = {};
+    chatText = socket.username + " says: "+ chat
+    //diceResultNode.nodeValue = diceResult;
+    payload.chat = chatText;
+    recipient = playerList.value;
+    //If the recipient is global, we broadcast to all players
+    if(recipient == 'global'){
+        socket.emit("globalChat", payload);
+        var item = document.createElement('li');
+        item.className +='list-group-item';
+        item.textContent = payload.chat;
+        chatLog.appendChild(item);
+        stayScrolled(chatCard);
+    }
+    else if(recipient == 'private'){
+        var item = document.createElement('li');
+        item.className +='list-group-item';
+        item.textContent = payload.chat;
+        chatLog.appendChild(item);
+        stayScrolled(chatCard);
+    }
+    //Else we send a directed message using sendChat
+    else {
+        payload.to = recipient;
+        console.log("Recipient "+ recipient);
+        socket.emit("sendChat", payload);
+        //turnDisplayTextNode.nodeValue = rollResult;
+        var item = document.createElement('li');
+        item.className +='list-group-item';
+        item.textContent = payload.chat;
+        chatLog.appendChild(item);
+        stayScrolled(chatCard);
+    }
+}
+
+//This endpoint is for a directed roll at a single user
+socket.on('sendRoll',(payload, from) => {
+    console.log("sendChat browser payload: "+payload.payload.diceResult);
+    var item = document.createElement('li');
+    item.className +='list-group-item';
+    item.textContent = payload.payload.diceResult;
+    chatLog.appendChild(item);
+    stayScrolled(chatCard);
+    });
+
+//This is for global dice rolls
+socket.on('allRoll',(payload, from) => {
+    console.log("allRoll browser payload: "+payload.diceResult);
     var item = document.createElement('li');
     item.className +='list-group-item';
     item.textContent = payload.diceResult;
     chatLog.appendChild(item);
     stayScrolled(chatCard);
-}
+});
 
+//This endpoint is for a directed chat at a single user
 socket.on('sendChat',(payload, from) => {
-    //console.log("displayChat diceResult: "+payload.diceResult);
-    console.log("in sendchat browser");
-    console.log(payload);
-    var users = payload.payload.users;
-    console.log(users);
-    for(let i=0; i<users.length;i++){
-        const user = users[i];
-        console.log("user in displaychat: "+user)
-        console.log(user);
-        console.log("from in displayChat "+ payload.from);
-        console.log(payload.from);
+    var item = document.createElement('li');
+    item.className +='list-group-item';
+    item.textContent = payload.payload.chat;
+    chatLog.appendChild(item);
+    stayScrolled(chatCard);
+    });
 
-        console.log("this is true");
-        var item = document.createElement('li');
-        item.className +='list-group-item';
-        item.textContent = payload.payload.diceResult;
-        chatLog.appendChild(item);
-        stayScrolled(chatCard);
-
-    };
+//This is for global chat
+socket.on('allChat',(payload, from) => {
+    console.log("allChat browser payload: "+payload.chat);
+    var item = document.createElement('li');
+    item.className +='list-group-item';
+    item.textContent = payload.chat;
+    chatLog.appendChild(item);
+    stayScrolled(chatCard);
 });
+
+//Get all users and build user dropdown menu
 socket.on('get users', (users) => {
-
+    playerList.innerHTML='';
+    //Create the private Item to only display to you
+    var private = document.createElement('option');
+    private.style.fontSize = "smaller";
+    private.value = "private";
+    private.textContent = "Private";
+    playerList.appendChild(private);
+    //Create the global item in the list which will broadcast to all players
+    var global = document.createElement('option');
+    global.style.fontSize = "smaller";
+    global.value = "global";
+    global.textContent = "Global";
+    playerList.appendChild(global);
+    //Loop through all connected users and add them to the list below global
+    users.forEach((user) =>{
+        //Don't add your own username to the list
+        if(user.userID == socket.id){
+            return;
+        }else{
+            var item = document.createElement('option');
+            item.style.fontSize = "smaller";
+            item.value = user.userID;
+            console.log("userID when making list: "+user.userID);
+            item.textContent = user.username;
+            playerList.appendChild(item);
+        }
+    })
 });
-socket.on("user connected", ({userID, username}) => {
-    console.log('in user connected');
-    var item = document.createElement('option');
-    item.style.fontSize = "smaller";
-    item.value = userID;
-    console.log("userID when making list: "+userID);
-    item.textContent = username;
-    playerList.appendChild(item);
-});
-
-socket.on("private message")
 
 function stayScrolled(elem){
     //console.log("in stayScrolled");
     elem.scrollTop = elem.scrollHeight;
 }
-
-// function clearDisplayNodes(){
-//     diceResultNode.nodeValue = '';
-//     turnDisplayTextNode.nodeValue= '';
-//     diceResult = '';
-//     rollResult=0;
-// }
