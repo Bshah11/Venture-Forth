@@ -93,6 +93,7 @@ function loadImage(image,layer){
     });
 }
 
+//Emit the DM's song choice to all connected parties
 function sendAudio(music){
     console.log(music);
     console.log(musicDict[music]);
@@ -103,6 +104,8 @@ function sendAudio(music){
     audioPlayer.play();
 }
 
+//Need to build a brand new audio element for the receiving end otherwise Chromium will not allow you to set the source
+//Of the audio element.
 socket.on('playMusic', (payload) => {
     var userAudioDiv = document.getElementById('userAudio');
     var userAudio = document.createElement('audio');
