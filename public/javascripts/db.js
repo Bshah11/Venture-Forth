@@ -18,7 +18,7 @@ function postMap(e){
     console.log(mapSave);
     axios.post('/map', {
         "mapName": "tester", // Map Name
-        "Email" : "email",
+        "Email" : "email@email.com",
         "map" : mapSave
         // User JWT
     })
