@@ -7,6 +7,13 @@ var backgroundImageButton = document.getElementById('backgroundImageButton');
 var backgroundImageInput = document.getElementById('backgroundImageInput');
 backgroundImageButton.addEventListener('click',function(){displayImage(backgroundImageButton.value)});
 
+//Music choice buttons
+var musicSelectDropdownValue = document.getElementById('musicChoiceDropdown');
+var musicSubmitButton = document.getElementById('musicSubmitButton');
+musicSubmitButton.addEventListener('click',function(){sendAudio(musicSelectDropdownValue.value)})
+var audioPlayer = document.getElementById('audioPlayer');
+var audioPlayerSource = document.getElementById('audioPlayerSource');
+
 
 //Depending on the innerHTML of overlayImageButton, create or destroy image
 function displayImage(layer){
@@ -84,6 +91,23 @@ function loadImage(image,layer){
             backgroundImageLayer.batchDraw();
         }
     });
-
-
 }
+
+function sendAudio(music){
+    console.log(music);
+    console.log(musicDict[music]);
+    let payload ={};
+    payload.music = musicDict[music];
+    socket.emit("sendMusic",payload);
+    audioPlayer.src = musicDict[music];
+    audioPlayer.play();
+}
+
+socket.on('playMusic', (payload) => {
+    var userAudioDiv = document.getElementById('userAudio');
+    var userAudio = document.createElement('audio');
+    userAudio.controls=true;
+    userAudio.src = payload.music;
+    userAudioDiv.appendChild(userAudio);
+    userAudio.play();
+});

@@ -1,5 +1,12 @@
 <div class ="row">
     <input id="overlayImageInput" autocomplete="off"/><button id="overlayImageButton" value="overlayImageLayer">Overlay Image</button>
     <input id="backgroundImageInput" autocomplete="off"/><button id="backgroundImageButton" value="backgroundImageLayer">Background Image</button>
-
+    <div id="line-color-form" class="col">
+        <select id="musicChoiceDropdown" class="form-control" aria-label = "Default select example" style="font-size: smaller;">
+            <option selected style="font-size:smaller;">Choose a Song</option>
+            <option value="inn">Cozy Inn</option>
+        </select>
+    </div>
+    <button id="musicSubmitButton">Play Song</button>
+    <audio controls id="audioPlayer"></audio>
 </div>
