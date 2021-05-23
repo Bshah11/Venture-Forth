@@ -68,6 +68,22 @@ async function get_Map(key){
   return data;
 };
 
+function patch_Map(key, body){
+  console.log("Inside function patch boat");
+  const entity = {
+      key: key,
+      data: toDatastore(body,['description'])
+      }
+  console.log(entity);    
+  return datastore.update(entity).then(entity,err => {
+      if(err){
+          return err;
+      } else {
+          return entity;
+      }
+  });
+
+}
 
 
 /* --- Datastore API calls ---*/
@@ -86,6 +102,22 @@ mainRouter.post('/map', function(req, res){
   })
 });
 
+mainRouter.patch('/map/:id', function(req,res){
+  console.log("Inside patch Map");
+  console.log(req.body);
+  console.log(req.params.id);
+  const key = datastore.key([MAPS, parseInt(req.params.id, 10)]);
+  let load = {};
+  load.id =key.id;
+  load.name = req.body.name;
+  load.map = req.body.map;
+  patch_Map(key, load)
+  .then(key => {
+    res.sendStatus(200);
+  })
+
+})
+
 mainRouter.get('/map', function(req, res){
   const layer = get_Maps()
 .then( (layer) => {
@@ -101,6 +133,7 @@ mainRouter.get('/map/:id', function(req, res){
       console.log("Found Map");
       console.log(map);
       if(map[0]){
+        map[0].id = req.params.id;
           console.log(map);
           res.status(200).send(map[0]);
 
