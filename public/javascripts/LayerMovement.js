@@ -103,6 +103,16 @@ function loadLayer(payload){
         opacityLayer.add(trO);
         opacityLayer.draw();
     }
+    if (payload.layerName == "overlayImageLayer"){
+        console.log("destroy imageLayer");
+        overlayImageLayer.destroyChildren();
+        overlayImageLayer.draw();
+    }
+    if (payload.layerName == "backgroundImageLayer"){
+        console.log("destroy imageLayer");
+        backgroundImageLayer.destroyChildren();
+        backgroundImageLayer.draw();
+    }
 
     // readd tranformers
 
@@ -150,6 +160,11 @@ function loadLayer(payload){
             }
             console.log(token);
             loadOpacity(token);
+        }
+        if(token.category == "image"){
+            console.log(token);
+            console.log("loading image");
+            loadImage(token, payload.layerName);
         }
     });
 };

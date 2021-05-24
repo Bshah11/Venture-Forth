@@ -145,7 +145,17 @@ mainRouter.get('/map/:id', function(req, res){
   })}
 );
 
-
+app.options('*',cors());
+// Add headers
+// Add Access Control Allow Origin headers
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 // view engine setup
 app.engine('hbs',hbs({
