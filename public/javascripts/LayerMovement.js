@@ -111,6 +111,16 @@ function loadLayer(payload){
         opacityLayer.destroyChildren();
         opacityLayer.draw();
     }
+    if (payload.layerName == "overlayImageLayer"){
+        console.log("destroy imageLayer");
+        overlayImageLayer.destroyChildren();
+        overlayImageLayer.draw();
+    }
+    if (payload.layerName == "backgroundImageLayer"){
+        console.log("destroy imageLayer");
+        backgroundImageLayer.destroyChildren();
+        backgroundImageLayer.draw();
+    }
 
 
     //console.log(layer);
@@ -149,6 +159,11 @@ function loadLayer(payload){
             token.opacity = 1;
             console.log(token);
             loadOpacity(token);
+        }
+        if(token.category == "image"){
+            console.log(token);
+            console.log("loading image");
+            loadImage(token, payload.layerName);
         }
     });
 };

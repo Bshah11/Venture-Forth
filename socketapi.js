@@ -137,6 +137,9 @@ io.on('connection', (socket) => {
     console.log("globalChat: "+payload.chat)
     socket.broadcast.emit("allChat", payload);
   });
+  socket.on('sendMusic',(payload)=>{
+    socket.broadcast.emit("playMusic", payload);
+  });
 
 });
 
