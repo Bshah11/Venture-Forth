@@ -31,18 +31,6 @@ console.log("connecting");
 socket.connect();
 
 
-
-
-
-
-
-
-//Event listener to reset game board by layer
-var clearLayerButton = document.getElementById('clear-layer-button');
-var clearLayerSelect = document.getElementById('clear-layer');
-
-clearLayerButton.addEventListener('click', function(){clearLayer()});
-
 // Saving to Server
 function sendLayer(payload) {
       //console.log(layer);
@@ -104,11 +92,15 @@ function loadLayer(payload){
     if (payload.layerName == "mapLayer"){
         console.log("destroy mapLayer");
         mapLayer.destroyChildren();
+        var tr = new Konva.Transformer();
+        mapLayer.add(tr);
         mapLayer.draw();
     }
     if (payload.layerName == "opacityLayer"){
         console.log("destroy opacityLayer");
         opacityLayer.destroyChildren();
+        var trO = new Konva.Transformer();
+        opacityLayer.add(trO);
         opacityLayer.draw();
     }
     if (payload.layerName == "overlayImageLayer"){
@@ -122,6 +114,7 @@ function loadLayer(payload){
         backgroundImageLayer.draw();
     }
 
+    // readd tranformers
 
     //console.log(layer);
     payload.curMapState.forEach(token =>{
@@ -139,24 +132,32 @@ function loadLayer(payload){
         }
         if (token.category == "rect"){
             console.log("lets create a rect");
-            token.draggable = false;
+            if (window.location.pathname != "/dm"){
+                token.draggable = false;
+            }
             loadRect(token);
         }
         if (token.category == "cir"){
-            console.log("lets create a cir");
-            token.draggable = false;
+            console.log("lets create a cir");            
+            if (window.location.pathname != "/dm"){
+                token.draggable = false;
+            }
             loadCir(token);
         }
         if (token.category == "tri"){
             console.log("lets create a tri");
-            token.draggable = false;
+            if (window.location.pathname != "/dm"){
+                token.draggable = false;
+            }
             loadTri(token);
         }
         if (token.category == "opacity"){
             console.log("lets create a opacity");
             console.log(token);
-            token.draggable = false;
-            token.opacity = 1;
+            if (window.location.pathname != "/dm"){
+                token.draggable = false;
+                token.opacity = 1;
+            }
             console.log(token);
             loadOpacity(token);
         }

@@ -17,6 +17,134 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 app.use(cors());
+
+
+// DB setup Google Cloud Storage
+const {Datastore} = require('@google-cloud/datastore');
+const bodyParser = require('body-parser');
+const datastore = new Datastore();
+const MAPS = "map";
+
+function fromDatastore(item){
+  item.id = item[Datastore.KEY].id;
+  return item;
+}
+
+function toDatastore (obj, nonIndexed) {
+  nonIndexed = nonIndexed || [];
+  const results = [];
+  Object.keys(obj).forEach((k) => {
+    if (obj[k] === undefined) {
+      return;
+    }
+    results.push({
+      name: k,
+      value: obj[k],
+      excludeFromIndexes: nonIndexed.indexOf(k) !== -1
+    });
+  });
+  return results;
+}
+
+/* --- Layer  model Functions ---- */
+
+async function post_Map(name, map){
+  console.log("send to DB");
+  var key = datastore.key(MAPS);
+  const newMap = {"name": name, "map": map};
+  // const new_Layer = {"name": name, "map": map, user : user};
+  await datastore.save({ "key": key, "data": newMap});
+  return key;
+}
+
+async function get_Maps(){
+  const q = datastore.createQuery(MAPS);
+  const entities = await datastore.runQuery(q);
+  return entities[0].map(fromDatastore);
+}
+
+async function get_Map(key){
+  const data = await datastore.get(key);
+  return data;
+};
+
+function patch_Map(key, body){
+  console.log("Inside function patch boat");
+  const entity = {
+      key: key,
+      data: toDatastore(body,['description'])
+      }
+  console.log(entity);    
+  return datastore.update(entity).then(entity,err => {
+      if(err){
+          return err;
+      } else {
+          return entity;
+      }
+  });
+
+}
+
+
+/* --- Datastore API calls ---*/
+
+mainRouter.post('/map', function(req, res){
+  console.log("inside post")
+  post_Map(req.body.name, req.body.map)
+  .then(key =>{
+    let reString = {
+      "id" : key.id,
+      "name" : req.body.name,
+      "nam" : req.body.map
+    }
+    console.log(reString)
+    res.status(201).send(reString);
+  })
+});
+
+mainRouter.patch('/map/:id', function(req,res){
+  console.log("Inside patch Map");
+  console.log(req.body);
+  console.log(req.params.id);
+  const key = datastore.key([MAPS, parseInt(req.params.id, 10)]);
+  let load = {};
+  load.id =key.id;
+  load.name = req.body.name;
+  load.map = req.body.map;
+  patch_Map(key, load)
+  .then(key => {
+    res.sendStatus(200);
+  })
+
+})
+
+mainRouter.get('/map', function(req, res){
+  const layer = get_Maps()
+.then( (layer) => {
+      res.status(200).json(layer);
+  });
+});
+
+mainRouter.get('/map/:id', function(req, res){
+  console.log("Inside get MAP ID") 
+  const key = datastore.key([MAPS, parseInt(req.params.id, 10)]);
+  
+  get_Map(key).then(map => {
+      console.log("Found Map");
+      console.log(map);
+      if(map[0]){
+        map[0].id = req.params.id;
+          console.log(map);
+          res.status(200).send(map[0]);
+
+      }else {
+          console.log("No id found");
+          let erString = {"Error": "No map with this boat_id exists"};
+          res.status(404).send(erString);
+      }
+  })}
+);
+
 app.options('*',cors());
 // Add headers
 // Add Access Control Allow Origin headers
@@ -28,10 +156,6 @@ app.use((req, res, next) => {
   );
   next();
 });
-//States for layers
-mapState = [];
-tokenState = [];
-
 
 // view engine setup
 app.engine('hbs',hbs({

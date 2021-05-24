@@ -163,7 +163,8 @@ function createOpacity(pos){
 
     newOpacity.on('dblclick', (e) => {
         console.log("opacity dblclick");
-        trO.detach();
+        let trans = opacityLayer.findOne('Transformer');
+        trans.detach();
         e.currentTarget.destroy();
         opacityLayer.draw();
         sendLayer(saveLayer(opacityLayer));
@@ -173,7 +174,8 @@ function createOpacity(pos){
     newOpacity.on('click', (e)=>{
         console.log("opacity clicked");
         console.log(e.currentTarget);
-        trO.nodes([e.currentTarget]);
+        let trans = opacityLayer.findOne('Transformer');
+        trans.nodes([e.currentTarget]);
         console.log(trO);
         opacityLayer.draw();
         sendLayer(saveLayer(opacityLayer));
@@ -181,7 +183,8 @@ function createOpacity(pos){
 
     newOpacity.on('transformend', (e) =>{
         console.log("end of transform");
-        trO.detach();
+        let trans = opacityLayer.findOne('Transformer');
+        trans.detach();
         opacityLayer.draw();
         sendLayer(saveLayer(opacityLayer));
     });
@@ -211,16 +214,17 @@ function createRect(pos){
 
     newRect.on('click', (e)=>{
         console.log("rect clicked");
-        tr.node
+        let trans = mapLayer.findOne('Transformer');
         console.log(e.currentTarget);
-        tr.nodes([e.currentTarget]);
-        console.log(tr);
+        trans.nodes([e.currentTarget]);
+        console.log(trans);
         mapLayer.draw();
     });
 
     newRect.on('transformend', (e) =>{
         console.log("end of transform");
-        tr.detach();
+        let trans = mapLayer.findOne('Transformer');
+        trans.detach();
         mapLayer.draw();
         sendLayer(saveLayer(mapLayer));
     });
@@ -250,16 +254,17 @@ function createTri(pos){
 
     newTri.on('click', (e)=>{
         console.log("rect clicked");
-        tr.node
+        let trans = mapLayer.findOne('Transformer');
         console.log(e.currentTarget);
-        tr.nodes([e.currentTarget]);
-        console.log(tr);
+        trans.nodes([e.currentTarget]);
+        console.log(trans);
         mapLayer.draw();
     });
 
     newTri.on('transformend', (e) =>{
         console.log("end of transform");
-        tr.detach();
+        let trans = mapLayer.findOne('Transformer');
+        trans.detach();
         mapLayer.draw();
         sendLayer(saveLayer(mapLayer));
     });
@@ -289,16 +294,17 @@ function createCir(pos){
 
     newCir.on('click', (e)=>{
         console.log("rect clicked");
-        tr.node
+        let trans = mapLayer.findOne('Transformer');
         console.log(e.currentTarget);
-        tr.nodes([e.currentTarget]);
-        console.log(tr);
+        trans.nodes([e.currentTarget]);
+        console.log(trans);
         mapLayer.draw();
     });
 
     newCir.on('transformend', (e) =>{
         console.log("end of transform");
-        tr.detach();
+        let trans = mapLayer.findOne('Transformer');
+        trans.detach();
         mapLayer.draw();
         sendLayer(saveLayer(mapLayer));
     });
@@ -312,6 +318,30 @@ function createCir(pos){
 
 function loadRect(token){
     loadedRect = new Konva.Rect(token);
+    if (window.location.pathname == "/dm") {
+        console.log("INSIDE DM TOKEN REBUILD")
+        loadedRect.on('click', (e)=>{
+            console.log("rect clicked");
+            let trans = mapLayer.findOne('Transformer');
+            console.log(e.currentTarget);
+            trans.nodes([e.currentTarget]);
+            console.log(trans);
+            mapLayer.draw();
+        });
+    
+        loadedRect.on('transformend', (e) =>{
+            console.log("end of transform");
+            let trans = mapLayer.findOne('Transformer');
+            trans.detach();
+            mapLayer.draw();
+            sendLayer(saveLayer(mapLayer));
+        });
+    
+        loadedRect.on('dragend', (e) =>{
+            sendLayer(saveLayer(mapLayer));
+    
+        });
+    }
     //loadedRect.opacity(1);
     mapLayer.add(loadedRect);
     mapLayer.draw();
@@ -320,6 +350,40 @@ function loadRect(token){
 function loadOpacity(token){
     console.log(token);
     loadedOpacity = new Konva.Rect(token);
+
+    if (window.location.pathname == "/dm") {
+        loadedOpacity.on('dblclick', (e) => {
+            console.log("opacity dblclick");
+            let trans = mapLayer.findOne('Transformer');
+            trans.detach();
+            e.currentTarget.destroy();
+            opacityLayer.draw();
+            sendLayer(saveLayer(opacityLayer));
+    
+        })
+    
+        loadedOpacity.on('click', (e)=>{
+            console.log("opacity clicked");
+            let trans = mapLayer.findOne('Transformer');
+            trans.nodes([e.currentTarget]);
+            console.log(trans);
+            opacityLayer.draw();
+            sendLayer(saveLayer(opacityLayer));
+        });
+    
+        loadedOpacity.on('transformend', (e) =>{
+            console.log("end of transform");
+            let trans = mapLayer.findOne('Transformer');
+            trans.detach();
+            opacityLayer.draw();
+            sendLayer(saveLayer(opacityLayer));
+        });
+    
+        loadedOpacity.on('dragend', (e) =>{
+            sendLayer(saveLayer(opacityLayer));
+    
+        });
+    }
     //loadedRect.opacity(1);
     opacityLayer.add(loadedOpacity);
     opacityLayer.draw();
@@ -328,6 +392,29 @@ function loadOpacity(token){
 
 function loadCir(token){
     loadedCir = new Konva.Circle(token);
+    if (window.location.pathname == "/dm") {
+        loadedCir.on('click', (e)=>{
+            console.log("rect clicked");
+            let trans = mapLayer.findOne('Transformer');
+            console.log(e.currentTarget);
+            trans.nodes([e.currentTarget]);
+            console.log(tr);
+            mapLayer.draw();
+        });
+    
+        loadedCir.on('transformend', (e) =>{
+            console.log("end of transform");
+            let trans = mapLayer.findOne('Transformer');
+            trans.detach();
+            mapLayer.draw();
+            sendLayer(saveLayer(mapLayer));
+        });
+    
+        loadedCir.on('dragend', (e) =>{
+            sendLayer(saveLayer(mapLayer));
+    
+        });
+    }
     //loadedRect.opacity(1);
     mapLayer.add(loadedCir);
     mapLayer.draw();
@@ -335,6 +422,29 @@ function loadCir(token){
 
 function loadTri(token){
     loadedTri = new Konva.RegularPolygon(token);
+    if (window.location.pathname == "/dm") {
+        loadedTri.on('click', (e)=>{
+            console.log("rect clicked");
+            let trans = mapLayer.findOne('Transformer');
+            console.log(e.currentTarget);
+            trans.nodes([e.currentTarget]);
+            console.log(tr);
+            mapLayer.draw();
+        });
+    
+        loadedTri.on('transformend', (e) =>{
+            console.log("end of transform");
+            let trans = mapLayer.findOne('Transformer');
+            trans.detach();
+            mapLayer.draw();
+            sendLayer(saveLayer(mapLayer));
+        });
+    
+        loadedTri.on('dragend', (e) =>{
+            sendLayer(saveLayer(mapLayer));
+    
+        });
+    }
     //loadedRect.opacity(1);
     mapLayer.add(loadedTri);
     mapLayer.draw();
