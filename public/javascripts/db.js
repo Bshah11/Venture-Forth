@@ -86,20 +86,6 @@ function postMap(e){
     })
 }
 
-function getMap(e){
-    console.log("Inside get map");
-    axios.get('/map/5632499082330112')
-    .then(function(response){
-        console.log(response.data.map);
-        let getMap = response.data.map
-        loadLayer(getMap.opacity);
-        loadLayer(getMap.map);
-        loadLayer(getMap.token);
-        curID = response.data.id;
-        curName = response.data.name;
-    })
-}
-
 
 function getMapList(e){
     console.log("Inside get map List");
