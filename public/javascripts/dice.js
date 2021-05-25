@@ -59,12 +59,12 @@ function rollDisplay(dice) {
     rollResult = rollResult + curRoll;
     let payload = {};
     console.log("Socket: "+socket.username);
-    diceResult = socket.username + ": rolled a "+ dice + " for: "+curRoll
     //diceResultNode.nodeValue = diceResult;
-    payload.diceResult = diceResult;
     recipient = playerList.value;
     //If the recipient is global, we broadcast to all players
     if(recipient == 'global'){
+        diceResult = socket.username + " rolled a "+ dice + " for: "+curRoll
+        payload.diceResult = diceResult;
         socket.emit("globalRoll", payload);
         var item = document.createElement('li');
         item.className +='list-group-item';
@@ -73,6 +73,8 @@ function rollDisplay(dice) {
         stayScrolled(chatCard);
     }
     else if(recipient == 'private'){
+        diceResult = "You rolled a "+ dice + " for: "+curRoll
+        payload.diceResult = diceResult;
         var item = document.createElement('li');
         item.className +='list-group-item';
         item.textContent = payload.diceResult;
@@ -81,6 +83,8 @@ function rollDisplay(dice) {
     }
     //Else we send a directed message using sendChat
     else {
+        diceResult = "Private roll from: "+socket.username + ". They rolled a "+ dice + " for: "+curRoll
+        payload.diceResult = diceResult;
         payload.to = recipient;
         console.log("Recipient "+ recipient);
         socket.emit("sendRoll", payload);
@@ -93,16 +97,28 @@ function rollDisplay(dice) {
     }
 }
 
+//If the user presses enter, send whatever is present in the chat input box
+function search(ele){
+    if(event.keyCode == 13 ){
+        chatDisplay(chatInput.value);
+    }
+}
+
 //Function to display chats
 function chatDisplay(chat) {
+    //If the message is blank, return
+    if(chat == ''){
+        return;
+    }
+    //Clear the chat input box
     chatInput.value='';
+
     let payload = {};
-    chatText = socket.username + " says: "+ chat
-    //diceResultNode.nodeValue = diceResult;
-    payload.chat = chatText;
-    recipient = playerList.value;
+    let recipient = playerList.value;
     //If the recipient is global, we broadcast to all players
     if(recipient == 'global'){
+        chatText = socket.username + " says: "+ chat
+        payload.chat = chatText;
         socket.emit("globalChat", payload);
         var item = document.createElement('li');
         item.className +='list-group-item';
@@ -111,6 +127,8 @@ function chatDisplay(chat) {
         stayScrolled(chatCard);
     }
     else if(recipient == 'private'){
+        chatText = "You say to yourself: "+ chat
+        payload.chat = chatText;
         var item = document.createElement('li');
         item.className +='list-group-item';
         item.textContent = payload.chat;
@@ -119,6 +137,8 @@ function chatDisplay(chat) {
     }
     //Else we send a directed message using sendChat
     else {
+        chatText = "Private message from "+socket.username + ": "+ chat
+        payload.chat = chatText;
         payload.to = recipient;
         console.log("Recipient "+ recipient);
         socket.emit("sendChat", payload);
