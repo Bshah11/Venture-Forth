@@ -1,8 +1,8 @@
 //Stage and layer setup//
 var stage = new Konva.Stage({
     container: 'konva-container',   // id of container <div>
-    width: 500,
-    height: 500
+    width: 700,
+    height: 600
   });
 
 var backgroundDict= {

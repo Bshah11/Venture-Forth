@@ -56,6 +56,7 @@ function rollDice(typeDie){
 
 //Function to display the number of die and their result
 function rollDisplay(dice) {
+    //Play a random dice sound when user clicks on dice button
     var audio = new Audio(_.sample(diceSounds));
     audio.play();
     var curRoll = rollDice(dice);
