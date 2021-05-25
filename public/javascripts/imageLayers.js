@@ -28,8 +28,8 @@ function displayImage(layer){
             imageNode.setAttrs({
                 x:0,
                 y:0,
-                height: 500,
-                width: 500,
+                height: stage.height(),
+                width: stage.width(),
                 url: overlayURL,
                 category: 'image',
             });
@@ -52,8 +52,8 @@ function displayImage(layer){
             imageNode.setAttrs({
                 x:0,
                 y:0,
-                height: 500,
-                width: 500,
+                height: stage.height(),
+                width: stage.width(),
                 url: backgroundURL,
                 category: 'image',
             });
