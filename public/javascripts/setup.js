@@ -13,6 +13,8 @@ var backgroundDict= {
 var musicDict ={
   'inn': "music/255_The_Hearth_Inn.mp3",
 }
+
+
 //Instantiate layer objects and prepare them to be added to the stage and modified by users
 var backgroundImageLayer = new Konva.Layer({
   name: 'backgroundImageLayer'
