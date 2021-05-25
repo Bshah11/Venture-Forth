@@ -3,10 +3,14 @@
 var formLineColor = document.getElementById("colorDropdownMenu");
 var formStrokeWidth = document.getElementById("widthDropdownMenu");
 var mapType = document.getElementById('map-type-button');
+var lineToggle = document.getElementById("lineDrawToggle");
+var typeLine = document.getElementById("lineDropdownMenu");
+
 
 // Lines
 var drawLineButton = document.getElementById('draw-line-button');
 var brushLineButton = document.getElementById('brush-line-button');
+
 
 //Shapes
 var newRectButton = document.getElementById('create-rect-button');
@@ -328,7 +332,7 @@ function loadRect(token){
             console.log(trans);
             mapLayer.draw();
         });
-    
+
         loadedRect.on('transformend', (e) =>{
             console.log("end of transform");
             let trans = mapLayer.findOne('Transformer');
@@ -336,10 +340,10 @@ function loadRect(token){
             mapLayer.draw();
             sendLayer(saveLayer(mapLayer));
         });
-    
+
         loadedRect.on('dragend', (e) =>{
             sendLayer(saveLayer(mapLayer));
-    
+
         });
     }
     //loadedRect.opacity(1);
@@ -359,9 +363,9 @@ function loadOpacity(token){
             e.currentTarget.destroy();
             opacityLayer.draw();
             sendLayer(saveLayer(opacityLayer));
-    
+
         })
-    
+
         loadedOpacity.on('click', (e)=>{
             console.log("opacity clicked");
             let trans = mapLayer.findOne('Transformer');
@@ -370,7 +374,7 @@ function loadOpacity(token){
             opacityLayer.draw();
             sendLayer(saveLayer(opacityLayer));
         });
-    
+
         loadedOpacity.on('transformend', (e) =>{
             console.log("end of transform");
             let trans = mapLayer.findOne('Transformer');
@@ -378,10 +382,10 @@ function loadOpacity(token){
             opacityLayer.draw();
             sendLayer(saveLayer(opacityLayer));
         });
-    
+
         loadedOpacity.on('dragend', (e) =>{
             sendLayer(saveLayer(opacityLayer));
-    
+
         });
     }
     //loadedRect.opacity(1);
@@ -401,7 +405,7 @@ function loadCir(token){
             console.log(tr);
             mapLayer.draw();
         });
-    
+
         loadedCir.on('transformend', (e) =>{
             console.log("end of transform");
             let trans = mapLayer.findOne('Transformer');
@@ -409,10 +413,10 @@ function loadCir(token){
             mapLayer.draw();
             sendLayer(saveLayer(mapLayer));
         });
-    
+
         loadedCir.on('dragend', (e) =>{
             sendLayer(saveLayer(mapLayer));
-    
+
         });
     }
     //loadedRect.opacity(1);
@@ -431,7 +435,7 @@ function loadTri(token){
             console.log(tr);
             mapLayer.draw();
         });
-    
+
         loadedTri.on('transformend', (e) =>{
             console.log("end of transform");
             let trans = mapLayer.findOne('Transformer');
@@ -439,10 +443,10 @@ function loadTri(token){
             mapLayer.draw();
             sendLayer(saveLayer(mapLayer));
         });
-    
+
         loadedTri.on('dragend', (e) =>{
             sendLayer(saveLayer(mapLayer));
-    
+
         });
     }
     //loadedRect.opacity(1);
@@ -450,6 +454,22 @@ function loadTri(token){
     mapLayer.draw();
 };
 
+function toggleLine(){
+    //e.stopPropagation();
+    console.log("linetoggle.checked: "+lineToggle.checked);
+    if(lineToggle.checked == true){
+        if (typeLine.value == 'draw'){
+            drawLine();
+        }
+        if(typeLine.value == 'brush'){
+            brushLine(formLineColor.value, formStrokeWidth.value);
+        }
+    }
+    else{
+        stage.off();
+        return;
+    }
+}
 function drawLine(){
     console.log("in drawLine");
     //First, make sure all event listeners are removed from the stage element
