@@ -1,11 +1,12 @@
 //Event listener to reset game board by layer
 var clearLayerButton = document.getElementById('clear-layer-button');
 var clearLayerSelect = document.getElementById('clear-layer');
-
+var showSaveNewButton = document.getElementById('show-File-Name');
 var postMapButton = document.getElementById('post-DB');
+var newFileName = document.getElementById('new-MapName');
 
 //var getMapButton = document.getElementById('get-DB');
-var getMapListButton = document.getElementById("get-Map-List");
+var openMapListButton = document.getElementById("get-Map-List");
 var mapListDropdown = document.getElementById('map-List');
 var loadMapButton = document.getElementById('load-Map');
 var saveCurMapButton = document.getElementById('save-Cur-Map');
@@ -14,13 +15,42 @@ var saveCurMapButton = document.getElementById('save-Cur-Map');
 clearLayerButton.addEventListener('click', function(){clearLayer()});
 postMapButton.addEventListener('click', postMap);
 //getMapButton.addEventListener('click', getMap);
-getMapListButton.addEventListener('click', getMapList);
+openMapListButton.addEventListener('click', getMapList);
 loadMapButton.addEventListener('click', loadMap);
 saveCurMapButton.addEventListener('click', saveCurMap);
+showSaveNewButton.addEventListener('click', showSaveNew);
 
 // 
 var curID = null;
 var curName = null;
+
+// onLoad Functionality
+
+
+function getMapsList(){
+    axios.get('/map')
+    .then(function (response){
+        console.log("got maps");
+        let playerMaps = {};
+
+        console.log(response.data);
+        for (let x = 0; x < response.data.length; x++){
+            playerMaps[response.data[x].name] = response.data[x].id;
+            var option = document.createElement("option");
+            option.value = response.data[x].id;
+            option.text = response.data[x].name;
+            mapListDropdown.appendChild(option);
+        }
+    });
+
+}
+getMapsList();
+
+function showSaveNew(e){
+    newFileName.hidden = false;
+    showSaveNewButton.hidden = true;
+    postMapButton.hidden = false;
+};
 
 function saveCurMap(e){
     if (curID == null){
@@ -40,6 +70,7 @@ function saveCurMap(e){
     })
     .then(function(response){
         console.log("Back from Server map Patch");
+        getMapsList();
     })
 }
 
@@ -57,12 +88,16 @@ function loadMap(e){
         console.log(response.data);
         curID = response.data.id;
         curName = response.data.name;
+        mapListDropdown.hidden = true;
+        loadMapButton.hidden = true;
+        openMapListButton.hidden = false;
+        saveCurMapButton.hidden = false;
     })
 }
 
 function postMap(e){
     console.log("Inside Post map");
-    let mapNewName = document.getElementById('new-MapName').value;
+    let mapNewName = newFileName.value;
     console.log(mapNewName);
     if (mapNewName === ""){
         console.log("Is empty");
@@ -83,24 +118,19 @@ function postMap(e){
         console.log("New save successful");
         console.log(response.data);
         curID = response.data.id;
+        newFileName.hidden = true;
+        showSaveNewButton.hidden = false;
+        postMapButton.hidden = true;
+        saveCurMapButton.hidden = false;
     })
 }
 
 
 function getMapList(e){
     console.log("Inside get map List");
-    axios.get('/map')
-    .then(function (response){
-        console.log("got maps");
-        let playerMaps = {};
+    mapListDropdown.hidden = false;
+    loadMapButton.hidden = false;
+    openMapListButton.hidden = true;
 
-        console.log(response.data);
-        for (let x = 0; x < response.data.length; x++){
-            playerMaps[response.data[x].name] = response.data[x].id;
-            var option = document.createElement("option");
-            option.value = response.data[x].id;
-            option.text = response.data[x].name;
-            mapListDropdown.appendChild(option);
-        }
-    })
+    
 }
