@@ -2,9 +2,11 @@
 //Get default values from the form selection
 var formLineColor = document.getElementById("colorDropdownMenu");
 var formStrokeWidth = document.getElementById("widthDropdownMenu");
+//formLineColor.addEventListener("change", function(){toggleLine()})
 var mapType = document.getElementById('map-type-button');
 var lineToggle = document.getElementById("lineDrawToggle");
 var typeLine = document.getElementById("lineDropdownMenu");
+typeLine.addEventListener("change",function(){toggleLine()});
 
 
 // Lines
@@ -462,7 +464,7 @@ function toggleLine(){
             drawLine();
         }
         if(typeLine.value == 'brush'){
-            brushLine(formLineColor.value, formStrokeWidth.value);
+            brushLine();
         }
     }
     else{
@@ -532,7 +534,7 @@ function loadMapLine(token){
 }
 
 
-function brushLine(color, width){
+function brushLine(){
     console.log("in brush line");
     //First, make sure all event listeners are removed from the stage element
     stage.off();
@@ -542,8 +544,8 @@ function brushLine(color, width){
         isDrawing = true;
         var pos = stage.getPointerPosition();
         lastLine = new Konva.Line({
-            stroke: color,
-            strokeWidth: width,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
             points: [pos.x, pos.y],
             category: 'line',
         });
