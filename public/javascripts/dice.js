@@ -99,7 +99,7 @@ function rollDisplay(dice) {
 
 //If the user presses enter, send whatever is present in the chat input box
 function search(ele){
-    if(event.keyCode == 13 ){
+    if(ele.keyCode == 13 ){
         chatDisplay(chatInput.value);
     }
 }
