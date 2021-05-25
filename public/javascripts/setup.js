@@ -1,8 +1,8 @@
 //Stage and layer setup//
 var stage = new Konva.Stage({
     container: 'konva-container',   // id of container <div>
-    width: 500,
-    height: 500
+    width: 700,
+    height: 600
   });
 
 var backgroundDict= {
@@ -13,6 +13,8 @@ var backgroundDict= {
 var musicDict ={
   'inn': "music/255_The_Hearth_Inn.mp3",
 }
+
+
 //Instantiate layer objects and prepare them to be added to the stage and modified by users
 var backgroundImageLayer = new Konva.Layer({
   name: 'backgroundImageLayer'

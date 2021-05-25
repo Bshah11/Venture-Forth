@@ -1,6 +1,7 @@
 // arrays of possible values for different dice
 dice = {"d4": _.range(1,5), "d6": _.range(1,7),"d8": _.range(1,9),"d10": _.range(1,11),"d12":_.range(1,13),"d20": _.range(1,21)}
 
+var diceSounds= ['music/dice1.wav', 'music/dice2.mp3', 'music/dice3.mp3', 'music/dice4.wav', 'music/dice5.mp3'];
 //Event listners for dice buttons
 var d4 = document.getElementById('d4Dice');
 d4.addEventListener('click',function(){rollDisplay(d4.value)});
@@ -55,6 +56,9 @@ function rollDice(typeDie){
 
 //Function to display the number of die and their result
 function rollDisplay(dice) {
+    //Play a random dice sound when user clicks on dice button
+    var audio = new Audio(_.sample(diceSounds));
+    audio.play();
     var curRoll = rollDice(dice);
     rollResult = rollResult + curRoll;
     let payload = {};
