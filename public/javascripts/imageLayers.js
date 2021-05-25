@@ -79,8 +79,8 @@ function loadImage(image,layer){
         imageNode.setAttrs({
             x:0,
             y:0,
-            height: 500,
-            width: 500,
+            height: stage.height(),
+            width: stage.width(),
         });
         if(layer == 'overlayImageLayer'){
             overlayImageLayer.add(imageNode);
