@@ -8,7 +8,6 @@
   "dependencies": {
     "@google-cloud/datastore": "^6.4.0",
     "axios": "^0.21.1",
-    "axois": "0.0.1-security",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
