@@ -91,7 +91,7 @@ io.on('connection', (socket) => {
     username: socket.username,
   });
   console.log('user: '+socket.username+" connected");
-
+  //////////////////ONBOARDING FUNCTIONS//////////////////////////////////////////////////////////////////////////
   //Send the users array to all players so that the dropdown is properly updated.
   //This could be done more succintly i'm sure however I could not get it to broadcast
   //To everyone on a new user connecting or have the updated player list. This ensures
@@ -101,7 +101,7 @@ io.on('connection', (socket) => {
   socket.broadcast.emit('get users', users);
 
 
-  //Same basic idea as above with get users. First we check to see if the object has been written to,
+  //Same basic idea as above with get users. First we check to see if the current layer state object has been written to,
   // if it has not we do nothing, otherwise we retrieve the current state of the map and load it to the newly logged
   // in users screen.
   if(curBackgroundImageLayer){
@@ -124,6 +124,7 @@ io.on('connection', (socket) => {
     socket.emit('retrieveLayer', curImageOverlayLayer);
     socket.broadcast.emit('retrieveLayer', curImageOverlayLayer);
   }
+  //////////////////////////////////////////////////////////////////////////////////////////
 
   socket.on('disconnect', () => {
     console.log('user: '+socket.username+' disconnected');
