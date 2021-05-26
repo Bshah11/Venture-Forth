@@ -20,7 +20,7 @@ loadMapButton.addEventListener('click', loadMap);
 saveCurMapButton.addEventListener('click', saveCurMap);
 showSaveNewButton.addEventListener('click', showSaveNew);
 
-// 
+//
 var curID = null;
 var curName = null;
 
@@ -85,6 +85,9 @@ function loadMap(e){
         loadLayer(getMap.opacity);
         loadLayer(getMap.map);
         loadLayer(getMap.token);
+        sendLayer(getMap.opacity);
+        sendLayer(getMap.map);
+        sendLayer(getMap.token);
         console.log(response.data);
         curID = response.data.id;
         curName = response.data.name;
@@ -132,5 +135,5 @@ function getMapList(e){
     loadMapButton.hidden = false;
     openMapListButton.hidden = true;
 
-    
+
 }
