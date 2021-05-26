@@ -31,6 +31,7 @@ console.log("connecting");
 socket.connect();
 
 
+
 // Saving to Server
 function sendLayer(payload) {
       //console.log(layer);
@@ -138,7 +139,7 @@ function loadLayer(payload){
             loadRect(token);
         }
         if (token.category == "cir"){
-            console.log("lets create a cir");            
+            console.log("lets create a cir");
             if (window.location.pathname != "/dm"){
                 token.draggable = false;
             }
@@ -170,5 +171,7 @@ function loadLayer(payload){
 };
 
 socket.on('retrieveLayer', function(payload) {
+    console.log("Payload in retrieveLayer");
+    console.log(payload);
     loadLayer(payload);
   });
