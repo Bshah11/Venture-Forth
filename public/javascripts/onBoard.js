@@ -9,12 +9,10 @@ function onboard() {
     // socket.auth = { username };
     // socket.connect();
     if (dmRadio.checked){
-        pcRadio.checked = false;
         document.location.href='/dm';
         localStorage.setItem("role", "dm");
     }
     if (pcRadio.checked){
-        dmRadio.checked = false;
         document.location.href = '/users';
         localStorage.setItem("role", "pc");
     }

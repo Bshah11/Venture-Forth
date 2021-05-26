@@ -99,6 +99,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('user: '+socket.username+' disconnected');
   });
+
   socket.on('broadcastLayer', (payload) => {
       console.log('message: ' + payload);
       socket.broadcast.emit('retrieveLayer', payload);
