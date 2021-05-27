@@ -30,7 +30,8 @@ socket.gameRole = role;
 console.log("connecting");
 socket.connect();
 
-
+var clearMapButton = document.getElementById('clear-map-button');
+clearMapButton.addEventListener("click",function(){clearMap()});
 
 // Saving to Server
 function sendLayer(payload) {
@@ -52,27 +53,40 @@ function saveLayer(layer){
     return payload;
 };
 
-function clearLayer(){
-    if (clearLayerSelect.value == 'mapLayer'){
-        console.log("in clear map layer");
-        var payload = {};
-        payload.layerName = clearLayerSelect.value;
-        var curMapState = [];
-        payload.curMapState = curMapState;
-        sendLayer(payload);
-        mapLayer.destroyChildren();
-        mapLayer.draw();
-    }
-    else if (clearLayerSelect.value == 'tokenLayer'){
-        console.log("in clear token layer");
-        var payload = {};
-        payload.layerName = clearLayerSelect.value;
-        var curMapState = [];
-        payload.curMapState = curMapState;
-        sendLayer(payload);
-        tokenLayer.destroyChildren();
-        tokenLayer.draw();
-    }
+function clearMap(){
+    console.log("in clear map");
+    sendLayer(saveLayer(backgroundImageLayer.destroyChildren()));
+    backgroundImageLayer.batchDraw()
+    sendLayer(saveLayer(mapLayer.destroyChildren()));
+    mapLayer.batchDraw()
+    sendLayer(saveLayer(tokenLayer.destroyChildren()));
+    tokenLayer.batchDraw()
+    sendLayer(saveLayer(opacityLayer.destroyChildren()));
+    opacityLayer.batchDraw()
+    sendLayer(saveLayer(overlayImageLayer.destroyChildren()));
+    overlayImageLayer.batchDraw()
+
+
+    // if (clearLayerSelect.value == 'mapLayer'){
+    //     console.log("in clear map layer");
+    //     var payload = {};
+    //     payload.layerName = clearLayerSelect.value;
+    //     var curMapState = [];
+    //     payload.curMapState = curMapState;
+    //     sendLayer(payload);
+    //     mapLayer.destroyChildren();
+    //     mapLayer.draw();
+    // }
+    // else if (clearLayerSelect.value == 'tokenLayer'){
+    //     console.log("in clear token layer");
+    //     var payload = {};
+    //     payload.layerName = clearLayerSelect.value;
+    //     var curMapState = [];
+    //     payload.curMapState = curMapState;
+    //     sendLayer(payload);
+    //     tokenLayer.destroyChildren();
+    //     tokenLayer.draw();
+    // }
 }
 
 
