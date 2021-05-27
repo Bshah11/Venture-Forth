@@ -1,31 +1,34 @@
-<div class='container-fluid'>
 <h1>{{title}}</h1>
 <p>Prepare to {{title}}</p>
 {{> user-toolbar}}
     <div class="row">
-        <div class="col-md-8">
-            {{> konva-stage}}
+        <div class="col-md-3">
+            {{> chat-toolbar}}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
+            {{> konva-stage}}
+            {{> experience-toolbar}}
+        </div>
+        <div class="col-md-3 col-lg-3">
             {{> token-toolbar}}
             {{> map-toolbar}}
             {{> clear-layers}}
         </div>
     </div>
     <div>
-        {{> chat-toolbar}}
-    </div>
-    <div>
         {{> dice-toolbar}}
     </div>
     <div>
-        {{> experience-toolbar}}
+
+    </div>
+    <div>
+
     </div>
     <div hidden>
         {{> user-experience-toolbar}}
     </div>
 
-</div>
+
 
 
 

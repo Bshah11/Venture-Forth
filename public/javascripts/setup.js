@@ -5,6 +5,9 @@ var stage = new Konva.Stage({
     height: 600
   });
 
+
+
+
 var backgroundDict= {
   'Woodland Tower': 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ff727761-d6b1-4548-916b-3b9033c9149d/ddnawjy-9b600c2e-4619-46f6-a709-011c2485b52c.jpg/v1/fill/w_1078,h_741,q_70,strp/watchtower_in_the_hills_vtt_no_grid_by_zatnikotel_ddnawjy-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MzA4MCIsInBhdGgiOiJcL2ZcL2ZmNzI3NzYxLWQ2YjEtNDU0OC05MTZiLTNiOTAzM2M5MTQ5ZFwvZGRuYXdqeS05YjYwMGMyZS00NjE5LTQ2ZjYtYTcwOS0wMTFjMjQ4NWI1MmMuanBnIiwid2lkdGgiOiI8PTQ0ODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.2WacElFwpfDZfBpzRkDVYkt89IgG7LlKmYjpCMlJCiQ'
 
