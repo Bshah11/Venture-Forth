@@ -166,6 +166,9 @@ function loadLayer(payload){
             console.log("loading image");
             loadImage(token, payload.layerName);
         }
+        if(token.category == "Adventureline"){
+            loadAdventureLine(token);
+        }
     });
 };
 
