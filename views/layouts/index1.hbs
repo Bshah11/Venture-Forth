@@ -1,11 +1,12 @@
-<h1>{{title}}</h1>
-<p>Prepare to {{title}}</p>
-{{> user-toolbar}}
+
     <div class="row">
         <div class="col-md-3">
             {{> chat-toolbar}}
         </div>
         <div class="col-md-6">
+            <h1>{{title}}</h1>
+            <p>Prepare to {{title}}</p>
+            {{> user-toolbar}}
             {{> konva-stage}}
             {{> experience-toolbar}}
         </div>
