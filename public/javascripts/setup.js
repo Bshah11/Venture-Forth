@@ -119,3 +119,4 @@ opacityLayer.draw();
 
 stage.add(overlayImageLayer);
 overlayImageLayer.draw();
+

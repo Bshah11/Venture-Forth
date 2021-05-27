@@ -106,8 +106,9 @@ function sendAudio(music){
 
 //Need to build a brand new audio element for the receiving end otherwise Chromium will not allow you to set the source
 //Of the audio element.
+var userAudioDiv = document.getElementById('userAudio');
 socket.on('playMusic', (payload) => {
-    var userAudioDiv = document.getElementById('userAudio');
+    userAudioDiv.innerHTML='';
     var userAudio = document.createElement('audio');
     userAudio.controls=true;
     userAudio.src = payload.music;
