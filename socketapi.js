@@ -128,6 +128,15 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('user: '+socket.username+' disconnected');
+    var total=io.engine.clientsCount;
+    if(total == 0){
+      curBackgroundImageLayer = '';
+      curImageOverlayLayer= '';
+      curMapLayer='';
+      curTokenLayer= '';
+      curOpacityLayer='';
+    }
+    console.log("Number of users connected "+total)
   });
 
   socket.on('broadcastLayer', (payload) => {
