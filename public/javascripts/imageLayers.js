@@ -60,13 +60,6 @@ function displayImage(layer){
             backgroundImageLayer.add(imageNode);
             backgroundImageLayer.batchDraw();
             sendLayer(saveLayer(backgroundImageLayer));
-            imageNode.on('dblclick', (e) => {
-                console.log("opacity dblclick");
-                //trO.detach();
-                e.currentTarget.destroy();
-                backgroundImageLayer.draw();
-                sendLayer(saveLayer(backgroundImageLayer));
-            })
         });
         backgroundImageInput.value = '';
     };
