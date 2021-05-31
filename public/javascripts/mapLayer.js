@@ -9,9 +9,7 @@ var typeLine = document.getElementById("lineDropdownMenu");
 typeLine.addEventListener("change",function(){toggleLine()});
 
 
-// Lines
-var drawLineButton = document.getElementById('draw-line-button');
-var brushLineButton = document.getElementById('brush-line-button');
+
 
 
 //Shapes
@@ -27,43 +25,12 @@ var stroke = formLineColor.value;
 var strokeWidth = formStrokeWidth.value;
 
 
-// Tabs
-var lineTabButton = document.getElementById('line-tab-button');
-var shapeTabButton = document.getElementById('shape-tab-button');
-var opacityTabButton = document.getElementById('opacity-tab-button');
-var lineTab = document.getElementById("line-tab");
-var shapeTab = document.getElementById("shape-tab");
-var opacityTab = document.getElementById("opacity-tab");
 
-// Listeners for tabs
-lineTabButton.addEventListener("click", function(){
-    console.log(lineTab);
-    shapeTab.hidden = true;
-    opacityTab.hidden = true;
-    lineTab.hidden = false;
-});
-
-shapeTabButton.addEventListener("click", function(){
-    console.log(shapeTab);
-    shapeTab.hidden = false;
-    opacityTab.hidden = true;
-    lineTab.hidden = true;
-});
-
-opacityTabButton.addEventListener("click", function(){
-    console.log(opacityTab);
-    shapeTab.hidden = true;
-    opacityTab.hidden = false;
-    lineTab.hidden = true;
-});
 
 //EventListener
 newRectButton.addEventListener("click", function() {drawRect()});
 newTriButton.addEventListener("click", function() {drawTri()});
 newCirButton.addEventListener("click", function() {drawCir()});
-
-drawLineButton.addEventListener("click", function() {drawLine()});
-brushLineButton.addEventListener("click", function() {brushLine(formLineColor.value, formStrokeWidth.value)});
 
 newOpacityButton.addEventListener("click", function() {drawOpacity()});
 
