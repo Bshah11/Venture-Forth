@@ -166,8 +166,17 @@ function loadLayer(payload){
             console.log("loading image");
             loadImage(token, payload.layerName);
         }
-        if(token.category == "Adventureline"){
+        if(token.category == "adventureLine"){
+            console.log("load adventure Line");
             loadAdventureLine(token);
+        }
+        if(token.category == "adventureCircle"){
+            console.log("load adventure Circle");
+            loadAdventureCircle(token);
+        }
+        if(token.category == "adventurePointer"){
+            console.log("load adventure Pointer");
+            loadAdventurePointer(token);
         }
     });
 };
