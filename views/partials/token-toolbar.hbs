@@ -1,21 +1,22 @@
-<h3>Token Toolbar</h3>
 <div class="container">
     <ul style="margin: 20px 0px 22px; visibility: visible;" class="nav nav-tabs">
         <li class ="nav-item">
-            <a class="nav-link active" href="#"> Humans </a>
+            <a class="nav-link active" href="#"> Humanoids </a>
+                <select class="form-control" name="Game Piece" id="token-type-button">
+                    <option selected value="goblin">goblin</option>
+                    <option value="elf">elf</option>
+                </select>
+
         </li>
-        <li class="nav-item">
+        <li class="nav-item" hidden>
             <a class="nav-link" href="#"> Animals </a>
+            <h6>To be built</h6>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" hidden>
             <a class="nav-link" href="#"> Monsters</a>
+            <h6>To be built</h6>
         </li>
     </ul>
 </div>
-<button id="create-token-button">Create New Token</button>
-<select name="Game Piece" id="token-type-button">
-    <option selected value="goblin">goblin</option>
-    <option selected value="elf">elf</option>
-</select>
-
+<button class="btn btn-secondary" id="create-token-button">Create New Token</button>
 

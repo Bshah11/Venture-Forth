@@ -1,31 +1,42 @@
-<div class='container-fluid'>
-<h1>{{title}}</h1>
-<p>Prepare to {{title}}</p>
-{{> user-toolbar}}
+<h2 style="text-align:center"> Venture Forth</h2>    
+<h4 style="text-align:center"> By KC Willard and Bhavin Shah</h4>    
     <div class="row">
-        <div class="col-md-8">
-            {{> konva-stage}}
+        <div class="col-md-3">
+            {{> chat-toolbar}}
         </div>
-        <div class="col-md-4">
-            {{> token-toolbar}}
-            {{> map-toolbar}}
-            {{> clear-layers}}
+        <div class="col-md-6">
+            <div class="card">
+                <h6 class="card-title" style="text-align: center;"> Save/Load/Clear Toolbar</h6>
+                {{> user-toolbar}}
+            </div>
+            <div class='p-1'></div>
+            <div class="card"> 
+                {{> konva-stage}}
+            </div>
+            <div class='p-1'></div>
+            <div class="card"> 
+                {{> experience-toolbar}}
+            </div>
         </div>
-    </div>
-    <div>
-        {{> chat-toolbar}}
-    </div>
-    <div>
-        {{> dice-toolbar}}
-    </div>
-    <div>
-        {{> experience-toolbar}}
+        <div class="col-md-3 col-lg-3">
+            <div class="card">
+               <h6 class="card-title" style="text-align: center;"> Token Toolbar</h6>
+                {{> token-toolbar}}
+            </div>
+            <div class='p-1'></div>
+            <div class="card">
+               <h6 class="card-title" style="text-align: center;"> Map Toolbar</h6>
+                {{> map-toolbar}}                
+            </div>
+        </div>
     </div>
     <div hidden>
-        {{> user-experience-toolbar}}
+        <div class="card">
+            {{> user-experience-toolbar}}
+        </div>
     </div>
+<h6 style="text-align:right"> Copywrite 2021</h6>
 
-</div>
 
 
 

@@ -1,20 +1,9 @@
-<h3>Map Toolbar</h3>
 <div class="container">
-    <ul style="margin: 20px 0px 22px; visibility: visible;" class="nav nav-tabs">
-        <li class ="nav-item">
-            <a class="nav-link active" href="#" id="line-tab-button"> Line</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#" id="shape-tab-button"> Shape </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#" id="opacity-tab-button"> Opacity</a>
-        </li>
-    </ul>
+    <h6> The color and width options are used for shapes and lines</h6>
     <div class="form-row" id="map-btn-toolbar">
         <div id="line-color-form" class="col">
             <select id="colorDropdownMenu" class="form-control" aria-label = "Default select example" style="font-size: smaller;">
-                <option selected style="font-size:smaller;">Choose a Color</option>
+                <option selected style="font-size:smaller;">Shape/Line Color</option>
                 <option value="#DC2626" style="background-color: rgb(220, 38, 38); color: white;">Red</option>
                 <option value="#34D399"  style="background-color: rgb(52, 211, 153); color: white;">Green</option>
                 <option value="#2563EB" style="background-color: rgb(37, 99, 235); color: white;">Blue</option>
@@ -27,7 +16,7 @@
         </div>
         <div id="width-color-form" class="col">
             <select id="widthDropdownMenu" class="form-control" aria-label = "Default select example" style="font-size: smaller;">
-                <option selected>Choose a Width</option>
+                <option selected>Shape/Line Width</option>
                 <option value="5">Largest</option>
                 <option value="4">Large</option>
                 <option value="3">Medium</option>
@@ -35,32 +24,42 @@
                 <option value="1">Smallest</option>
             </select>
         </div>
-        <div id='line-type-form' class='col'>
-            <select id="lineDropdownMenu" class="form-control" aria-label = "Default select example" style="font-size: smaller;">
-                <option selected>Choose Line Type</option>
-                <option value='draw'>Draw Line</option>
-                <option value='brush'>Brush Line</option>
-            </select>
-        </div>
+</div>
+<div class="p-1"></div>
+<div>
+    <h5> Line</h5>
+    <div id='line-type-form' class='col'>
+        <select id="lineDropdownMenu" class="form-control" aria-label = "Default select example" style="font-size: smaller;">
+            <option selected>Line Type</option>
+            <option value='draw'>Draw Line</option>
+            <option value='brush'>Brush Line</option>
+        </select>
     </div>
+    <div class="p-1"></div>
     <div class="checkbox">
             <input id="lineDrawToggle" type="checkbox"data-toggle="toggle" data-on="Line Drawing On" data-off="Line Drawing Off" data-onstyle="success" data-offstyle="danger" onchange="toggleLine()">
     </div>
+</div>
+<div class="p-1"></div>
 
+<div id = "shape-tab">
+    <h5>Shape</h5>
+    <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group mr-2" role="group"> 
+            <button class="btn btn-info p-1" id="create-rect-button">Rectangle</button>
+        </div>
+        <div class="btn-group mr-2" role="group"> 
+            <button class="btn btn-info p-1" id="create-tri-button">Triangle</button>
+        </div>
+        <div class="btn-group mr-2" role="group"> 
+           <button class="btn btn-info p-1" id="create-cir-button">Circle</button>
+        </div>
+    </div>
 </div>
-<div id = "line-tab" hidden>
-    <h3> Lines </h3>
-    <button id="draw-line-button">Draw line</button>
-    <button id="brush-line-button">Brush Line</button>
-</div>
-<div id = "shape-tab" hidden>
-    <h3>Shape</h3>
-    <button id="create-rect-button">Create New Rect</button>
-    <button id="create-tri-button">Create New Triangle</button>
-    <button id="create-cir-button">Create New circle</button>
-</div>
-<div id = "opacity-tab" hidden>
-    <button id="create-Opacity-button">Create Shadow</button>
+<div class="p-1"></div>
+<div id = "opacity-tab">
+    <h5> Opacity</h5>
+    <button class="btn btn-dark" id="create-Opacity-button">Create Shadow</button>
 </div>
 
 
