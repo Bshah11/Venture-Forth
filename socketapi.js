@@ -9,7 +9,11 @@ function getRandID(){
   return id;
 }
 
-
+var curBackgroundImageLayer;
+var curMapLayer;
+var curTokenLayer;
+var curOpacityLayer;
+var curImageOverlayLayer;
 
 var sessionStore = [];
 
@@ -87,7 +91,7 @@ io.on('connection', (socket) => {
     username: socket.username,
   });
   console.log('user: '+socket.username+" connected");
-
+  //////////////////ONBOARDING FUNCTIONS//////////////////////////////////////////////////////////////////////////
   //Send the users array to all players so that the dropdown is properly updated.
   //This could be done more succintly i'm sure however I could not get it to broadcast
   //To everyone on a new user connecting or have the updated player list. This ensures
@@ -96,11 +100,61 @@ io.on('connection', (socket) => {
   socket.emit('get users', users);
   socket.broadcast.emit('get users', users);
 
+
+  //Same basic idea as above with get users. First we check to see if the current layer state object has been written to,
+  // if it has not we do nothing, otherwise we retrieve the current state of the map and load it to the newly logged
+  // in users screen.
+  if(curBackgroundImageLayer){
+    socket.emit('retrieveLayer', curBackgroundImageLayer);
+    socket.broadcast.emit('retrieveLayer', curBackgroundImageLayer);
+  }
+  if(curMapLayer){
+    socket.emit('retrieveLayer', curMapLayer);
+    socket.broadcast.emit('retrieveLayer', curMapLayer);
+  }
+  if(curTokenLayer) {
+    socket.emit('retrieveLayer', curTokenLayer);
+    socket.broadcast.emit('retrieveLayer', curTokenLayer);
+  }
+  if(curOpacityLayer) {
+    socket.emit('retrieveLayer', curOpacityLayer);
+    socket.broadcast.emit('retrieveLayer', curOpacityLayer);
+  }
+  if(curImageOverlayLayer) {
+    socket.emit('retrieveLayer', curImageOverlayLayer);
+    socket.broadcast.emit('retrieveLayer', curImageOverlayLayer);
+  }
+  //////////////////////////////////////////////////////////////////////////////////////////
+
   socket.on('disconnect', () => {
     console.log('user: '+socket.username+' disconnected');
+    var total=io.engine.clientsCount;
+    if(total == 0){
+      curBackgroundImageLayer = '';
+      curImageOverlayLayer= '';
+      curMapLayer='';
+      curTokenLayer= '';
+      curOpacityLayer='';
+    }
+    console.log("Number of users connected "+total)
   });
+
   socket.on('broadcastLayer', (payload) => {
+    console.log("in broadcast layer")
       console.log('message: ' + payload);
+      //Save the most up to date version of the layer
+      if(payload.layerName == 'backgroundImageLayer'){
+        curBackgroundImageLayer = payload;
+      } else if (payload.layerName == 'mapLayer'){
+        curMapLayer = payload;
+      } else if (payload.layerName == 'tokenLayer'){
+        curTokenLayer = payload;
+      } else if (payload.layerName == 'opacityLayer') {
+        curOpacityLayer = payload;
+      } else if (payload.layerName == 'overlayImageLayer'){
+        overlayImageLayer = payload;
+      };
+
       socket.broadcast.emit('retrieveLayer', payload);
   });
 

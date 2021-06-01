@@ -1,15 +1,13 @@
 //Event listener to reset game board by layer
-var clearLayerButton = document.getElementById('clear-layer-button');
-var clearLayerSelect = document.getElementById('clear-layer');
 var showSaveNewButton = document.getElementById('show-File-Name');
 var postMapButton = document.getElementById('post-DB');
 var newFileName = document.getElementById('new-MapName');
-
 //var getMapButton = document.getElementById('get-DB');
 var openMapListButton = document.getElementById("get-Map-List");
 var mapListDropdown = document.getElementById('map-List');
 var loadMapButton = document.getElementById('load-Map');
 var saveCurMapButton = document.getElementById('save-Cur-Map');
+
 
 
 clearLayerButton.addEventListener('click', function(){clearLayer()});
@@ -20,7 +18,7 @@ loadMapButton.addEventListener('click', loadMap);
 saveCurMapButton.addEventListener('click', saveCurMap);
 showSaveNewButton.addEventListener('click', showSaveNew);
 
-// 
+//
 var curID = null;
 var curName = null;
 
@@ -85,6 +83,9 @@ function loadMap(e){
         loadLayer(getMap.opacity);
         loadLayer(getMap.map);
         loadLayer(getMap.token);
+        sendLayer(getMap.opacity);
+        sendLayer(getMap.map);
+        sendLayer(getMap.token);
         console.log(response.data);
         curID = response.data.id;
         curName = response.data.name;
@@ -132,5 +133,5 @@ function getMapList(e){
     loadMapButton.hidden = false;
     openMapListButton.hidden = true;
 
-    
+
 }
