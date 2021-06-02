@@ -11,7 +11,7 @@ var saveCurMapButton = document.getElementById('save-Cur-Map');
 
 
 //clearLayerButton.addEventListener('click', function(){clearLayer()});
-//postMapButton.addEventListener('click', postMap);
+postMapButton.addEventListener('click', postMap);
 //getMapButton.addEventListener('click', getMap);
 openMapListButton.addEventListener('click', getMapList);
 loadMapButton.addEventListener('click', loadMap);
