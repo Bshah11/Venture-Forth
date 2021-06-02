@@ -56,8 +56,11 @@ const cellSize = stage.width()/gridN;
 //Image Dicts used to load the token fill images//
 
 let srcDict = {
-  "goblin" : 'images/goblin.png',
-  "elf" :'images/elf.jpg'
+  "dwarf" : 'images/goblin.png',
+  "elf" :'images/elf.jpg',
+  "Gelatinous Cube" : 'images/jelly_cube.png',
+  "goblin" : 'images/goblin1.png',
+  "mimic" : 'images/mimic.png'
 };
 
 ///////////////
