@@ -87,7 +87,7 @@ function rollDisplay(dice) {
     }
     //Else we send a directed message using sendChat
     else {
-        diceResult = "Private roll from: "+socket.username + ". They rolled a "+ dice + " for: "+curRoll
+        diceResult = "Private roll from: "+socket.username + " to "+playerList.options[playerList.selectedIndex].text+". They rolled a "+ dice + " for: "+curRoll
         payload.diceResult = diceResult;
         payload.to = recipient;
         console.log("Recipient "+ recipient);
@@ -141,7 +141,7 @@ function chatDisplay(chat) {
     }
     //Else we send a directed message using sendChat
     else {
-        chatText = "Private message from "+socket.username + ": "+ chat
+        chatText = "Private message from "+socket.username + " to "+playerList.options[playerList.selectedIndex].text+": "+ chat
         payload.chat = chatText;
         payload.to = recipient;
         console.log("Recipient "+ recipient);
