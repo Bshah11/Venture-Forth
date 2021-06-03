@@ -1,12 +1,17 @@
 <div class ="row">
-    <input id="overlayImageInput" autocomplete="off"/><button id="overlayImageButton" value="overlayImageLayer">Overlay Image</button>
-    <input id="backgroundImageInput" autocomplete="off"/><button id="backgroundImageButton" value="backgroundImageLayer">Background Image</button>
-    <div id="line-color-form" class="col">
+    <input id="overlayImageInput" autocomplete="off"/>
+    <div class='p-1'></div>
+    <button class='btn btn-secondary' id="overlayImageButton" value="overlayImageLayer" style='font-size: smaller;'>Overlay Image</button>
+    <div class='p-1'></div>
+    <input id="backgroundImageInput" autocomplete="off"/>
+    <div class='p-1'></div>
+    <button class='btn btn-secondary' id="backgroundImageButton" value="backgroundImageLayer" style='font-size: smaller;'>Background Image</button>
+    <div id="music-choice-form" class="col">
         <select id="musicChoiceDropdown" class="form-control" aria-label = "Default select example" style="font-size: smaller;">
-            <option selected style="font-size:smaller;">Choose a Song</option>
+            <option selected style="font-size: smaller;">Choose a Song</option>
             <option value="inn">Cozy Inn</option>
         </select>
     </div>
-    <button id="musicSubmitButton">Play Song</button>
+    <button class='btn btn-secondary' id="musicSubmitButton" style='font-size: smaller;'>Play Song</button>
     <audio controls id="audioPlayer"></audio>
 </div>
